@@ -19,7 +19,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2826401d-8697-405c-8c50-7ac4cbe4b8c2" name="Default Changelist" comment="" />
+    <list default="true" id="2826401d-8697-405c-8c50-7ac4cbe4b8c2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver_lib.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver.py" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,7 +50,7 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunManager">
-    <configuration name="USB_driver" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="USB_driver_lib" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Automated-Anechoic-Chamber" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -58,7 +62,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\drivers\USB Driver\USB_driver_lib.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -120,25 +124,29 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="740" y="295" key="FileChooserDialogImpl/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602781434749" />
-    <state width="1898" height="295" key="GridCell.Tab.0.bottom" timestamp="1602782122366">
+    <state width="1898" height="295" key="GridCell.Tab.0.bottom" timestamp="1602785196963">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1898" height="295" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602782122366" />
-    <state width="1898" height="295" key="GridCell.Tab.0.center" timestamp="1602782122366">
+    <state width="1898" height="295" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602785196963" />
+    <state width="1898" height="295" key="GridCell.Tab.0.center" timestamp="1602785196962">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1898" height="295" key="GridCell.Tab.0.center/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602782122366" />
-    <state width="1898" height="295" key="GridCell.Tab.0.left" timestamp="1602782122365">
+    <state width="1898" height="295" key="GridCell.Tab.0.center/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602785196962" />
+    <state width="1898" height="295" key="GridCell.Tab.0.left" timestamp="1602785196962">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1898" height="295" key="GridCell.Tab.0.left/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602782122365" />
-    <state width="1898" height="295" key="GridCell.Tab.0.right" timestamp="1602782122366">
+    <state width="1898" height="295" key="GridCell.Tab.0.left/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602785196962" />
+    <state width="1898" height="295" key="GridCell.Tab.0.right" timestamp="1602785196962">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1898" height="295" key="GridCell.Tab.0.right/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602782122366" />
+    <state width="1898" height="295" key="GridCell.Tab.0.right/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602785196962" />
     <state x="461" y="185" key="SettingsEditor" timestamp="1602781717682">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="461" y="185" key="SettingsEditor/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602781717682" />
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1602784894736">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602784894736" />
   </component>
 </project>
