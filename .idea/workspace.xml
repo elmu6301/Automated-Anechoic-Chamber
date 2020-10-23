@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -20,9 +23,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2826401d-8697-405c-8c50-7ac4cbe4b8c2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver_lib.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Automated-Anechoic-Chamber.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Automated-Anechoic-Chamber.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver_lib.py" beforeDir="false" afterPath="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver_lib.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +51,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver.py" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="preferences.pathVariables" />
   </component>
   <component name="RunManager">
     <configuration name="USB_driver_lib" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
@@ -57,12 +61,12 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\elena\AppData\Local\Programs\Python\Python38-32\python.exe" />
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/software/drivers/USB Driver" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\drivers\USB Driver\USB_driver_lib.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver_lib.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -114,35 +118,47 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="414" y="195" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602781460288">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="323" y="181" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603387500167">
+      <screen x="0" y="0" width="1500" height="1000" />
     </state>
+    <state x="323" y="181" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1500.1000@0.0.1500.1000" timestamp="1603387500167" />
     <state x="414" y="195" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602781460288" />
-    <state x="740" y="295" key="FileChooserDialogImpl" timestamp="1602781434749">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="734" y="282" key="EnvironmentVariablesDialog" timestamp="1603387497943">
+      <screen x="0" y="0" width="1500" height="1000" />
     </state>
+    <state x="734" y="282" key="EnvironmentVariablesDialog/0.0.1500.1000@0.0.1500.1000" timestamp="1603387497943" />
+    <state x="578" y="273" key="FileChooserDialogImpl" timestamp="1603387673030">
+      <screen x="0" y="0" width="1500" height="1000" />
+    </state>
+    <state x="578" y="273" key="FileChooserDialogImpl/0.0.1500.1000@0.0.1500.1000" timestamp="1603387673030" />
     <state x="740" y="295" key="FileChooserDialogImpl/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602781434749" />
-    <state width="1898" height="295" key="GridCell.Tab.0.bottom" timestamp="1602785196963">
+    <state width="1898" height="425" key="GridCell.Tab.0.bottom" timestamp="1603472646718">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1898" height="295" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602785196963" />
-    <state width="1898" height="295" key="GridCell.Tab.0.center" timestamp="1602785196962">
+    <state width="1479" height="319" key="GridCell.Tab.0.bottom/0.0.1500.1000@0.0.1500.1000" timestamp="1603387678348" />
+    <state width="1898" height="425" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1603472646718" />
+    <state width="1898" height="425" key="GridCell.Tab.0.center" timestamp="1603472646718">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1898" height="295" key="GridCell.Tab.0.center/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602785196962" />
-    <state width="1898" height="295" key="GridCell.Tab.0.left" timestamp="1602785196962">
+    <state width="1479" height="319" key="GridCell.Tab.0.center/0.0.1500.1000@0.0.1500.1000" timestamp="1603387678348" />
+    <state width="1898" height="425" key="GridCell.Tab.0.center/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1603472646718" />
+    <state width="1898" height="425" key="GridCell.Tab.0.left" timestamp="1603472646717">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1898" height="295" key="GridCell.Tab.0.left/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602785196962" />
-    <state width="1898" height="295" key="GridCell.Tab.0.right" timestamp="1602785196962">
+    <state width="1479" height="319" key="GridCell.Tab.0.left/0.0.1500.1000@0.0.1500.1000" timestamp="1603387678346" />
+    <state width="1898" height="425" key="GridCell.Tab.0.left/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1603472646717" />
+    <state width="1898" height="425" key="GridCell.Tab.0.right" timestamp="1603472646718">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1898" height="295" key="GridCell.Tab.0.right/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602785196962" />
-    <state x="461" y="185" key="SettingsEditor" timestamp="1602781717682">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1479" height="319" key="GridCell.Tab.0.right/0.0.1500.1000@0.0.1500.1000" timestamp="1603387678348" />
+    <state width="1898" height="425" key="GridCell.Tab.0.right/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1603472646718" />
+    <state x="360" y="171" key="SettingsEditor" timestamp="1603387677097">
+      <screen x="0" y="0" width="1500" height="1000" />
     </state>
+    <state x="360" y="171" key="SettingsEditor/0.0.1500.1000@0.0.1500.1000" timestamp="1603387677097" />
     <state x="461" y="185" key="SettingsEditor/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602781717682" />
     <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1602784894736">
       <screen x="0" y="0" width="1920" height="1080" />
