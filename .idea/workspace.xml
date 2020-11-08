@@ -23,10 +23,264 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2826401d-8697-405c-8c50-7ac4cbe4b8c2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/software/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/software/drivers/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/software/drivers/usb/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/software/tests/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/software/tests/usb_driver_lib_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/_argcomplete.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/_code/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/_code/code.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/_code/source.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/_io/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/_io/saferepr.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/_io/terminalwriter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/_io/wcwidth.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/_version.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/assertion/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/assertion/rewrite.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/assertion/truncate.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/assertion/util.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/cacheprovider.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/capture.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/compat.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/config/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/config/argparsing.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/config/exceptions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/config/findpaths.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/debugging.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/deprecated.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/doctest.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/faulthandler.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/fixtures.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/freeze_support.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/helpconfig.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/hookspec.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/junitxml.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/logging.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/mark/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/mark/expression.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/mark/structures.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/monkeypatch.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/nodes.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/nose.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/outcomes.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/pastebin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/pathlib.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/py.typed" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/pytester.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/python.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/python_api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/recwarn.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/reports.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/runner.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/setuponly.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/setupplan.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/skipping.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/stepwise.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/store.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/terminal.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/timing.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/tmpdir.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/unittest.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/warning_types.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/_pytest/warnings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/atomicwrites-1.4.0.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/atomicwrites-1.4.0.dist-info/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/atomicwrites-1.4.0.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/atomicwrites-1.4.0.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/atomicwrites-1.4.0.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/atomicwrites-1.4.0.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/atomicwrites/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/__init__.pyi" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/_compat.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/_config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/_funcs.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/_make.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/_next_gen.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/_version_info.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/_version_info.pyi" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/converters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/converters.pyi" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/exceptions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/exceptions.pyi" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/filters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/filters.pyi" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/py.typed" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/setters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/setters.pyi" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/validators.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attr/validators.pyi" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attrs-20.2.0.dist-info/AUTHORS.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attrs-20.2.0.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attrs-20.2.0.dist-info/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attrs-20.2.0.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attrs-20.2.0.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attrs-20.2.0.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/attrs-20.2.0.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/colorama-0.4.4.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/colorama-0.4.4.dist-info/LICENSE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/colorama-0.4.4.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/colorama-0.4.4.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/colorama-0.4.4.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/colorama-0.4.4.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/colorama/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/colorama/ansi.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/colorama/ansitowin32.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/colorama/initialise.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/colorama/win32.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/colorama/winterm.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/iniconfig-1.1.1.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/iniconfig-1.1.1.dist-info/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/iniconfig-1.1.1.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/iniconfig-1.1.1.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/iniconfig-1.1.1.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/iniconfig-1.1.1.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/iniconfig/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/iniconfig/__init__.pyi" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/iniconfig/py.typed" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging-20.4.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging-20.4.dist-info/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging-20.4.dist-info/LICENSE.APACHE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging-20.4.dist-info/LICENSE.BSD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging-20.4.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging-20.4.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging-20.4.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging-20.4.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging/__about__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging/_compat.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging/_structures.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging/_typing.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging/markers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging/py.typed" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging/requirements.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging/specifiers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging/tags.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging/utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/packaging/version.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pluggy-0.13.1.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pluggy-0.13.1.dist-info/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pluggy-0.13.1.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pluggy-0.13.1.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pluggy-0.13.1.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pluggy-0.13.1.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pluggy/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pluggy/_tracing.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pluggy/_version.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pluggy/callers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pluggy/hooks.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pluggy/manager.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py-1.9.0.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py-1.9.0.dist-info/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py-1.9.0.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py-1.9.0.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py-1.9.0.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py-1.9.0.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/__init__.pyi" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/__metainfo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_builtin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_code/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_code/_assertionnew.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_code/_assertionold.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_code/_py2traceback.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_code/assertion.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_code/code.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_code/source.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_error.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_io/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_io/capture.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_io/saferepr.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_io/terminalwriter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_log/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_log/log.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_log/warning.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_path/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_path/cacheutil.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_path/common.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_path/local.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_path/svnurl.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_path/svnwc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_process/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_process/cmdexec.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_process/forkedfunc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_process/killproc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_std.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/apipkg-1.4.dist-info/DESCRIPTION.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/apipkg-1.4.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/apipkg-1.4.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/apipkg-1.4.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/apipkg-1.4.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/apipkg-1.4.dist-info/metadata.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/apipkg-1.4.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/apipkg.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/iniconfig-1.0.0.dist-info/DESCRIPTION.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/iniconfig-1.0.0.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/iniconfig-1.0.0.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/iniconfig-1.0.0.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/iniconfig-1.0.0.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/iniconfig-1.0.0.dist-info/metadata.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/iniconfig-1.0.0.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_vendored_packages/iniconfig.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_version.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/_xmlgen.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/error.pyi" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/iniconfig.pyi" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/io.pyi" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/path.pyi" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/py.typed" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/py/xml.pyi" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pyparsing-2.4.7.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pyparsing-2.4.7.dist-info/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pyparsing-2.4.7.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pyparsing-2.4.7.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pyparsing-2.4.7.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pyparsing-2.4.7.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pyparsing.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytest-6.1.1.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytest-6.1.1.dist-info/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytest-6.1.1.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytest-6.1.1.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytest-6.1.1.dist-info/REQUESTED" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytest-6.1.1.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytest-6.1.1.dist-info/entry_points.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytest-6.1.1.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytest/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytest/__main__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytest/collect.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytest/py.typed" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/six-1.15.0.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/six-1.15.0.dist-info/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/six-1.15.0.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/six-1.15.0.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/six-1.15.0.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/six-1.15.0.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/six.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/toml-0.10.1.dist-info/DESCRIPTION.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/toml-0.10.1.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/toml-0.10.1.dist-info/LICENSE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/toml-0.10.1.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/toml-0.10.1.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/toml-0.10.1.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/toml-0.10.1.dist-info/metadata.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/toml-0.10.1.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/toml/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/toml/common.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/toml/decoder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/toml/encoder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/toml/ordered.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/toml/tz.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Scripts/py.test.exe" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Scripts/pytest.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/Automated-Anechoic-Chamber.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Automated-Anechoic-Chamber.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver_lib.py" beforeDir="false" afterPath="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver_lib.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver_lib.py" beforeDir="false" afterPath="$PROJECT_DIR$/software/drivers/usb/USB_driver_lib.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +290,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Python Unit Test" />
         <option value="Python Script" />
       </list>
     </option>
@@ -44,17 +299,50 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1hxknJuRN1FWd3hhv7oyZ6wtzNW" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver.py" />
-    <property name="settings.editor.selected.configurable" value="preferences.pathVariables" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/software/drivers/usb/USB_driver_lib_test.py" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\tests" />
+      <recent name="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\drivers\usb" />
+      <recent name="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\drivers" />
+      <recent name="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\drivers\USB Driver" />
+      <recent name="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\drivers\USB Driver\USB Driver" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.USB_driver_lib">
     <configuration name="USB_driver_lib" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="Automated-Anechoic-Chamber" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/software/drivers/usb" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/software/drivers/usb/USB_driver_lib.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="__init__" type="PythonConfigurationType" factoryName="Python">
       <module name="Automated-Anechoic-Chamber" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -66,7 +354,28 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver_lib.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\drivers\__init__.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="Automated-Anechoic-Chamber" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/software/drivers/USB Driver" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/software/drivers/USB Driver/USB Driver/__init__.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -96,6 +405,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in usb_driver_lib_test.py" type="tests" factoryName="py.test" nameIsGenerated="true">
+      <module name="Automated-Anechoic-Chamber" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\venv\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/software/tests/usb_driver_lib_test.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.USB_driver_lib" />
+      <item itemvalue="Python.__init__" />
+      <item itemvalue="Python tests.pytest in usb_driver_lib_test.py" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -121,48 +451,79 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="323" y="181" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603387500167">
-      <screen x="0" y="0" width="1500" height="1000" />
+    <state x="414" y="195" width="1164" height="762" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603827345296">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="323" y="181" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1500.1000@0.0.1500.1000" timestamp="1603387500167" />
-    <state x="414" y="195" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602781460288" />
+    <state x="414" y="195" width="1164" height="762" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1603827345296" />
+    <state x="689" y="366" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1603476051525">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="689" y="366" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1603476051525" />
     <state x="734" y="282" key="EnvironmentVariablesDialog" timestamp="1603387497943">
       <screen x="0" y="0" width="1500" height="1000" />
     </state>
     <state x="734" y="282" key="EnvironmentVariablesDialog/0.0.1500.1000@0.0.1500.1000" timestamp="1603387497943" />
-    <state x="578" y="273" key="FileChooserDialogImpl" timestamp="1603387673030">
-      <screen x="0" y="0" width="1500" height="1000" />
+    <state x="740" y="295" key="FileChooserDialogImpl" timestamp="1603476066695">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="578" y="273" key="FileChooserDialogImpl/0.0.1500.1000@0.0.1500.1000" timestamp="1603387673030" />
-    <state x="740" y="295" key="FileChooserDialogImpl/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602781434749" />
-    <state width="1898" height="425" key="GridCell.Tab.0.bottom" timestamp="1603472646718">
+    <state x="740" y="295" key="FileChooserDialogImpl/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1603476066695" />
+    <state width="1898" height="364" key="GridCell.Tab.0.bottom" timestamp="1604871432851">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1479" height="319" key="GridCell.Tab.0.bottom/0.0.1500.1000@0.0.1500.1000" timestamp="1603387678348" />
-    <state width="1898" height="425" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1603472646718" />
-    <state width="1898" height="425" key="GridCell.Tab.0.center" timestamp="1603472646718">
+    <state width="1479" height="305" key="GridCell.Tab.0.bottom/0.0.1500.1000@0.0.1500.1000" timestamp="1603991366105" />
+    <state width="1898" height="364" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604871432851" />
+    <state width="1898" height="364" key="GridCell.Tab.0.center" timestamp="1604871432851">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1479" height="319" key="GridCell.Tab.0.center/0.0.1500.1000@0.0.1500.1000" timestamp="1603387678348" />
-    <state width="1898" height="425" key="GridCell.Tab.0.center/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1603472646718" />
-    <state width="1898" height="425" key="GridCell.Tab.0.left" timestamp="1603472646717">
+    <state width="1479" height="305" key="GridCell.Tab.0.center/0.0.1500.1000@0.0.1500.1000" timestamp="1603991366105" />
+    <state width="1898" height="364" key="GridCell.Tab.0.center/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604871432851" />
+    <state width="1898" height="364" key="GridCell.Tab.0.left" timestamp="1604871432851">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1479" height="319" key="GridCell.Tab.0.left/0.0.1500.1000@0.0.1500.1000" timestamp="1603387678346" />
-    <state width="1898" height="425" key="GridCell.Tab.0.left/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1603472646717" />
-    <state width="1898" height="425" key="GridCell.Tab.0.right" timestamp="1603472646718">
+    <state width="1479" height="305" key="GridCell.Tab.0.left/0.0.1500.1000@0.0.1500.1000" timestamp="1603991366105" />
+    <state width="1898" height="364" key="GridCell.Tab.0.left/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604871432851" />
+    <state width="1898" height="364" key="GridCell.Tab.0.right" timestamp="1604871432851">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1479" height="319" key="GridCell.Tab.0.right/0.0.1500.1000@0.0.1500.1000" timestamp="1603387678348" />
-    <state width="1898" height="425" key="GridCell.Tab.0.right/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1603472646718" />
-    <state x="360" y="171" key="SettingsEditor" timestamp="1603387677097">
-      <screen x="0" y="0" width="1500" height="1000" />
+    <state width="1479" height="305" key="GridCell.Tab.0.right/0.0.1500.1000@0.0.1500.1000" timestamp="1603991366105" />
+    <state width="1898" height="364" key="GridCell.Tab.0.right/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604871432851" />
+    <state width="1898" height="364" key="GridCell.Tab.1.bottom" timestamp="1604871432852">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1898" height="364" key="GridCell.Tab.1.bottom/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604871432852" />
+    <state width="1898" height="364" key="GridCell.Tab.1.center" timestamp="1604871432851">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1898" height="364" key="GridCell.Tab.1.center/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604871432851" />
+    <state width="1898" height="364" key="GridCell.Tab.1.left" timestamp="1604871432851">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1898" height="364" key="GridCell.Tab.1.left/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604871432851" />
+    <state width="1898" height="364" key="GridCell.Tab.1.right" timestamp="1604871432851">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1898" height="364" key="GridCell.Tab.1.right/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604871432851" />
+    <state x="461" y="185" key="SettingsEditor" timestamp="1604870356358">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="360" y="171" key="SettingsEditor/0.0.1500.1000@0.0.1500.1000" timestamp="1603387677097" />
-    <state x="461" y="185" key="SettingsEditor/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602781717682" />
+    <state x="461" y="185" key="SettingsEditor/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604870356358" />
     <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1602784894736">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602784894736" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/venv/Lib/site-packages/usb/_interop.py</url>
+          <line>89</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
