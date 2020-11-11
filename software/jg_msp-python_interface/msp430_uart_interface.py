@@ -45,7 +45,8 @@ def configure_motor_driver(timer=0,
                            step_port=1, step_pin=2, 
                            dir_port=1, dir_pin=4, 
                            res_port=1, res_pin=5, 
-                           sd_port=2, sd_pin=2):
+                           sd_port=2, sd_pin=2,
+                           es_no_port = 1, es_no_pin = 1):
     global MSP430
     flush()
     print('Configuring motor driver...')
@@ -53,7 +54,12 @@ def configure_motor_driver(timer=0,
     if not available:
         print('\tCannot configure; MCU busy')
         return
-    s = 'c%d%d%d%d%d%d%d%d%d\n'%(timer, step_port-1, step_pin, dir_port-1, dir_pin, res_port-1, res_pin, sd_port-1, sd_pin)
+    s = 'c%d%d%d%d%d%d%d%d%d%d%d\n'%(timer,
+                                 step_port-1, step_pin,
+                                 dir_port-1, dir_pin,
+                                 res_port-1, res_pin,
+                                 sd_port-1, sd_pin,
+                                 es_no_port-1, es_no_pin)
     print('\tWriting string: %s'%(s[:-1]))
     MSP430.write(s.encode('ascii'))
     r = await_response()
@@ -87,11 +93,34 @@ def turn_motor(direction=True, num_steps=1e5, frequency=3e4):
         print('\tAcked')
     elif r == 'N':
         print('\tNacked')
-        MSP430.flush()
         return
     else:
         print('\tUnknown response: %s'%(r))
-        MSP430.flush()
+        return
+    r = await_response()
+    if r == 'D':
+        print('\tDone')
+    else:
+        print('\tUnknown response: %s'%(r))
+
+def find_end_switch():
+    global MSP430
+    flush()
+    print('Finding end switch...')
+    available = query_available()
+    if not available:
+        print('\t Cannot find end switch; MCU busy.')
+        return
+    s = 'e\n'
+    MSP430.write(s.encode('ascii'))
+    r = await_response()
+    if r == 'A':
+        print('\tAcked')
+    elif r == 'N':
+        print('\tNacked')
+        return
+    else:
+        print('\tUnknown response: %s'%(r))
         return
     r = await_response()
     if r == 'D':

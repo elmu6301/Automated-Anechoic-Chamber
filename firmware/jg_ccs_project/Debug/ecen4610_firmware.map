@@ -20,8 +20,12 @@ c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430
                               c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large\libmul_f5.a(lib2hw_mul_f5.o) (__mspabi_mpyll)
 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_bss.o)
                               ./src/source/app_clocks.o (__crt0_init_bss)
+c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_movedata.o)
+                              ./src/source/timer_a.o (__crt0_movedata)
 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_main.o)
                               c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large/crt0.o (__crt0_call_main)
+c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memmove.o)
+                              c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_movedata.o) (memmove)
 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memset.o)
                               c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_bss.o) (memset)
 
@@ -48,13 +52,12 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 ./src/source/io.o
  .data          0x0000000000000000        0x0 ./src/source/motor_driver.o
  .data          0x0000000000000000        0x0 ./src/source/pulse_train.o
- .data          0x0000000000000000        0x0 ./src/source/timer_a.o
  .bss           0x0000000000000000        0x0 ./src/source/timer_a.o
  .text          0x0000000000000000        0x0 ./src/source/timer_b.o
  .data          0x0000000000000000        0x0 ./src/source/timer_b.o
  .bss           0x0000000000000000        0x0 ./src/source/timer_b.o
  .debug_line    0x0000000000000000        0x0 ./src/source/timer_b.o
- .debug_str     0x0000000000000000      0x14b ./src/source/timer_b.o
+ .debug_str     0x0000000000000000      0x154 ./src/source/timer_b.o
  .comment       0x0000000000000000       0x3a ./src/source/timer_b.o
  .data          0x0000000000000000        0x0 ./src/source/uart.o
  .bss           0x0000000000000000        0x0 ./src/source/uart.o
@@ -152,9 +155,15 @@ Discarded input sections
  .text          0x0000000000000000        0x0 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_bss.o)
  .data          0x0000000000000000        0x0 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_bss.o)
  .bss           0x0000000000000000        0x0 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_bss.o)
+ .text          0x0000000000000000        0x0 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_movedata.o)
+ .data          0x0000000000000000        0x0 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_movedata.o)
+ .bss           0x0000000000000000        0x0 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_movedata.o)
  .text          0x0000000000000000        0x0 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_main.o)
  .data          0x0000000000000000        0x0 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_main.o)
  .bss           0x0000000000000000        0x0 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_main.o)
+ .text          0x0000000000000000        0x0 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memmove.o)
+ .data          0x0000000000000000        0x0 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memmove.o)
+ .bss           0x0000000000000000        0x0 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memmove.o)
  .text          0x0000000000000000        0x0 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memset.o)
  .data          0x0000000000000000        0x0 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memset.o)
  .bss           0x0000000000000000        0x0 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memset.o)
@@ -499,7 +508,7 @@ __reset_vector  0x000000000000fffe        0x2
                 0x0000000000004400                . = ALIGN (0x2)
  *(.lower.rodata.* .lower.rodata)
 
-.rodata         0x0000000000004400      0x2a7
+.rodata         0x0000000000004400      0x2cf
                 0x0000000000004400                . = ALIGN (0x2)
  *(.plt)
                 0x0000000000004400                . = ALIGN (0x2)
@@ -516,42 +525,40 @@ __reset_vector  0x000000000000fffe        0x2
  *fill*         0x00000000000044df        0x1 
  .rodata        0x00000000000044e0       0x24 ./src/source/io.o
  .rodata.str1.1
-                0x0000000000004504       0xe9 ./src/source/motor_driver.o
-                                         0xef (size before relaxing)
+                0x0000000000004504      0x11e ./src/source/motor_driver.o
+                                        0x124 (size before relaxing)
  .rodata.str1.1
-                0x00000000000045ed       0x2a ./src/source/timer_a.o
- *fill*         0x0000000000004617        0x1 
- .rodata        0x0000000000004618        0xc ./src/source/timer_a.o
+                0x0000000000004622       0x2a ./src/source/timer_a.o
  .rodata.str1.1
-                0x0000000000004624       0x15 ./src/source/uart.o
+                0x000000000000464c       0x15 ./src/source/uart.o
                                          0x1b (size before relaxing)
- *fill*         0x0000000000004639        0x1 
- .rodata        0x000000000000463a        0x8 ./src/source/uart.o
+ *fill*         0x0000000000004661        0x1 
+ .rodata        0x0000000000004662        0x8 ./src/source/uart.o
  .rodata.str1.1
-                0x0000000000004642       0x65 ./src/source/vcom.o
+                0x000000000000466a       0x65 ./src/source/vcom.o
  *(.rodata1)
  *(.gcc_except_table)
  *(.gcc_except_table.*)
 
-.rodata2        0x00000000000046a8       0x64
-                0x00000000000046a8                . = ALIGN (0x2)
+.rodata2        0x00000000000046d0       0x64
+                0x00000000000046d0                . = ALIGN (0x2)
                 [!provide]                        PROVIDE (__preinit_array_start = .)
  *(.preinit_array)
                 [!provide]                        PROVIDE (__preinit_array_end = .)
-                0x00000000000046a8                . = ALIGN (0x2)
+                0x00000000000046d0                . = ALIGN (0x2)
                 [!provide]                        PROVIDE (__init_array_start = .)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array)
                 [!provide]                        PROVIDE (__init_array_end = .)
-                0x00000000000046a8                . = ALIGN (0x2)
+                0x00000000000046d0                . = ALIGN (0x2)
                 [!provide]                        PROVIDE (__fini_array_start = .)
  *(.fini_array)
  *(SORT_BY_NAME(.fini_array.*))
                 [!provide]                        PROVIDE (__fini_array_end = .)
-                0x00000000000046a8                . = ALIGN (0x2)
+                0x00000000000046d0                . = ALIGN (0x2)
  *(.eh_frame_hdr)
  *(.eh_frame)
- .eh_frame      0x00000000000046a8       0x64 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large\libgcc.a(_udivdi3.o)
+ .eh_frame      0x00000000000046d0       0x64 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large\libgcc.a(_udivdi3.o)
  *crtbegin*.o(.ctors)
  *(EXCLUDE_FILE(*crtend*.o) .ctors)
  *(SORT_BY_NAME(.ctors.*))
@@ -564,9 +571,9 @@ __reset_vector  0x000000000000fffe        0x2
 .upper.rodata
  *(.upper.rodata.* .upper.rodata)
 
-.data           0x0000000000002400        0x0 load address 0x000000000000470c
+.data           0x0000000000002400        0xc load address 0x0000000000004734
                 0x0000000000002400                . = ALIGN (0x2)
-                [!provide]                        PROVIDE (__datastart = .)
+                0x0000000000002400                PROVIDE (__datastart = .)
  *(.lower.data.* .lower.data)
                 0x0000000000002400                . = ALIGN (0x2)
  *(.either.data.* .either.data)
@@ -577,199 +584,206 @@ __reset_vector  0x000000000000fffe        0x2
  *(.dynamic)
                 0x0000000000002400                . = ALIGN (0x2)
  *(.data .data.* .gnu.linkonce.d.*)
+ .data          0x0000000000002400        0xc ./src/source/timer_a.o
+                0x0000000000002400                timers
  *(.gnu.linkonce.d.*personality*)
  *(.data1)
  *(.got.plt)
  *(.got)
-                0x0000000000002400                . = ALIGN (0x2)
+                0x000000000000240c                . = ALIGN (0x2)
  *(.sdata .sdata.* .gnu.linkonce.s.* D_2 D_1)
-                0x0000000000002400                . = ALIGN (0x2)
-                0x0000000000002400                _edata = .
+                0x000000000000240c                . = ALIGN (0x2)
+                0x000000000000240c                _edata = .
                 [!provide]                        PROVIDE (edata = .)
                 [!provide]                        PROVIDE (__dataend = .)
-                [!provide]                        PROVIDE (__romdatastart = LOADADDR (.data))
-                [!provide]                        PROVIDE (__romdatacopysize = SIZEOF (.data))
+                0x0000000000004734                PROVIDE (__romdatastart = LOADADDR (.data))
+                0x000000000000000c                PROVIDE (__romdatacopysize = SIZEOF (.data))
 
-.bss            0x0000000000002400      0x200 load address 0x000000000000470c
-                0x0000000000002400                . = ALIGN (0x2)
-                0x0000000000002400                PROVIDE (__bssstart = .)
+.bss            0x000000000000240c      0x20c load address 0x0000000000004740
+                0x000000000000240c                . = ALIGN (0x2)
+                0x000000000000240c                PROVIDE (__bssstart = .)
  *(.lower.bss.* .lower.bss)
-                0x0000000000002400                . = ALIGN (0x2)
+                0x000000000000240c                . = ALIGN (0x2)
  *(.either.bss.* .either.bss)
  *(.dynbss)
  *(.sbss .sbss.*)
  *(.bss .bss.* .gnu.linkonce.b.*)
- .bss           0x0000000000002400        0x1 ./src/source/app_clocks.o
- *fill*         0x0000000000002401        0x1 
- .bss           0x0000000000002402        0x4 ./src/source/delay.o
- .bss           0x0000000000002406        0x1 ./src/source/find_reference.o
- .bss           0x0000000000002407       0x41 ./src/source/interface.o
-                0x0000000000002407                command_in_progress
- .bss           0x0000000000002448        0x2 ./src/source/interrupts.o
- .bss           0x000000000000244a       0x20 ./src/source/motor_driver.o
-                0x000000000000244a                num_pulses
-                0x000000000000244e                configured
-                0x0000000000002450                state
- .bss           0x000000000000246a      0x10c ./src/source/pulse_train.o
-                0x000000000000246a                stop_points_index
-                0x000000000000246c                stop_points
- .bss           0x0000000000002576       0x8a ./src/source/vcom.o
-                0x0000000000002600                . = ALIGN (0x2)
+ .bss           0x000000000000240c        0x1 ./src/source/app_clocks.o
+ *fill*         0x000000000000240d        0x1 
+ .bss           0x000000000000240e        0x4 ./src/source/delay.o
+ .bss           0x0000000000002412        0x1 ./src/source/find_reference.o
+ .bss           0x0000000000002413       0x41 ./src/source/interface.o
+                0x0000000000002413                command_in_progress
+ .bss           0x0000000000002454        0x2 ./src/source/interrupts.o
+ .bss           0x0000000000002456       0x2c ./src/source/motor_driver.o
+                0x0000000000002456                num_pulses
+                0x000000000000245a                configured
+                0x000000000000245c                state
+ .bss           0x0000000000002482      0x10c ./src/source/pulse_train.o
+                0x0000000000002482                stop_points_index
+                0x0000000000002484                stop_points
+ .bss           0x000000000000258e       0x8a ./src/source/vcom.o
+                0x0000000000002618                . = ALIGN (0x2)
  *(COMMON)
                 [!provide]                        PROVIDE (__bssend = .)
-                0x0000000000000200                PROVIDE (__bsssize = SIZEOF (.bss))
+                0x000000000000020c                PROVIDE (__bsssize = SIZEOF (.bss))
 
-.noinit         0x0000000000002600        0x0 load address 0x000000000000470c
-                0x0000000000002600                . = ALIGN (0x2)
+.noinit         0x0000000000002618        0x0 load address 0x0000000000004740
+                0x0000000000002618                . = ALIGN (0x2)
                 [!provide]                        PROVIDE (__noinit_start = .)
  *(.noinit)
-                0x0000000000002600                . = ALIGN (0x2)
+                0x0000000000002618                . = ALIGN (0x2)
                 [!provide]                        PROVIDE (__noinit_end = .)
 
-.heap           0x0000000000002600        0x4 load address 0x000000000000470c
-                0x0000000000002600                . = ALIGN (0x2)
-                0x0000000000002600                __heap_start__ = .
-                0x0000000000002600                _end = __heap_start__
+.heap           0x0000000000002618        0x4 load address 0x0000000000004740
+                0x0000000000002618                . = ALIGN (0x2)
+                0x0000000000002618                __heap_start__ = .
+                0x0000000000002618                _end = __heap_start__
                 [!provide]                        PROVIDE (end = .)
  *(.heap)
-                0x0000000000002600                _end = .
+                0x0000000000002618                _end = .
                 [!provide]                        PROVIDE (end = .)
-                0x0000000000002600        0x4 LONG 0x0
-                0x0000000000002604                __heap_end__ = .
-                0x0000000000002604                __HeapLimit = __heap_end__
+                0x0000000000002618        0x4 LONG 0x0
+                0x000000000000261c                __heap_end__ = .
+                0x000000000000261c                __HeapLimit = __heap_end__
 
 .stack          0x0000000000004380        0x0
                 0x0000000000004380                PROVIDE (__stack = .)
  *(.stack)
 
-.lowtext        0x000000000000470c      0x34a
-                0x000000000000470c                PROVIDE (_start = .)
-                0x000000000000470c                . = ALIGN (0x2)
+.lowtext        0x0000000000004740      0x310
+                0x0000000000004740                PROVIDE (_start = .)
+                0x0000000000004740                . = ALIGN (0x2)
  *(SORT_BY_NAME(.crt_*))
  .crt_0000start
-                0x000000000000470c        0x4 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large/crt0.o
-                0x000000000000470c                __crt0_start
+                0x0000000000004740        0x4 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large/crt0.o
+                0x0000000000004740                __crt0_start
  .crt_0100init_bss
-                0x0000000000004710       0x10 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_bss.o)
-                0x0000000000004710                __crt0_init_bss
+                0x0000000000004744       0x10 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_bss.o)
+                0x0000000000004744                __crt0_init_bss
+ .crt_0300movedata
+                0x0000000000004754       0x14 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_movedata.o)
+                0x0000000000004754                __crt0_movedata
  .crt_0800call_main
-                0x0000000000004720        0x6 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_main.o)
-                0x0000000000004720                __crt0_call_main
+                0x0000000000004768        0x6 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_main.o)
+                0x0000000000004768                __crt0_call_main
  *(.lowtext)
- .lowtext       0x0000000000004726       0x1a ./src/source/delay.o
- .lowtext       0x0000000000004740       0x16 ./src/source/find_reference.o
- .lowtext       0x0000000000004756       0x16 ./src/source/interrupts.o
-                0x0000000000004756                INT_defaultHandler
- .lowtext       0x000000000000476c      0x1f8 ./src/source/motor_driver.o
- .lowtext       0x0000000000004964       0x3a ./src/source/pulse_train.o
- .lowtext       0x000000000000499e       0xb8 ./src/source/vcom.o
-                0x000000000000499e                uart_event
+ .lowtext       0x000000000000476e       0x1a ./src/source/delay.o
+ .lowtext       0x0000000000004788       0x16 ./src/source/find_reference.o
+ .lowtext       0x000000000000479e       0x16 ./src/source/interrupts.o
+                0x000000000000479e                INT_defaultHandler
+ .lowtext       0x00000000000047b4      0x1aa ./src/source/motor_driver.o
+ .lowtext       0x000000000000495e       0x3a ./src/source/pulse_train.o
+ .lowtext       0x0000000000004998       0xb8 ./src/source/vcom.o
+                0x0000000000004998                uart_event
 
-.lower.text     0x0000000000004a56        0x0
-                0x0000000000004a56                . = ALIGN (0x2)
+.lower.text     0x0000000000004a50        0x0
+                0x0000000000004a50                . = ALIGN (0x2)
  *(.lower.text.* .lower.text)
 
-.text           0x0000000000004a56     0x1580
-                0x0000000000004a56                . = ALIGN (0x2)
+.text           0x0000000000004a50     0x1a24
+                0x0000000000004a50                . = ALIGN (0x2)
  *(.text .stub .text.* .gnu.linkonce.t.* .text:*)
- .text          0x0000000000004a56       0x90 ./main.o
-                0x0000000000004a56                main
- .text          0x0000000000004ae6        0xe ./src/source/app_assert.o
-                0x0000000000004ae6                _assert_failure
- .text          0x0000000000004af4       0xd6 ./src/source/app_clocks.o
-                0x0000000000004af4                CLOCKS_cpuSpeedNormal
-                0x0000000000004b1e                CLOCKS_initialize
-                0x0000000000004b7e                CLOCKS_cpuSpeedFast
-                0x0000000000004baa                CLOCKS_getAclkFreqHz
-                0x0000000000004bb0                CLOCKS_getSmclkFreqKhz
-                0x0000000000004bb6                CLOCKS_getMclkFreqKhz
- .text          0x0000000000004bca       0x78 ./src/source/delay.o
-                0x0000000000004bca                DELAY_setDelay
- .text          0x0000000000004c42      0x2f2 ./src/source/interface.o
-                0x0000000000004d4c                INTERFACE_inProgress
-                0x0000000000004d52                INTERFACE_parseAndExecuteCommand
- .text          0x0000000000004f34       0xba ./src/source/interrupts.o
-                0x0000000000004f34                INT_initialize
-                0x0000000000004f76                INT_configureGie
-                0x0000000000004f90                INT_addBlock
-                0x0000000000004fa2                INT_removeBlock
-                0x0000000000004fbc                INT_configureHandler
-                0x0000000000004fe0                INT_getHandler
- .text          0x0000000000004fee      0x42c ./src/source/io.o
-                0x0000000000004fee                IO_disableAllPins
-                0x000000000000504c                IO_disablePin
-                0x00000000000050ec                IO_configurePin
-                0x0000000000005250                IO_writePin
-                0x00000000000052ee                IO_readPin
-                0x000000000000536e                IO_configureInterrupts
-                0x00000000000053f6                IO_clearIfg
- .text          0x000000000000541a      0x46a ./src/source/motor_driver.o
-                0x000000000000548e                MD_configure
-                0x0000000000005740                MD_turnMotor
-                0x0000000000005852                MD_inUse
-                0x0000000000005872                MD_findEndSwitch
- .text          0x0000000000005884      0x100 ./src/source/pulse_train.o
-                0x0000000000005884                PULSETRAIN_configure
-                0x0000000000005930                PULSETRAIN_start
-                0x000000000000594e                PULSETRAIN_stop
- .text          0x0000000000005984      0x154 ./src/source/timer_a.o
-                0x0000000000005984                TIMERA_configure
-                0x00000000000059d6                TIMERA_configureCcr
-                0x0000000000005a36                TIMERA_start
-                0x0000000000005a4e                TIMERA_stop
-                0x0000000000005a60                TIMERA_setCount
-                0x0000000000005a70                TIMERA_getCount
-                0x0000000000005a80                TIMERA_setCcr
-                0x0000000000005a9c                TIMERA_getCcr
-                0x0000000000005ab2                TIMERA_configureInterrupts
- .text          0x0000000000005ad8      0x17c ./src/source/uart.o
-                0x0000000000005ad8                UART_configure
-                0x0000000000005bde                UART_loadByte
-                0x0000000000005bee                UART_readByte
-                0x0000000000005bfe                UART_configureTxInterrupt
-                0x0000000000005c1a                UART_configureRxInterrupt
-                0x0000000000005c2e                UART_checkTxInterrupt
-                0x0000000000005c42                UART_checkRxInterrupt
- .text          0x0000000000005c54       0xe0 ./src/source/ucs.o
-                0x0000000000005c54                UCS_initialize
-                0x0000000000005c8c                UCS_configureDco
-                0x0000000000005cce                UCS_configureACLK
-                0x0000000000005cf4                UCS_configureSMCLK
-                0x0000000000005d16                UCS_configureMCLK
- .text          0x0000000000005d34      0x1ba ./src/source/vcom.o
-                0x0000000000005d34                VCOM_initialize
-                0x0000000000005de0                VCOM_transmitString
-                0x0000000000005e20                VCOM_isTransmitting
-                0x0000000000005e26                VCOM_rxAvailable
-                0x0000000000005e44                VCOM_stringAvailable
-                0x0000000000005e74                VCOM_getString
+ .text          0x0000000000004a50       0xa8 ./main.o
+                0x0000000000004a50                main
+ .text          0x0000000000004af8        0xe ./src/source/app_assert.o
+                0x0000000000004af8                _assert_failure
+ .text          0x0000000000004b06       0xd6 ./src/source/app_clocks.o
+                0x0000000000004b06                CLOCKS_cpuSpeedNormal
+                0x0000000000004b30                CLOCKS_initialize
+                0x0000000000004b90                CLOCKS_cpuSpeedFast
+                0x0000000000004bbc                CLOCKS_getAclkFreqHz
+                0x0000000000004bc2                CLOCKS_getSmclkFreqKhz
+                0x0000000000004bc8                CLOCKS_getMclkFreqKhz
+ .text          0x0000000000004bdc       0x78 ./src/source/delay.o
+                0x0000000000004bdc                DELAY_setDelay
+ .text          0x0000000000004c54      0x320 ./src/source/interface.o
+                0x0000000000004d74                INTERFACE_inProgress
+                0x0000000000004d7a                INTERFACE_parseAndExecuteCommand
+ .text          0x0000000000004f74       0xba ./src/source/interrupts.o
+                0x0000000000004f74                INT_initialize
+                0x0000000000004fb6                INT_configureGie
+                0x0000000000004fd0                INT_addBlock
+                0x0000000000004fe2                INT_removeBlock
+                0x0000000000004ffc                INT_configureHandler
+                0x0000000000005020                INT_getHandler
+ .text          0x000000000000502e      0x42c ./src/source/io.o
+                0x000000000000502e                IO_disableAllPins
+                0x000000000000508c                IO_disablePin
+                0x000000000000512c                IO_configurePin
+                0x0000000000005290                IO_writePin
+                0x000000000000532e                IO_readPin
+                0x00000000000053ae                IO_configureInterrupts
+                0x0000000000005436                IO_clearIfg
+ .text          0x000000000000545a      0x832 ./src/source/motor_driver.o
+                0x00000000000057d4                MD_configure
+                0x0000000000005abe                MD_turnMotor
+                0x0000000000005bd0                MD_inUse
+                0x0000000000005bf0                MD_findEndSwitch
+ .text          0x0000000000005c8c      0x100 ./src/source/pulse_train.o
+                0x0000000000005c8c                PULSETRAIN_configure
+                0x0000000000005d38                PULSETRAIN_start
+                0x0000000000005d56                PULSETRAIN_stop
+ .text          0x0000000000005d8c      0x184 ./src/source/timer_a.o
+                0x0000000000005d8c                TIMERA_configure
+                0x0000000000005de4                TIMERA_configureCcr
+                0x0000000000005e62                TIMERA_start
+                0x0000000000005e7c                TIMERA_stop
+                0x0000000000005e8e                TIMERA_setCount
+                0x0000000000005e9e                TIMERA_getCount
+                0x0000000000005eae                TIMERA_setCcr
+                0x0000000000005eca                TIMERA_getCcr
+                0x0000000000005ee0                TIMERA_configureInterrupts
+ .text          0x0000000000005f10      0x17c ./src/source/uart.o
+                0x0000000000005f10                UART_configure
+                0x0000000000006016                UART_loadByte
+                0x0000000000006026                UART_readByte
+                0x0000000000006036                UART_configureTxInterrupt
+                0x0000000000006052                UART_configureRxInterrupt
+                0x0000000000006066                UART_checkTxInterrupt
+                0x000000000000607a                UART_checkRxInterrupt
+ .text          0x000000000000608c       0xe0 ./src/source/ucs.o
+                0x000000000000608c                UCS_initialize
+                0x00000000000060c4                UCS_configureDco
+                0x0000000000006106                UCS_configureACLK
+                0x000000000000612c                UCS_configureSMCLK
+                0x000000000000614e                UCS_configureMCLK
+ .text          0x000000000000616c      0x1ba ./src/source/vcom.o
+                0x000000000000616c                VCOM_initialize
+                0x0000000000006218                VCOM_transmitString
+                0x0000000000006258                VCOM_isTransmitting
+                0x000000000000625e                VCOM_rxAvailable
+                0x000000000000627c                VCOM_stringAvailable
+                0x00000000000062ac                VCOM_getString
  .text.udivmodsi4
-                0x0000000000005eee       0x86 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large\libgcc.a(lib2divSI.o)
-                0x0000000000005eee                udivmodsi4
+                0x0000000000006326       0x86 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large\libgcc.a(lib2divSI.o)
+                0x0000000000006326                udivmodsi4
  .text.__udivsi3
-                0x0000000000005f74       0x12 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large\libgcc.a(lib2divSI.o)
-                0x0000000000005f74                __mspabi_divlu
-                0x0000000000005f74                __mspabi_divul
+                0x00000000000063ac       0x12 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large\libgcc.a(lib2divSI.o)
+                0x00000000000063ac                __mspabi_divlu
+                0x00000000000063ac                __mspabi_divul
  .text.__mspabi_slli
-                0x0000000000005f86        0xa c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large\libgcc.a(slli.o)
-                0x0000000000005f8a                __mspabi_slli
+                0x00000000000063be        0xa c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large\libgcc.a(slli.o)
+                0x00000000000063c2                __mspabi_slli
  .text.__mspabi_srai
-                0x0000000000005f90        0xa c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large\libgcc.a(srai.o)
-                0x0000000000005f94                __mspabi_srai
+                0x00000000000063c8        0xa c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large\libgcc.a(srai.o)
+                0x00000000000063cc                __mspabi_srai
  .text.__mulsi2_f5
-                0x0000000000005f9a       0x22 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large\libmul_f5.a(lib2hw_mul_f5.o)
-                0x0000000000005f9a                __mspabi_mpyl_f5hw
-                0x0000000000005f9a                __mulsi2_f5
-                0x0000000000005f9a                __mspabi_mpyl
- .text.memset   0x0000000000005fbc       0x1a c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memset.o)
-                0x0000000000005fbc                memset
+                0x00000000000063d2       0x22 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large\libmul_f5.a(lib2hw_mul_f5.o)
+                0x00000000000063d2                __mspabi_mpyl_f5hw
+                0x00000000000063d2                __mulsi2_f5
+                0x00000000000063d2                __mspabi_mpyl
+ .text.memmove  0x00000000000063f4       0x66 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memmove.o)
+                0x00000000000063f4                memmove
+ .text.memset   0x000000000000645a       0x1a c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memset.o)
+                0x000000000000645a                memset
  *(.text.*personality*)
  *(.gnu.warning)
  *(.interp .hash .dynsym .dynstr .gnu.version*)
                 [!provide]                        PROVIDE (__etext = .)
                 [!provide]                        PROVIDE (_etext = .)
                 [!provide]                        PROVIDE (etext = .)
-                0x0000000000005fd6                . = ALIGN (0x2)
+                0x0000000000006474                . = ALIGN (0x2)
  *(.init)
  *(.fini)
  *(.tm_clone_table)
@@ -849,11 +863,15 @@ __reset_vector  0x000000000000fffe        0x2
  .MSP430.attributes
                 0x00000000000003dc       0x26 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_bss.o)
  .MSP430.attributes
-                0x0000000000000402       0x26 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_main.o)
+                0x0000000000000402       0x26 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_movedata.o)
  .MSP430.attributes
-                0x0000000000000428       0x26 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memset.o)
+                0x0000000000000428       0x26 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libcrt.a(crt_main.o)
  .MSP430.attributes
-                0x000000000000044e       0x26 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large/crtend_no_eh.o
+                0x000000000000044e       0x26 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memmove.o)
+ .MSP430.attributes
+                0x0000000000000474       0x26 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memset.o)
+ .MSP430.attributes
+                0x000000000000049a       0x26 c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large/crtend_no_eh.o
  *(.gnu.attributes)
  *(__TI_build_attributes)
 
@@ -894,6 +912,7 @@ __reset_vector  0x000000000000fffe        0x2
  .comment       0x0000000000000039       0x3a ./src/source/vcom.o
  .comment       0x0000000000000039       0x3a c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large\libgcc.a(lib2divSI.o)
  .comment       0x0000000000000039       0x3a c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/large\libgcc.a(_udivdi3.o)
+ .comment       0x0000000000000039       0x3a c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memmove.o)
  .comment       0x0000000000000039       0x3a c:/ti/ccs1011/ccs/tools/compiler/msp430-gcc-9.2.0.50_win64/bin/../lib/gcc/msp430-elf/9.2.0/../../../../msp430-elf/lib/large\libc.a(lib_a-memset.o)
 
 .debug
@@ -908,7 +927,7 @@ __reset_vector  0x000000000000fffe        0x2
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x0000000000000000      0x200
+.debug_aranges  0x0000000000000000      0x208
  *(.debug_aranges)
  .debug_aranges
                 0x0000000000000000       0x20 ./main.o
@@ -927,39 +946,39 @@ __reset_vector  0x000000000000fffe        0x2
  .debug_aranges
                 0x00000000000000f8       0x20 ./src/source/io.o
  .debug_aranges
-                0x0000000000000118       0x38 ./src/source/motor_driver.o
+                0x0000000000000118       0x40 ./src/source/motor_driver.o
  .debug_aranges
-                0x0000000000000150       0x28 ./src/source/pulse_train.o
+                0x0000000000000158       0x28 ./src/source/pulse_train.o
  .debug_aranges
-                0x0000000000000178       0x20 ./src/source/timer_a.o
+                0x0000000000000180       0x20 ./src/source/timer_a.o
  .debug_aranges
-                0x0000000000000198       0x20 ./src/source/uart.o
+                0x00000000000001a0       0x20 ./src/source/uart.o
  .debug_aranges
-                0x00000000000001b8       0x20 ./src/source/ucs.o
+                0x00000000000001c0       0x20 ./src/source/ucs.o
  .debug_aranges
-                0x00000000000001d8       0x28 ./src/source/vcom.o
+                0x00000000000001e0       0x28 ./src/source/vcom.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x7301
+.debug_info     0x0000000000000000     0x745d
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x0000000000000000     0x2d84 ./main.o
- .debug_info    0x0000000000002d84       0xbc ./src/source/app_assert.o
- .debug_info    0x0000000000002e40      0x408 ./src/source/app_clocks.o
- .debug_info    0x0000000000003248      0x45a ./src/source/delay.o
- .debug_info    0x00000000000036a2      0x493 ./src/source/find_reference.o
- .debug_info    0x0000000000003b35      0x33f ./src/source/interface.o
- .debug_info    0x0000000000003e74      0xb65 ./src/source/interrupts.o
- .debug_info    0x00000000000049d9      0x53e ./src/source/io.o
- .debug_info    0x0000000000004f17      0x8e5 ./src/source/motor_driver.o
- .debug_info    0x00000000000057fc      0x59c ./src/source/pulse_train.o
- .debug_info    0x0000000000005d98      0x5fa ./src/source/timer_a.o
- .debug_info    0x0000000000006392      0x524 ./src/source/uart.o
- .debug_info    0x00000000000068b6      0x343 ./src/source/ucs.o
- .debug_info    0x0000000000006bf9      0x708 ./src/source/vcom.o
+ .debug_info    0x0000000000000000     0x2d9e ./main.o
+ .debug_info    0x0000000000002d9e       0xbc ./src/source/app_assert.o
+ .debug_info    0x0000000000002e5a      0x408 ./src/source/app_clocks.o
+ .debug_info    0x0000000000003262      0x45a ./src/source/delay.o
+ .debug_info    0x00000000000036bc      0x493 ./src/source/find_reference.o
+ .debug_info    0x0000000000003b4f      0x359 ./src/source/interface.o
+ .debug_info    0x0000000000003ea8      0xb65 ./src/source/interrupts.o
+ .debug_info    0x0000000000004a0d      0x53e ./src/source/io.o
+ .debug_info    0x0000000000004f4b      0xa0c ./src/source/motor_driver.o
+ .debug_info    0x0000000000005957      0x59c ./src/source/pulse_train.o
+ .debug_info    0x0000000000005ef3      0x5fb ./src/source/timer_a.o
+ .debug_info    0x00000000000064ee      0x524 ./src/source/uart.o
+ .debug_info    0x0000000000006a12      0x343 ./src/source/ucs.o
+ .debug_info    0x0000000000006d55      0x708 ./src/source/vcom.o
 
-.debug_abbrev   0x0000000000000000     0x1046
+.debug_abbrev   0x0000000000000000     0x108f
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000       0xe6 ./main.o
  .debug_abbrev  0x00000000000000e6       0x97 ./src/source/app_assert.o
@@ -969,91 +988,91 @@ __reset_vector  0x000000000000fffe        0x2
  .debug_abbrev  0x0000000000000400      0x18e ./src/source/interface.o
  .debug_abbrev  0x000000000000058e      0x224 ./src/source/interrupts.o
  .debug_abbrev  0x00000000000007b2      0x161 ./src/source/io.o
- .debug_abbrev  0x0000000000000913      0x194 ./src/source/motor_driver.o
- .debug_abbrev  0x0000000000000aa7      0x129 ./src/source/pulse_train.o
- .debug_abbrev  0x0000000000000bd0      0x13f ./src/source/timer_a.o
- .debug_abbrev  0x0000000000000d0f      0x114 ./src/source/uart.o
- .debug_abbrev  0x0000000000000e23       0xe6 ./src/source/ucs.o
- .debug_abbrev  0x0000000000000f09      0x13d ./src/source/vcom.o
+ .debug_abbrev  0x0000000000000913      0x1db ./src/source/motor_driver.o
+ .debug_abbrev  0x0000000000000aee      0x129 ./src/source/pulse_train.o
+ .debug_abbrev  0x0000000000000c17      0x141 ./src/source/timer_a.o
+ .debug_abbrev  0x0000000000000d58      0x114 ./src/source/uart.o
+ .debug_abbrev  0x0000000000000e6c       0xe6 ./src/source/ucs.o
+ .debug_abbrev  0x0000000000000f52      0x13d ./src/source/vcom.o
 
-.debug_line     0x0000000000000000     0x38e4
+.debug_line     0x0000000000000000     0x3f2f
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x0000000000000000      0x286 ./main.o
- .debug_line    0x0000000000000286       0x95 ./src/source/app_assert.o
- .debug_line    0x000000000000031b      0x2a2 ./src/source/app_clocks.o
- .debug_line    0x00000000000005bd      0x226 ./src/source/delay.o
- .debug_line    0x00000000000007e3      0x2f6 ./src/source/find_reference.o
- .debug_line    0x0000000000000ad9      0x538 ./src/source/interface.o
- .debug_line    0x0000000000001011      0x3af ./src/source/interrupts.o
- .debug_line    0x00000000000013c0      0x77f ./src/source/io.o
- .debug_line    0x0000000000001b3f      0x861 ./src/source/motor_driver.o
- .debug_line    0x00000000000023a0      0x319 ./src/source/pulse_train.o
- .debug_line    0x00000000000026b9      0x40b ./src/source/timer_a.o
- .debug_line    0x0000000000002ac4      0x4d9 ./src/source/uart.o
- .debug_line    0x0000000000002f9d      0x3fd ./src/source/ucs.o
- .debug_line    0x000000000000339a      0x54a ./src/source/vcom.o
+ .debug_line    0x0000000000000000      0x28f ./main.o
+ .debug_line    0x000000000000028f       0x95 ./src/source/app_assert.o
+ .debug_line    0x0000000000000324      0x2ab ./src/source/app_clocks.o
+ .debug_line    0x00000000000005cf      0x22f ./src/source/delay.o
+ .debug_line    0x00000000000007fe      0x2ff ./src/source/find_reference.o
+ .debug_line    0x0000000000000afd      0x571 ./src/source/interface.o
+ .debug_line    0x000000000000106e      0x3b8 ./src/source/interrupts.o
+ .debug_line    0x0000000000001426      0x788 ./src/source/io.o
+ .debug_line    0x0000000000001bae      0xdc0 ./src/source/motor_driver.o
+ .debug_line    0x000000000000296e      0x322 ./src/source/pulse_train.o
+ .debug_line    0x0000000000002c90      0x464 ./src/source/timer_a.o
+ .debug_line    0x00000000000030f4      0x4e2 ./src/source/uart.o
+ .debug_line    0x00000000000035d6      0x406 ./src/source/ucs.o
+ .debug_line    0x00000000000039dc      0x553 ./src/source/vcom.o
 
-.debug_frame    0x0000000000000000      0xb50
+.debug_frame    0x0000000000000000      0xc68
  *(.debug_frame)
  .debug_frame   0x0000000000000000       0x34 ./main.o
  .debug_frame   0x0000000000000034       0x2c ./src/source/app_assert.o
  .debug_frame   0x0000000000000060       0xb4 ./src/source/app_clocks.o
  .debug_frame   0x0000000000000114       0x7c ./src/source/delay.o
  .debug_frame   0x0000000000000190       0x98 ./src/source/find_reference.o
- .debug_frame   0x0000000000000228      0x100 ./src/source/interface.o
- .debug_frame   0x0000000000000328       0xdc ./src/source/interrupts.o
- .debug_frame   0x0000000000000404      0x158 ./src/source/io.o
- .debug_frame   0x000000000000055c      0x1fc ./src/source/motor_driver.o
- .debug_frame   0x0000000000000758       0xd8 ./src/source/pulse_train.o
- .debug_frame   0x0000000000000830      0x100 ./src/source/timer_a.o
- .debug_frame   0x0000000000000930       0xa0 ./src/source/uart.o
- .debug_frame   0x00000000000009d0       0x64 ./src/source/ucs.o
- .debug_frame   0x0000000000000a34      0x11c ./src/source/vcom.o
+ .debug_frame   0x0000000000000228      0x124 ./src/source/interface.o
+ .debug_frame   0x000000000000034c       0xdc ./src/source/interrupts.o
+ .debug_frame   0x0000000000000428      0x158 ./src/source/io.o
+ .debug_frame   0x0000000000000580      0x2d0 ./src/source/motor_driver.o
+ .debug_frame   0x0000000000000850       0xd8 ./src/source/pulse_train.o
+ .debug_frame   0x0000000000000928      0x120 ./src/source/timer_a.o
+ .debug_frame   0x0000000000000a48       0xa0 ./src/source/uart.o
+ .debug_frame   0x0000000000000ae8       0x64 ./src/source/ucs.o
+ .debug_frame   0x0000000000000b4c      0x11c ./src/source/vcom.o
 
-.debug_str      0x0000000000000000     0x36e2
+.debug_str      0x0000000000000000     0x3802
  *(.debug_str)
- .debug_str     0x0000000000000000     0x1ec5 ./main.o
-                                       0x1f11 (size before relaxing)
- .debug_str     0x0000000000001ec5       0x43 ./src/source/app_assert.o
-                                        0x190 (size before relaxing)
- .debug_str     0x0000000000001f08      0x434 ./src/source/app_clocks.o
-                                        0x676 (size before relaxing)
- .debug_str     0x000000000000233c      0x6ea ./src/source/delay.o
-                                        0x8e1 (size before relaxing)
- .debug_str     0x0000000000002a26       0xdc ./src/source/find_reference.o
-                                        0x7ca (size before relaxing)
- .debug_str     0x0000000000002b02       0xdb ./src/source/interface.o
-                                        0x399 (size before relaxing)
- .debug_str     0x0000000000002bdd      0x493 ./src/source/interrupts.o
-                                        0x96a (size before relaxing)
- .debug_str     0x0000000000003070       0xcd ./src/source/io.o
-                                        0x4bc (size before relaxing)
- .debug_str     0x000000000000313d      0x134 ./src/source/motor_driver.o
-                                        0xc96 (size before relaxing)
- .debug_str     0x0000000000003271       0xad ./src/source/pulse_train.o
-                                        0x9ce (size before relaxing)
- .debug_str     0x000000000000331e       0xde ./src/source/timer_a.o
-                                        0x6eb (size before relaxing)
- .debug_str     0x00000000000033fc      0x141 ./src/source/uart.o
-                                        0x4ca (size before relaxing)
- .debug_str     0x000000000000353d       0x84 ./src/source/ucs.o
-                                        0x4a7 (size before relaxing)
- .debug_str     0x00000000000035c1      0x121 ./src/source/vcom.o
-                                        0x967 (size before relaxing)
+ .debug_str     0x0000000000000000     0x1ee3 ./main.o
+                                       0x1f2f (size before relaxing)
+ .debug_str     0x0000000000001ee3       0x43 ./src/source/app_assert.o
+                                        0x199 (size before relaxing)
+ .debug_str     0x0000000000001f26      0x434 ./src/source/app_clocks.o
+                                        0x67f (size before relaxing)
+ .debug_str     0x000000000000235a      0x6ea ./src/source/delay.o
+                                        0x8ea (size before relaxing)
+ .debug_str     0x0000000000002a44       0xdc ./src/source/find_reference.o
+                                        0x7d3 (size before relaxing)
+ .debug_str     0x0000000000002b20       0xdb ./src/source/interface.o
+                                        0x3b7 (size before relaxing)
+ .debug_str     0x0000000000002bfb      0x493 ./src/source/interrupts.o
+                                        0x973 (size before relaxing)
+ .debug_str     0x000000000000308e       0xcd ./src/source/io.o
+                                        0x4c5 (size before relaxing)
+ .debug_str     0x000000000000315b      0x236 ./src/source/motor_driver.o
+                                        0xdca (size before relaxing)
+ .debug_str     0x0000000000003391       0xad ./src/source/pulse_train.o
+                                        0x9d7 (size before relaxing)
+ .debug_str     0x000000000000343e       0xde ./src/source/timer_a.o
+                                        0x6f4 (size before relaxing)
+ .debug_str     0x000000000000351c      0x141 ./src/source/uart.o
+                                        0x4d3 (size before relaxing)
+ .debug_str     0x000000000000365d       0x84 ./src/source/ucs.o
+                                        0x4b0 (size before relaxing)
+ .debug_str     0x00000000000036e1      0x121 ./src/source/vcom.o
+                                        0x970 (size before relaxing)
 
-.debug_loc      0x0000000000000000      0x8f5
+.debug_loc      0x0000000000000000      0x97b
  *(.debug_loc)
  .debug_loc     0x0000000000000000       0x26 ./src/source/app_assert.o
  .debug_loc     0x0000000000000026       0x40 ./src/source/delay.o
- .debug_loc     0x0000000000000066      0x145 ./src/source/interface.o
- .debug_loc     0x00000000000001ab       0x39 ./src/source/interrupts.o
- .debug_loc     0x00000000000001e4      0x264 ./src/source/io.o
- .debug_loc     0x0000000000000448      0x100 ./src/source/motor_driver.o
- .debug_loc     0x0000000000000548       0x54 ./src/source/pulse_train.o
- .debug_loc     0x000000000000059c      0x10d ./src/source/timer_a.o
- .debug_loc     0x00000000000006a9       0xd7 ./src/source/uart.o
- .debug_loc     0x0000000000000780       0x72 ./src/source/ucs.o
- .debug_loc     0x00000000000007f2      0x103 ./src/source/vcom.o
+ .debug_loc     0x0000000000000066      0x160 ./src/source/interface.o
+ .debug_loc     0x00000000000001c6       0x39 ./src/source/interrupts.o
+ .debug_loc     0x00000000000001ff      0x264 ./src/source/io.o
+ .debug_loc     0x0000000000000463      0x16b ./src/source/motor_driver.o
+ .debug_loc     0x00000000000005ce       0x54 ./src/source/pulse_train.o
+ .debug_loc     0x0000000000000622      0x10d ./src/source/timer_a.o
+ .debug_loc     0x000000000000072f       0xd7 ./src/source/uart.o
+ .debug_loc     0x0000000000000806       0x72 ./src/source/ucs.o
+ .debug_loc     0x0000000000000878      0x103 ./src/source/vcom.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -1073,14 +1092,14 @@ __reset_vector  0x000000000000fffe        0x2
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x0000000000000000       0xd0
+.debug_ranges   0x0000000000000000       0xd8
  *(.debug_ranges)
  .debug_ranges  0x0000000000000000       0x18 ./src/source/delay.o
  .debug_ranges  0x0000000000000018       0x30 ./src/source/find_reference.o
  .debug_ranges  0x0000000000000048       0x18 ./src/source/interrupts.o
- .debug_ranges  0x0000000000000060       0x28 ./src/source/motor_driver.o
- .debug_ranges  0x0000000000000088       0x18 ./src/source/pulse_train.o
- .debug_ranges  0x00000000000000a0       0x30 ./src/source/vcom.o
+ .debug_ranges  0x0000000000000060       0x30 ./src/source/motor_driver.o
+ .debug_ranges  0x0000000000000090       0x18 ./src/source/pulse_train.o
+ .debug_ranges  0x00000000000000a8       0x30 ./src/source/vcom.o
 
 .debug_macro
  *(.debug_macro)

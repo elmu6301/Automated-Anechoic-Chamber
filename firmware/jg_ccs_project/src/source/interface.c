@@ -16,23 +16,23 @@ volatile bool command_in_progress = false;
 
 static void indicate_done(void)
 {
-    VCOM_transmitString("D", 1);
     ASSERT_perm(command_in_progress);
     command_in_progress = false;
+    VCOM_transmitString("D", 1);
 }
 
 static void executeTurnCommand(bool dir, uint32_t num_steps, uint32_t frequency)
 {
-    MD_turnMotor(dir, num_steps, frequency, &indicate_done);
     ASSERT_temp(!command_in_progress);
     command_in_progress = true;
+    MD_turnMotor(dir, num_steps, frequency, &indicate_done);
 }
 
 static void executeEndSwitchCommand(void)
 {
-    MD_findEndSwitch(&indicate_done);
     ASSERT_temp(!command_in_progress);
     command_in_progress = true;
+    MD_findEndSwitch(&indicate_done);
 }
 
 #define C2D(c) (c-'0')
@@ -78,6 +78,8 @@ void INTERFACE_parseAndExecuteCommand(void)
         configuration_settings.res_pin = (uint8_t) C2D(command[7]);
         configuration_settings.sd_port = (IO_Port_Enum) C2D(command[8]);
         configuration_settings.sd_pin = (uint8_t) C2D(command[9]);
+        configuration_settings.es_no_port = (IO_Port_Enum) C2D(command[10]);
+        configuration_settings.es_no_pin = (uint8_t) C2D(command[11]);
         MD_configure(&configuration_settings);
         VCOM_transmitString("D", 1);
         break;
