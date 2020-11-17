@@ -26,7 +26,7 @@ typedef struct
 #define TA1_BASE ((_timera_Struct *) 0x0380)
 #define TA2_BASE ((_timera_Struct *) 0x0400)
 
-static _timera_Struct * timers[NUM_TIMERS] = {TA0_BASE, TA1_BASE, TA2_BASE};
+_timera_Struct * timers[NUM_TIMERS] = {TA0_BASE, TA1_BASE, TA2_BASE};
 
 void TIMERA_configure(TIMERA_Base_Enum tax, TIMERA_Configure_Struct * settings)
 {
@@ -54,7 +54,7 @@ void TIMERA_start(TIMERA_Base_Enum tax, TIMERA_Mode_Enum mode)
     timers[tax]->CTL |= mode<<4;
 }
 
-void TIMERA_stop(TIMERA_Base_Enum tax)
+inline void TIMERA_stop(TIMERA_Base_Enum tax)
 {
     timers[tax]->CTL &= ~(3<<4);
 }

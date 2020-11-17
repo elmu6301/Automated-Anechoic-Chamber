@@ -24,6 +24,8 @@ typedef struct
     uint8_t res_pin;
     IO_Port_Enum sd_port;
     uint8_t sd_pin;
+    IO_Port_Enum es_no_port;
+    uint8_t es_no_pin;
 } MD_Configuration_Struct;
 
 void MD_configure(MD_Configuration_Struct * settings);
@@ -32,6 +34,6 @@ void MD_turnMotor(bool dir, uint32_t num_steps, uint32_t frequency, void (* done
 
 bool MD_inUse(void);
 
-void MD_findEndSwitch(void * done_handler);
+void MD_findEndSwitch(void (* done_handler)(void));
 
 #endif /* SRC_HEADERS_MOTOR_DRIVER_H_ */
