@@ -22,9 +22,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2826401d-8697-405c-8c50-7ac4cbe4b8c2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="2826401d-8697-405c-8c50-7ac4cbe4b8c2" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -52,7 +50,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/software/drivers/usb/USB_driver_lib_test.py" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -248,11 +246,12 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1898" height="364" key="GridCell.Tab.1.right/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643442" />
-    <state x="461" y="185" key="SettingsEditor" timestamp="1604870356358">
+    <state x="461" y="185" key="SettingsEditor" timestamp="1606242611132">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="360" y="171" key="SettingsEditor/0.0.1500.1000@0.0.1500.1000" timestamp="1603387677097" />
     <state x="461" y="185" key="SettingsEditor/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604870356358" />
+    <state x="461" y="185" key="SettingsEditor/1920.-919.1500.1000/0.0.1920.1080@0.0.1920.1080" timestamp="1606242611132" />
     <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1602784894736">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
