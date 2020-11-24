@@ -85,12 +85,6 @@ def test_connect_to_port():
 
 
 def test_write_to_device():
-    # Test with None
-    res = host_usb.write_to_device(None)
-    assert not res
-    print(f"\n\tCase CMD = None: expected 'False' got '{res}' ")
-    # time.sleep(1)
-
     # Turn the LED ON
     res = host_usb.write_to_device('LED ON')
     assert res == "ACK\n"
@@ -102,18 +96,25 @@ def test_write_to_device():
     assert res == "ACK\n"
     print(f"\tCase CMD = 'LED OFF': expected 'ACK' got {res}", end='')
     # time.sleep(1)
-#
+
     # Send an Unknown Command
     res = host_usb.write_to_device('BAD CMD')
     assert res == "NACK\n"
     print(f"\tCase CMD = 'BAD CMD': expected 'NACK' got {res}", end='')
     # time.sleep(1)
 
+    # Send a command with a random integer
     rand_int = random.randint(1, 1000)
     rand_str = "RAND%d" % rand_int
     res = host_usb.write_to_device(rand_str)
     assert int(res) == rand_int
     print(f"\tCase CMD = '{rand_str}': expected '{rand_int}' got {res}", end='')
+
+    # Test with None
+    res = host_usb.write_to_device(None)
+    assert not res
+    print(f"\n\tCase CMD = None: expected 'False' got '{res}' ")
+    # time.sleep(1)
 
 
 def test_disconnect_from_port():
