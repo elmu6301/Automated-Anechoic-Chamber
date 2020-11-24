@@ -12,8 +12,6 @@ def print_menu():
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print("Welcome to MSP430 User Interface v0.0")
-    print_menu()
-
     active = True
 
     port = input("MSP430 COM port: ")
@@ -26,6 +24,7 @@ if __name__ == '__main__':
         msp430.port = port
         port_conn = msp430.connect_to_port()
 
+    print_menu()
     while active:
         action = input("--> ")
         if action == 'o':
@@ -35,10 +34,10 @@ if __name__ == '__main__':
         elif action == 'w':
             data = input("data: ")
             res = msp430.write_to_device(data)
-            if res:
-                print("Data transfer was successful!")
-            else:
+            if res == 'NACK\n':
                 print("Data transfer was not successful!")
+            else:
+                print("Data transfer was successful!")
         elif action == 'h':
             print_menu()
         elif action == 'q':
