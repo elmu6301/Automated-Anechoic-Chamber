@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -28,6 +31,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Python Unit Test" />
         <option value="Python Script" />
       </list>
     </option>
@@ -36,29 +40,83 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1hxknJuRN1FWd3hhv7oyZ6wtzNW" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver.py" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/software/drivers/usb/USB_driver_lib_test.py" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager">
-    <configuration name="USB_driver" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\tests" />
+      <recent name="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\drivers\usb" />
+      <recent name="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\drivers" />
+      <recent name="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\drivers\USB Driver" />
+      <recent name="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\drivers\USB Driver\USB Driver" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.USB_driver_lib">
+    <configuration name="USB_driver_lib" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Automated-Anechoic-Chamber" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\elena\AppData\Local\Programs\Python\Python38-32\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/software/drivers/USB Driver" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/software/drivers/usb" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/software/drivers/USB Driver/USB_driver.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/software/drivers/usb/USB_driver_lib.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="__init__" type="PythonConfigurationType" factoryName="Python">
+      <module name="Automated-Anechoic-Chamber" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/software/drivers/USB Driver" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\drivers\__init__.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="Automated-Anechoic-Chamber" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/software/drivers/USB Driver" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/software/drivers/USB Driver/USB Driver/__init__.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -88,6 +146,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in usb_driver_lib_test.py" type="tests" factoryName="py.test" nameIsGenerated="true">
+      <module name="Automated-Anechoic-Chamber" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\venv\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/software/tests/usb_driver_lib_test.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.USB_driver_lib" />
+      <item itemvalue="Python.__init__" />
+      <item itemvalue="Python tests.pytest in usb_driver_lib_test.py" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -110,35 +189,83 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="414" y="195" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602781460288">
+    <state x="414" y="195" width="1164" height="762" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603827345296">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="414" y="195" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602781460288" />
-    <state x="740" y="295" key="FileChooserDialogImpl" timestamp="1602781434749">
+    <state x="323" y="181" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1500.1000@0.0.1500.1000" timestamp="1603387500167" />
+    <state x="414" y="195" width="1164" height="762" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1603827345296" />
+    <state x="689" y="366" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1603476051525">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="740" y="295" key="FileChooserDialogImpl/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602781434749" />
-    <state width="1898" height="295" key="GridCell.Tab.0.bottom" timestamp="1602782122366">
+    <state x="689" y="366" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1603476051525" />
+    <state x="734" y="282" key="EnvironmentVariablesDialog" timestamp="1603387497943">
+      <screen x="0" y="0" width="1500" height="1000" />
+    </state>
+    <state x="734" y="282" key="EnvironmentVariablesDialog/0.0.1500.1000@0.0.1500.1000" timestamp="1603387497943" />
+    <state x="740" y="295" key="FileChooserDialogImpl" timestamp="1604876521333">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1898" height="295" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602782122366" />
-    <state width="1898" height="295" key="GridCell.Tab.0.center" timestamp="1602782122366">
+    <state x="578" y="273" key="FileChooserDialogImpl/0.0.1500.1000@0.0.1500.1000" timestamp="1603387673030" />
+    <state x="740" y="295" key="FileChooserDialogImpl/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876521333" />
+    <state width="1898" height="364" key="GridCell.Tab.0.bottom" timestamp="1604876643442">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1898" height="295" key="GridCell.Tab.0.center/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602782122366" />
-    <state width="1898" height="295" key="GridCell.Tab.0.left" timestamp="1602782122365">
+    <state width="1479" height="305" key="GridCell.Tab.0.bottom/0.0.1500.1000@0.0.1500.1000" timestamp="1603991366105" />
+    <state width="1898" height="364" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643442" />
+    <state width="1898" height="364" key="GridCell.Tab.0.center" timestamp="1604876643442">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1898" height="295" key="GridCell.Tab.0.left/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602782122365" />
-    <state width="1898" height="295" key="GridCell.Tab.0.right" timestamp="1602782122366">
+    <state width="1479" height="305" key="GridCell.Tab.0.center/0.0.1500.1000@0.0.1500.1000" timestamp="1603991366105" />
+    <state width="1898" height="364" key="GridCell.Tab.0.center/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643442" />
+    <state width="1898" height="364" key="GridCell.Tab.0.left" timestamp="1604876643441">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1898" height="295" key="GridCell.Tab.0.right/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602782122366" />
-    <state x="461" y="185" key="SettingsEditor" timestamp="1602781717682">
+    <state width="1479" height="305" key="GridCell.Tab.0.left/0.0.1500.1000@0.0.1500.1000" timestamp="1603991366105" />
+    <state width="1898" height="364" key="GridCell.Tab.0.left/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643441" />
+    <state width="1898" height="364" key="GridCell.Tab.0.right" timestamp="1604876643442">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="461" y="185" key="SettingsEditor/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602781717682" />
+    <state width="1479" height="305" key="GridCell.Tab.0.right/0.0.1500.1000@0.0.1500.1000" timestamp="1603991366105" />
+    <state width="1898" height="364" key="GridCell.Tab.0.right/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643442" />
+    <state width="1898" height="364" key="GridCell.Tab.1.bottom" timestamp="1604876643442">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1898" height="364" key="GridCell.Tab.1.bottom/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643442" />
+    <state width="1898" height="364" key="GridCell.Tab.1.center" timestamp="1604876643442">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1898" height="364" key="GridCell.Tab.1.center/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643442" />
+    <state width="1898" height="364" key="GridCell.Tab.1.left" timestamp="1604876643442">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1898" height="364" key="GridCell.Tab.1.left/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643442" />
+    <state width="1898" height="364" key="GridCell.Tab.1.right" timestamp="1604876643442">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1898" height="364" key="GridCell.Tab.1.right/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643442" />
+    <state x="461" y="185" key="SettingsEditor" timestamp="1606242611132">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="360" y="171" key="SettingsEditor/0.0.1500.1000@0.0.1500.1000" timestamp="1603387677097" />
+    <state x="461" y="185" key="SettingsEditor/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604870356358" />
+    <state x="461" y="185" key="SettingsEditor/1920.-919.1500.1000/0.0.1920.1080@0.0.1920.1080" timestamp="1606242611132" />
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1602784894736">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602784894736" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/venv/Lib/site-packages/usb/_interop.py</url>
+          <line>89</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
