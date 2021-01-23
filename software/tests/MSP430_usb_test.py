@@ -3,7 +3,7 @@ from drivers import MSP430_usb as usb
 import time
 import random
 
-port = 'COM12'
+port = 'COM15'
 msp430 = usb.MSP430(port, open=False)
 
 
@@ -47,7 +47,7 @@ def test_write_to_device():
     res = msp430.write_to_device('LED OFF')
     assert res == "ACK\n"
     print(f"\tCase CMD = 'LED OFF': expected 'ACK' got {res}", end='')
-    # time.sleep(1)
+    time.sleep(1)
 
     # Send an Unknown Command
     res = msp430.write_to_device('BAD CMD')
