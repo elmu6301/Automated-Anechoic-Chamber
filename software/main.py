@@ -1,6 +1,7 @@
 import sys
 import getopt
 from drivers import MSP430_usb as usb
+from util import config_parser as parser
 
 
 def print_menu():
@@ -12,34 +13,65 @@ def print_menu():
 
 
 def print_usage():
-    print("Usage: main.py -c <configfile> -t <test>")
+    print("\tDirecMeasure Usage")
+    print("\t\t- Run with laser alignment: main.py -c <configfile>")
+    print("\t\t- Run without laser alignment: main.py -c <configfile> -l")
+
+
+def print_welcome_sign():
+    print("\n  ********************************************************")
+    print("  *             Welcome to direcMeasure v0.0             *")
+    print("  ********************************************************\n")
 
 
 def process_cmd_line(argv):
-    print("Parsing cmd line...")
     # Get all options and their arguments
     try:
-        opts, args = getopt.gnu_getopt(argv, 'ht:c:')
+        opts, args = getopt.gnu_getopt(argv, "hlc:")
     except getopt.GetoptError as err:
-        print("Error invalid input")
+        print("Error: Invalid command line input entered...")
+        print_usage()
         sys.exit()
     config = ''
     # Parse all options
     for opt, arg in opts:
+        # Check to see if the user needs help
         if opt == "-h":
             print_usage()
             sys.exit()
+        # Check to see if
         elif opt == '-c':
-            print("Arg: " + arg)
             config = arg
-    print("Opening config: " + config)
+            # if config == '' or config is None:
+            #     print("Error: No config file detected...")
+            #     sys.exit()
+            # elif config.endswith(".json") is False:
+            #     print("Error: Config file must be a json file...")
+            #     sys.exit()
+            print(f"Opening {config}...")
+            # File stuff move to
+            cfg = open(config,"r")
+            data = cfg.read()
+            import json
+            dataJson = json.load(cfg)
+            print(dataJson)
+            # for expt in dataJson:
+            #     print("")
+
+            cfg.close()
+        # Run the system without
+        elif opt == '-l':
+            print("Running direcMeasure without laser alignment...")
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    print_welcome_sign()
+    print_usage()
     process_cmd_line(sys.argv[1:])
 
-    print("Welcome to MSP430 User Interface v0.0")
+    exit(1)
+    # print("Welcome to direcMeasure v0.0")
     active = True
     port = input("MSP430 COM port: ")
     msp430 = usb.MSP430(port, open=False)
