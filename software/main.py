@@ -2,6 +2,7 @@ import sys
 import getopt
 from drivers import MSP430_usb as usb
 from util import config_parser as parser
+import json
 
 
 def print_menu():
@@ -42,19 +43,19 @@ def process_cmd_line(argv):
         # Check to see if
         elif opt == '-c':
             config = arg
-            # if config == '' or config is None:
-            #     print("Error: No config file detected...")
-            #     sys.exit()
-            # elif config.endswith(".json") is False:
-            #     print("Error: Config file must be a json file...")
-            #     sys.exit()
+            if config == '' or config is None:
+                print("Error: No config file detected...")
+                sys.exit()
+            elif config.endswith(".json") is False:
+                print("Error: Config file must be a json file...")
+                sys.exit()
             print(f"Opening {config}...")
             # File stuff move to
-            cfg = open(config,"r")
-            data = cfg.read()
-            import json
-            dataJson = json.load(cfg)
-            print(dataJson)
+            # cfg = open(config,"r")
+            # data = cfg.read()
+            # import json
+            # dataJson = json.load(cfg)
+            # print(dataJson)
             # for expt in dataJson:
             #     print("")
 
