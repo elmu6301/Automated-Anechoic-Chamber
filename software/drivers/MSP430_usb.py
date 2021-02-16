@@ -10,7 +10,7 @@ This file contains the USB library for the host machine.
 
 class MSP430:
 
-    def __init__(self, port, name=None, open=True):
+    def __init__(self, port=None, name=None, open=True):
         self.port = port
         self.name = name
         self.MSP430 = None
@@ -21,8 +21,19 @@ class MSP430:
             except:
                 pass
 
+    def find_port(self):
+        #Inspired by: https://stackoverflow.com/questions/35724405/pyserial-get-the-name-of-the-device-behind-a-com-port
+
+        ports = list(serial.tools.list_ports.comports())
+
+        for port in ports:
+            if port.device:
+                if str(port.description) == "MSP430-USB Example":
+                    return port.device
+
     def connect_to_port(self):
         try:
+            self.port = self.find_port()
             self.MSP430 = serial.Serial(self.port, baudrate=self.baudrate)
             # MSP430.open()
             if self.MSP430.isOpen():
