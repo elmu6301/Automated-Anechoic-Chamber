@@ -50,16 +50,6 @@ def process_cmd_line(argv):
                 print("Error: Config file must be a json file...")
                 sys.exit()
             print(f"Opening {config}...")
-            # File stuff move to
-            # cfg = open(config,"r")
-            # data = cfg.read()
-            # import json
-            # dataJson = json.load(cfg)
-            # print(dataJson)
-            # for expt in dataJson:
-            #     print("")
-
-            cfg.close()
         # Run the system without
         elif opt == '-l':
             print("Running direcMeasure without laser alignment...")
@@ -71,8 +61,7 @@ if __name__ == '__main__':
     print_usage()
     process_cmd_line(sys.argv[1:])
 
-    exit(1)
-    # print("Welcome to direcMeasure v0.0")
+    print("\nStarting device connection process")
     active = True
     port = input("MSP430 COM port: ")
     msp430 = usb.MSP430(port, open=False)
