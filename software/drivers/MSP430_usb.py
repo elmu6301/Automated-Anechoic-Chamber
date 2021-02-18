@@ -7,6 +7,8 @@ host_usb.py
 This file contains the USB library for the host machine.
 '''
 
+from serial.tools import list_ports
+
 
 class MSP430:
 
@@ -15,6 +17,7 @@ class MSP430:
         self.name = name
         self.MSP430 = None
         self.baudrate = 9600
+        self.port_name = "MSP Application UART1"
         if open:
             try:
                 self.connect_to_port()
@@ -23,12 +26,16 @@ class MSP430:
 
     def find_port(self):
         #Inspired by: https://stackoverflow.com/questions/35724405/pyserial-get-the-name-of-the-device-behind-a-com-port
+        #Formats:
+            #print(port) = COM5 - MSP Application UART1 (COM5)
+            #print(port.description) = MSP Application UART1 (COM5)
+            #print(port.device) = COM5
 
-        ports = list(serial.tools.list_ports.comports())
+        ports = list(list_ports.comports())
 
         for port in ports:
             if port.device:
-                if str(port.description) == "MSP430-USB Example":
+                if self.port_name in str(port.description):
                     return port.device
 
     def connect_to_port(self):

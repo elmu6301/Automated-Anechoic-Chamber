@@ -23,146 +23,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2826401d-8697-405c-8c50-7ac4cbe4b8c2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Automated-Anechoic-Chamber.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Automated-Anechoic-Chamber.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/PoC_USB_Test.map" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/PoC_USB_Test.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/PoC_USB_Test.out" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/PoC_USB_Test.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/PoC_USB_Test_linkInfo.xml" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/PoC_USB_Test_linkInfo.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_CDC_API/UsbCdc.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_CDC_API/UsbCdc.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_CDC_API/UsbCdc.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_CDC_API/UsbCdc.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/.launches/PoC_USB_Test.launch" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/.launches/PoC_USB_Test.launch" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_CDC_API/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_CDC_API/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_CDC_API/subdir_vars.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_CDC_API/subdir_vars.mk" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_Common/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_Common/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_Common/subdir_vars.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_Common/subdir_vars.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_Common/usb.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_Common/usb.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_Common/usb.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_Common/usb.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_Common/usbdma.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_Common/usbdma.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_Common/usbdma.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_Common/usbdma.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_HID_API/UsbHid.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_HID_API/UsbHid.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_HID_API/UsbHid.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_HID_API/UsbHid.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_HID_API/UsbHidReq.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_HID_API/UsbHidReq.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_HID_API/UsbHidReq.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_HID_API/UsbHidReq.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_HID_API/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_HID_API/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_HID_API/subdir_vars.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_HID_API/subdir_vars.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/UsbMscReq.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/UsbMscReq.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/UsbMscReq.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/UsbMscReq.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/UsbMscScsi.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/UsbMscScsi.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/UsbMscScsi.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/UsbMscScsi.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/UsbMscStateMachine.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/UsbMscStateMachine.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/UsbMscStateMachine.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/UsbMscStateMachine.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/subdir_vars.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/subdir_vars.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_PHDC_API/UsbPHDC.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_PHDC_API/UsbPHDC.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_PHDC_API/UsbPHDC.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_PHDC_API/UsbPHDC.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_PHDC_API/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_PHDC_API/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_PHDC_API/subdir_vars.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_PHDC_API/subdir_vars.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/subdir_vars.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/subdir_vars.mk" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_app/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_app/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_app/subdir_vars.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_app/subdir_vars.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_app/usbConstructs.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_app/usbConstructs.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_app/usbConstructs.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_app/usbConstructs.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_app/usbEventHandling.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_app/usbEventHandling.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_app/usbEventHandling.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_app/usbEventHandling.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_config/UsbIsr.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_config/UsbIsr.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_config/UsbIsr.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_config/UsbIsr.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_config/descriptors.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_config/descriptors.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_config/descriptors.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_config/descriptors.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_config/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_config/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_config/subdir_vars.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_config/subdir_vars.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/adc10_a.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/adc10_a.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/adc10_a.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/adc10_a.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/adc12_a.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/adc12_a.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/adc12_a.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/adc12_a.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/aes.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/aes.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/aes.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/aes.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/battbak.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/battbak.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/battbak.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/battbak.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/comp_b.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/comp_b.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/comp_b.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/comp_b.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/crc.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/crc.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/crc.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/crc.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ctsd16.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ctsd16.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ctsd16.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ctsd16.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/dac12_a.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/dac12_a.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/dac12_a.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/dac12_a.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/dma.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/dma.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/dma.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/dma.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_a_spi.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_a_spi.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_a_spi.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_a_spi.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_a_uart.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_a_uart.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_a_uart.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_a_uart.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_b_i2c.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_b_i2c.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_b_i2c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_b_i2c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_b_spi.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_b_spi.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_b_spi.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/eusci_b_spi.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/flashctl.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/flashctl.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/flashctl.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/flashctl.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/gpio.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/gpio.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/gpio.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/gpio.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/lcd_b.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/lcd_b.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/lcd_b.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/lcd_b.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ldopwr.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ldopwr.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ldopwr.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ldopwr.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/mpy32.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/mpy32.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/mpy32.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/mpy32.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/oa.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/oa.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/oa.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/oa.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/pmap.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/pmap.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/pmap.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/pmap.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/pmm.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/pmm.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/pmm.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/pmm.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ram.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ram.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ram.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ram.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ref.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ref.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ref.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ref.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/rtc_a.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/rtc_a.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/rtc_a.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/rtc_a.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/rtc_b.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/rtc_b.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/rtc_b.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/rtc_b.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/rtc_c.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/rtc_c.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/rtc_c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/rtc_c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/sd24_b.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/sd24_b.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/sd24_b.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/sd24_b.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/sfr.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/sfr.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/sfr.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/sfr.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/subdir_vars.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/subdir_vars.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/sysctl.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/sysctl.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/sysctl.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/sysctl.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/tec.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/tec.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/tec.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/tec.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/timer_a.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/timer_a.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/timer_a.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/timer_a.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/timer_b.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/timer_b.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/timer_b.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/timer_b.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/timer_d.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/timer_d.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/timer_d.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/timer_d.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/tlv.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/tlv.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/tlv.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/tlv.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ucs.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ucs.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ucs.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/ucs.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_a_spi.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_a_spi.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_a_spi.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_a_spi.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_a_uart.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_a_uart.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_a_uart.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_a_uart.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_b_i2c.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_b_i2c.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_b_i2c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_b_i2c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_b_spi.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_b_spi.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_b_spi.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/usci_b_spi.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/wdt_a.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/wdt_a.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/wdt_a.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/wdt_a.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/hal.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/hal.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/hal.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/hal.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/main.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/main.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/main.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/main.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/sources.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/sources.mk" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/subdir_vars.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/subdir_vars.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/system_pre_init.d" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/system_pre_init.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/system_pre_init.obj" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/system_pre_init.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/software/drivers/MSP430_usb.py" beforeDir="false" afterPath="$PROJECT_DIR$/software/drivers/MSP430_usb.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/software/tests/MSP430_usb_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/software/tests/MSP430_usb_test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -191,7 +65,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/software/drivers/usb/USB_driver_lib_test.py" />
-    <property name="settings.editor.selected.configurable" value="consents" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -202,7 +76,7 @@
       <recent name="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\drivers\USB Driver\USB Driver" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.USB_driver_lib">
+  <component name="RunManager" selected="Python tests.pytest for MSP430_usb_test.test_disconnect_from_port">
     <configuration name="USB_driver_lib" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Automated-Anechoic-Chamber" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -287,6 +161,54 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for MSP430_usb_test.test_connect_to_port" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="Automated-Anechoic-Chamber" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/software/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;MSP430_usb_test.test_connect_to_port&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for MSP430_usb_test.test_disconnect_from_port" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="Automated-Anechoic-Chamber" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/software/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;MSP430_usb_test.test_disconnect_from_port&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for MSP430_usb_test.test_find_port" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="Automated-Anechoic-Chamber" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/software/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;MSP430_usb_test.test_find_port&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest in usb_driver_lib_test.py" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="Automated-Anechoic-Chamber" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -307,7 +229,17 @@
       <item itemvalue="Python.USB_driver_lib" />
       <item itemvalue="Python.__init__" />
       <item itemvalue="Python tests.pytest in usb_driver_lib_test.py" />
+      <item itemvalue="Python tests.pytest for MSP430_usb_test.test_connect_to_port" />
+      <item itemvalue="Python tests.pytest for MSP430_usb_test.test_find_port" />
+      <item itemvalue="Python tests.pytest for MSP430_usb_test.test_disconnect_from_port" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.pytest for MSP430_usb_test.test_disconnect_from_port" />
+        <item itemvalue="Python tests.pytest for MSP430_usb_test.test_connect_to_port" />
+        <item itemvalue="Python tests.pytest for MSP430_usb_test.test_find_port" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -333,71 +265,47 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="414" y="195" width="1164" height="762" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603827345296">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="323" y="181" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1500.1000@0.0.1500.1000" timestamp="1603387500167" />
-    <state x="414" y="195" width="1164" height="762" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1603827345296" />
-    <state x="689" y="366" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1603476051525">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="689" y="366" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1603476051525" />
-    <state x="734" y="282" key="EnvironmentVariablesDialog" timestamp="1603387497943">
-      <screen x="0" y="0" width="1500" height="1000" />
-    </state>
-    <state x="734" y="282" key="EnvironmentVariablesDialog/0.0.1500.1000@0.0.1500.1000" timestamp="1603387497943" />
-    <state x="740" y="295" key="FileChooserDialogImpl" timestamp="1604876521333">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="578" y="273" key="FileChooserDialogImpl/0.0.1500.1000@0.0.1500.1000" timestamp="1603387673030" />
-    <state x="740" y="295" key="FileChooserDialogImpl/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876521333" />
-    <state width="1898" height="364" key="GridCell.Tab.0.bottom" timestamp="1604876643442">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1479" height="305" key="GridCell.Tab.0.bottom/0.0.1500.1000@0.0.1500.1000" timestamp="1603991366105" />
-    <state width="1898" height="364" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643442" />
-    <state width="1898" height="364" key="GridCell.Tab.0.center" timestamp="1604876643442">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1479" height="305" key="GridCell.Tab.0.center/0.0.1500.1000@0.0.1500.1000" timestamp="1603991366105" />
-    <state width="1898" height="364" key="GridCell.Tab.0.center/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643442" />
-    <state width="1898" height="364" key="GridCell.Tab.0.left" timestamp="1604876643441">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1479" height="305" key="GridCell.Tab.0.left/0.0.1500.1000@0.0.1500.1000" timestamp="1603991366105" />
-    <state width="1898" height="364" key="GridCell.Tab.0.left/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643441" />
-    <state width="1898" height="364" key="GridCell.Tab.0.right" timestamp="1604876643442">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1479" height="305" key="GridCell.Tab.0.right/0.0.1500.1000@0.0.1500.1000" timestamp="1603991366105" />
-    <state width="1898" height="364" key="GridCell.Tab.0.right/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643442" />
-    <state width="1898" height="364" key="GridCell.Tab.1.bottom" timestamp="1604876643442">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1898" height="364" key="GridCell.Tab.1.bottom/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643442" />
-    <state width="1898" height="364" key="GridCell.Tab.1.center" timestamp="1604876643442">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1898" height="364" key="GridCell.Tab.1.center/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643442" />
-    <state width="1898" height="364" key="GridCell.Tab.1.left" timestamp="1604876643442">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1898" height="364" key="GridCell.Tab.1.left/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643442" />
-    <state width="1898" height="364" key="GridCell.Tab.1.right" timestamp="1604876643442">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1898" height="364" key="GridCell.Tab.1.right/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604876643442" />
-    <state x="360" y="164" key="SettingsEditor" timestamp="1606852873857">
+    <state x="206" y="135" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1613671315811">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
-    <state x="360" y="171" key="SettingsEditor/0.0.1500.1000@0.0.1500.1000" timestamp="1603387677097" />
-    <state x="360" y="164" key="SettingsEditor/0.0.1500.960@0.0.1500.960" timestamp="1606852873857" />
-    <state x="461" y="185" key="SettingsEditor/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1604870356358" />
-    <state x="461" y="185" key="SettingsEditor/1920.-919.1500.1000/0.0.1920.1080@0.0.1920.1080" timestamp="1606242611132" />
-    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1602784894736">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="206" y="135" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1500.960@0.0.1500.960" timestamp="1613671315811" />
+    <state width="1480" height="256" key="GridCell.Tab.0.bottom" timestamp="1613673757546">
+      <screen x="0" y="0" width="1500" height="960" />
     </state>
-    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/1920.-918.1500.1000@0.0.1920.1080" timestamp="1602784894736" />
+    <state width="1480" height="256" key="GridCell.Tab.0.bottom/0.0.1500.960@0.0.1500.960" timestamp="1613673757546" />
+    <state width="1480" height="256" key="GridCell.Tab.0.center" timestamp="1613673757545">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state width="1480" height="256" key="GridCell.Tab.0.center/0.0.1500.960@0.0.1500.960" timestamp="1613673757545" />
+    <state width="1480" height="256" key="GridCell.Tab.0.left" timestamp="1613673757545">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state width="1480" height="256" key="GridCell.Tab.0.left/0.0.1500.960@0.0.1500.960" timestamp="1613673757545" />
+    <state width="1480" height="256" key="GridCell.Tab.0.right" timestamp="1613673757546">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state width="1480" height="256" key="GridCell.Tab.0.right/0.0.1500.960@0.0.1500.960" timestamp="1613673757546" />
+    <state width="1480" height="316" key="GridCell.Tab.1.bottom" timestamp="1613673640152">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state width="1480" height="316" key="GridCell.Tab.1.bottom/0.0.1500.960@0.0.1500.960" timestamp="1613673640152" />
+    <state width="1480" height="316" key="GridCell.Tab.1.center" timestamp="1613673640151">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state width="1480" height="316" key="GridCell.Tab.1.center/0.0.1500.960@0.0.1500.960" timestamp="1613673640151" />
+    <state width="1480" height="316" key="GridCell.Tab.1.left" timestamp="1613673640151">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state width="1480" height="316" key="GridCell.Tab.1.left/0.0.1500.960@0.0.1500.960" timestamp="1613673640151" />
+    <state width="1480" height="316" key="GridCell.Tab.1.right" timestamp="1613673640151">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state width="1480" height="316" key="GridCell.Tab.1.right/0.0.1500.960@0.0.1500.960" timestamp="1613673640151" />
+    <state x="360" y="164" key="SettingsEditor" timestamp="1613667287735">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state x="360" y="164" key="SettingsEditor/0.0.1500.960@0.0.1500.960" timestamp="1613667287734" />
+    <state x="461" y="185" key="SettingsEditor/1920.-919.1500.1000/0.0.1920.1080@0.0.1920.1080" timestamp="1606242611132" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -406,6 +314,21 @@
           <url>file://$PROJECT_DIR$/venv/Lib/site-packages/usb/_interop.py</url>
           <line>89</line>
           <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/software/tests/MSP430_usb_test.py</url>
+          <line>76</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/software/drivers/MSP430_usb.py</url>
+          <line>42</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/software/drivers/MSP430_usb.py</url>
+          <line>43</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

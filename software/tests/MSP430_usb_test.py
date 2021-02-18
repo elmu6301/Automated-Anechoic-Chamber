@@ -3,7 +3,7 @@ from drivers import MSP430_usb as usb
 import time
 import random
 
-port = 'COM15'
+port = None
 msp430 = usb.MSP430(port, open=False)
 
 
@@ -26,6 +26,9 @@ def test_set_orientation():
     # TODO
     assert True
 
+def test_find_port():
+    usb_port = msp430.find_port()
+    assert usb_port == port
 
 def test_connect_to_port():
     print("\n\t", end='')
