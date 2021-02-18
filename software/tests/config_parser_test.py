@@ -5,12 +5,14 @@ import random
 
 
 def test_get_path():
-    cfg.get_path()
-    assert True
+    path = cfg.get_root_path()
+    assert path.endswith("Automated-Anechoic-Chamber\\software")
 
 
 def test_find_config():
-    cfg.find_config()
+    file_name = "sample_exp.json"
+    file_path = cfg.find_config(file_name)
+    print(f"\nFile '{file_name}' found at {file_path}")
     assert True
 
 
