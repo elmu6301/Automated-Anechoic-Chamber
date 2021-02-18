@@ -23,19 +23,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2826401d-8697-405c-8c50-7ac4cbe4b8c2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/.launches/PoC_USB_Test.launch" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/.launches/PoC_USB_Test.launch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_CDC_API/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_CDC_API/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_Common/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_Common/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_HID_API/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_HID_API/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_MSC_API/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_PHDC_API/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_API/USB_PHDC_API/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_app/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_app/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_config/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/USB_config/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/driverlib/MSP430F5xx_6xx/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/subdir_rules.mk" beforeDir="false" afterPath="$PROJECT_DIR$/firmware/PoC_USB_Test/Debug/subdir_rules.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/software/drivers/MSP430_usb.py" beforeDir="false" afterPath="$PROJECT_DIR$/software/drivers/MSP430_usb.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/software/tests/MSP430_usb_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/software/tests/MSP430_usb_test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -76,7 +63,7 @@
       <recent name="C:\Users\elena\Documents\College\Automated-Anechoic-Chamber\software\drivers\USB Driver\USB Driver" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for MSP430_usb_test.test_disconnect_from_port">
+  <component name="RunManager" selected="Python tests.pytest for MSP430_usb_test.test_connect_to_port">
     <configuration name="USB_driver_lib" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Automated-Anechoic-Chamber" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -235,9 +222,9 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for MSP430_usb_test.test_disconnect_from_port" />
         <item itemvalue="Python tests.pytest for MSP430_usb_test.test_connect_to_port" />
         <item itemvalue="Python tests.pytest for MSP430_usb_test.test_find_port" />
+        <item itemvalue="Python tests.pytest for MSP430_usb_test.test_disconnect_from_port" />
       </list>
     </recent_temporary>
   </component>

@@ -28,7 +28,7 @@ def test_set_orientation():
 
 def test_find_port():
     usb_port = msp430.find_port()
-    assert usb_port == port
+    assert usb_port == 'COM5'
 
 def test_connect_to_port():
     print("\n\t", end='')
