@@ -17,10 +17,20 @@ def test_find_config():
 
 
 def test_get_expt_flow():
-    cfg.get_expt_flow()
-    assert True
+
+    # Existing file input
+    file_name = "sample_exp.json"
+    flow = cfg.get_expt_flow(file_name)
+    assert flow
+
+    file_path = cfg.find_config(file_name)
+    flow = cfg.get_expt_flow(file_path)
+    assert flow
 
 
 def test_gen_expt_cmds():
-    cfg.gen_expt_cmds()
+    file_name = "sample_exp.json"
+    flow = cfg.get_expt_flow(file_name)
+    cmds = cfg.gen_expt_cmds(flow)
+
     assert True

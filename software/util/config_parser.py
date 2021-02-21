@@ -6,8 +6,10 @@ import json
 config_parser.py
 This file contains functions to find, open, and.
 '''
+
 root_base = "software"
 config_base = "\\configs"
+allowed_expt = ("sweepPhi", "sweepTheta", "sweepFreq")
 
 
 # Gets the path to the repository
@@ -55,35 +57,81 @@ def find_config(file_name, file_path=None):
 
 
 # Opens the file and returns the contents of flow
-def get_expt_flow():
-    return True
+def get_expt_flow(full_file_name):
+    if full_file_name == '':
+        return False
+    if full_file_name.rfind(root_base) == -1:
+        # Get file name with file path
+        full_file_name = find_config(full_file_name)
+
+    #
+    flow = False
+    # print(f"full_file_name {full_file_name}")
+    with open(full_file_name, "r") as file:
+        data = json.load(file)
+        flow = data.get("flow")
+        # print(flow)
+    # # Search for other config files and load them into the
+    # index = 0
+    # for expt in flow:
+    #     expType = expt.get("expType")
+    #     if expType.endswith(".json"):
+    #         print(f"Found other config file: {expType}")
+    #         full_file_name = find_config(expType)
+    #         if full_file_name is False:
+    #             print(f"Unable to locate {expType}")
+    #         with open(full_file_name, "r") as file:
+    #             data = json.load(file)
+    #             flow = data.get("flow")
+    #
+    #     index += 1
+    return flow
 
 
-def gen_expt_cmds():
+def gen_expt_cmds(flow):
+    cmds = []
+    for expt in flow:
+        print("Found experiment: " + expt.get("expType"))
+        if expt.get("expType") == "sweepPhi":
+            freq = expt.get("freq")
+            startPhi = expt.get("startPhi")
+            endPhi = expt.get("endPhi")
+            samples = expt.get("samples")
+            print("Phi Sweep:")
+            print(f"\tFrequency: {freq} Hz")
+            print(f"\tStarting Angle: {startPhi}")
+            print(f"\tEnding Angle: {endPhi}")
+            print(f"\tEnding Angle: {samples}")
+
+        elif expt.get("expType") == "sweepTheta":
+            freq = expt.get("freq")
+            startTheta = expt.get("startTheta")
+            endTheta = expt.get("endTheta")
+            samples = expt.get("samples")
+            print("Phi Sweep:")
+            print(f"\tFrequency: {freq} Hz")
+            print(f"\tStarting Angle: {startTheta}")
+            print(f"\tEnding Angle: {endTheta}")
+            print(f"\tEnding Angle: {samples}")
+
+        elif expt.get("expType") == "sweepFreq":
+            freq = expt.get("freq")
+            phi = expt.get("phi")
+            theta = expt.get("theta")
+            print(f"\tFrequenies: {freq} Hz")
+            print(f"\tPhi Angle: {phi}")
+            print(f"\tTheta Angle: {theta}")
+        else:
+            return False
     return True
 
 
 # main
 def main():
-
     print("\nRunning the config parser")
-
-    # Testing reading/loading ability
-    data = None
-    flow = None
-    with open("../configs/sample_exp.json", "r") as file:
-        data = json.load(file)
-        flow = data.get("flow")
-        print(flow)
-    if data is None:
-        print("Could not find/load file...")
-    # else:
-    #     print(data)
-
-    # Testing data parsing
-    for expt in flow:
-        print("Found experiment: "+expt.get("expType"))
-
+    file_name = "sample_exp.json"
+    flow = get_expt_flow(file_name)
+    cmds = gen_expt_cmds(flow)
 
 if __name__ == "__main__":
     main()
