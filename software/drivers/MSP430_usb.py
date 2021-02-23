@@ -17,7 +17,7 @@ class MSP430:
         self.name = name
         self.MSP430 = None
         self.baudrate = 9600
-        self.port_name = "MSP Application UART1"
+        self.port_name = "MSP430-USB Example" # CHECK THIS
         if open:
             try:
                 self.connect_to_port()
