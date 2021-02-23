@@ -3,7 +3,7 @@ from drivers import MSP430_usb as usb
 import time
 import random
 
-port = None
+port = 'COM5'
 msp430 = usb.MSP430(port, open=False)
 
 

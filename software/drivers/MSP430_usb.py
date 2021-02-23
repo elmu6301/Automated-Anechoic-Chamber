@@ -12,12 +12,12 @@ from serial.tools import list_ports
 
 class MSP430:
 
-    def __init__(self, port=None, name=None, open=True):
+    def __init__(self, port, name=None, open=True):
         self.port = port
         self.name = name
         self.MSP430 = None
         self.baudrate = 9600
-        self.port_name = "MSP Application UART1"
+        self.port_name = "MSP Application UART1"  #CHECK THIS IT MAY HAVE CHANGED
         if open:
             try:
                 self.connect_to_port()
