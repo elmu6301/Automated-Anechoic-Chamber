@@ -9,15 +9,16 @@ This file contains the USB library for the host machine.
 
 from serial.tools import list_ports
 
+def_port_name = "MSP430-USB Example"
 
 class MSP430:
 
     def __init__(self, port=None, name=None, open=True):
-        self.port = port
+        self.port = ''
         self.name = name
         self.MSP430 = None
         self.baudrate = 9600
-        self.port_name = "MSP430-USB Example" # CHECK THIS
+        self.port_name = def_port_name # CHECK THIS
         if open:
             try:
                 self.connect_to_port()
@@ -42,14 +43,13 @@ class MSP430:
         try:
             self.port = self.find_port()
             self.MSP430 = serial.Serial(self.port, baudrate=self.baudrate)
-            # MSP430.open()
             if self.MSP430.isOpen():
                 print(f"{self.port} is open")
             while self.MSP430.in_waiting:
                 self.MSP430.read()
-            # print(f"Connected to {port}")
+            print(f"Connected to {port}")
         except Exception as e:
-            print(f"Could not connect to {self.port}")
+            # print(f"Could not connect to {self.port}")
             return False
         return True
 
@@ -62,7 +62,7 @@ class MSP430:
             self.MSP430.close()
             # Check to make sure that the port is
             if self.MSP430.isOpen():
-                # print("Port is still open")
+                print("Port is still open")
                 return False
         except Exception as e:
             print(f"Could not disconnect from MSP340 {e}")
@@ -87,6 +87,7 @@ class MSP430:
                 return response.decode()
             return False
         return False
+
 
     def set_orientation(self, phi, theta):
         # Check inputs

@@ -63,15 +63,8 @@ if __name__ == '__main__':
 
     print("\nStarting device connection process")
     active = True
-    port = input("MSP430 COM port: ")
-    msp430 = usb.MSP430(port, open=False)
+    msp430 = usb.MSP430(port=None, open=False)
     port_conn = msp430.connect_to_port()
-
-    while not port_conn:
-        print(f"Unable to connect to {port} try a different port or entering port like: COMXX")
-        port = input("MSP430 COM port: ")
-        msp430.port = port
-        port_conn = msp430.connect_to_port()
 
     print_menu()
     while active:
@@ -90,7 +83,7 @@ if __name__ == '__main__':
         elif action == 'h':
             print_menu()
         elif action == 'q':
-            print(f"Closing port {port}")
+            # print(f"Closing port {port}")
             msp430.disconnect_from_port()
             active = False
         else:
