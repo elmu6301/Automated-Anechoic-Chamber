@@ -65,6 +65,9 @@ if __name__ == '__main__':
     active = True
     msp430 = usb.MSP430(port=None, open=False)
     port_conn = msp430.connect_to_port()
+    if port_conn is False:
+        print("Closing down direcMeasure...")
+        exit(-1)
 
     print_menu()
     while active:
@@ -80,11 +83,14 @@ if __name__ == '__main__':
                 print("Data transfer was not successful!")
             else:
                 print("Data transfer was successful!")
+                print(f"Received: {res}")
         elif action == 'h':
             print_menu()
         elif action == 'q':
-            # print(f"Closing port {port}")
+            print("Disconnecting device...")
             msp430.disconnect_from_port()
             active = False
         else:
             print("Command not recognized. Enter 'h' for help")
+    print("Closing down direcMeasure...")
+    exit(1)

@@ -11,14 +11,16 @@ from serial.tools import list_ports
 
 def_port_name = "MSP430-USB Example"
 
+
 class MSP430:
 
     def __init__(self, port=None, name=None, open=True):
-        self.port = ''
+        self.port = port
         self.name = name
+        self.devLoc = ''
         self.MSP430 = None
         self.baudrate = 9600
-        self.port_name = def_port_name # CHECK THIS
+        self.port_name = def_port_name
         if open:
             try:
                 self.connect_to_port()
@@ -47,9 +49,19 @@ class MSP430:
                 print(f"{self.port} is open")
             while self.MSP430.in_waiting:
                 self.MSP430.read()
-            print(f"Connected to {port}")
+            print(f"Connected to {self.port}")
+            # identify if the port is TX or RX
+            loc = self.write_to_device("idTxRx")
+            if loc == "TX\n":
+                self.devLoc = "TX"
+            elif loc == "RX\n":
+                self.devLoc = "RX"
+            else:
+                print(f"Could not identify device location: {loc}")
+                return False
+            print(f"Device identified as: {loc}")
         except Exception as e:
-            # print(f"Could not connect to {self.port}")
+            print(f"Could not connect to {self.port} because {e}")
             return False
         return True
 
@@ -87,7 +99,6 @@ class MSP430:
                 return response.decode()
             return False
         return False
-
 
     def set_orientation(self, phi, theta):
         # Check inputs
