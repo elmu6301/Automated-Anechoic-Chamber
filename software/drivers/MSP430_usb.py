@@ -2,12 +2,12 @@
 import pydoc
 import serial
 import random
+from serial.tools import list_ports
+
 '''
 host_usb.py
 This file contains the USB library for the host machine.
 '''
-
-from serial.tools import list_ports
 
 def_port_name = "MSP430-USB Example"
 
@@ -29,10 +29,6 @@ class MSP430:
 
     def find_port(self):
         #Inspired by: https://stackoverflow.com/questions/35724405/pyserial-get-the-name-of-the-device-behind-a-com-port
-        #Formats:
-            #print(port) = COM5 - MSP Application UART1 (COM5)
-            #print(port.description) = MSP Application UART1 (COM5)
-            #print(port.device) = COM5
 
         ports = list(list_ports.comports())
 
@@ -43,7 +39,10 @@ class MSP430:
 
     def connect_to_port(self):
         try:
-            self.port = self.find_port()
+            # Get port if not passed in
+            if self.port is None:
+                self.port = self.find_port()
+            # Open COM port
             self.MSP430 = serial.Serial(self.port, baudrate=self.baudrate)
             if self.MSP430.isOpen():
                 print(f"{self.port} is open")
@@ -115,6 +114,20 @@ class MSP430:
         return orient_str # self.write_to_device(orient_str)
 
 
+def sort_devices_by(msp430):
+    return msp430.devLoc
+
+
+def find_ports(port_name):
+    ports = list(list_ports.comports())
+    found_dev = []
+    for port in ports:
+        if port.device:
+            if port_name in str(port.description):
+                found_dev.append(port.device)
+    return found_dev
+
+
 def to_usb_str(cmdStr):
     # Check to make sure that the command is not empty and is a string
     if cmdStr is not None and isinstance(cmdStr, str):
@@ -129,18 +142,19 @@ def to_usb_str(cmdStr):
 
 # main
 def main():
-    print("\nMSP430_usb.py")
-    msp430 = MSP430('COM12', "Eval Board")
-    # msp430.connect_to_port()
+    import time
+    msp430s = []
+    ports = find_ports(def_port_name)
+    print(f"Found ports: {ports}")
+    for port in ports:
+        msp430 = MSP430(port, "Eval Board", open=True)
+        msp430s.append(msp430)
 
-    res = msp430.write_to_device("LED ON")
-
-    # rand_int = random.randint(1, 1000)
-    # rand_str = "RAND%d" % (rand_int)
-    # print(rand_str)
-    # res = msp430.write_to_device(rand_str)
-    print(res)
-    msp430.disconnect_from_port()
+    for msp430 in msp430s:
+        res = msp430.write_to_device("LED ON")
+        time.sleep(2)
+        res = msp430.write_to_device("LED OFF")
+        msp430.disconnect_from_port()
 
 
 if __name__ == "__main__":
