@@ -44,11 +44,11 @@ class MSP430:
                 self.port = self.find_port()
             # Open COM port
             self.MSP430 = serial.Serial(self.port, baudrate=self.baudrate)
-            if self.MSP430.isOpen():
-                print(f"{self.port} is open")
+            # if self.MSP430.isOpen():
+            #     print(f"{self.port} is open")
             while self.MSP430.in_waiting:
                 self.MSP430.read()
-            print(f"Connected to {self.port}")
+            # print(f"Connected to {self.port}")
             # identify if the port is TX or RX
             loc = self.write_to_device("idTxRx")
             if loc == "TX\n":
@@ -58,7 +58,7 @@ class MSP430:
             else:
                 print(f"Could not identify device location: {loc}")
                 return False
-            print(f"Device identified as: {loc}")
+            # print(f"Device identified as: {loc}")
         except Exception as e:
             print(f"Could not connect to {self.port} because {e}")
             return False

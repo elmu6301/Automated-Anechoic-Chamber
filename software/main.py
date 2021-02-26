@@ -61,7 +61,7 @@ def connect_to_devices():
     devices = []
     # Find device port names
     ports = usb.find_ports(usb.def_port_name)
-    print(f"Found ports: {ports}")
+    # print(f"Found ports: {ports}")
     # Open devices and add to devices
     for port in ports:
         dev = usb.MSP430(port, None, True)
