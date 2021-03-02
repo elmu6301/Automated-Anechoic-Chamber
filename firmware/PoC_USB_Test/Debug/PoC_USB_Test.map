@@ -1,7 +1,7 @@
 ******************************************************************************
-                  MSP430 Linker PC v20.2.3                     
+                  MSP430 Linker PC v20.2.1                     
 ******************************************************************************
->> Linked Tue Nov 17 15:59:22 2020
+>> Linked Thu Dec  3 10:38:09 2020
 
 OUTPUT FILE NAME:   <PoC_USB_Test.out>
 ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00004568
@@ -408,7 +408,7 @@ MODULE SUMMARY
     +--+----------------------------+------+---------+---------+
        Total:                       1584   28        0      
                                                             
-    C:\ti\ccs1011\ccs\tools\compiler\ti-cgt-msp430_20.2.3.LTS\lib\rts430x_lc_rd_eabi.lib
+    C:\ti\ccs1011\ccs\tools\compiler\ti-cgt-msp430_20.2.1.LTS\lib\rts430x_lc_rd_eabi.lib
        copy_decompress_lzss.c.obj   118    0         0      
        div32u.asm.obj               88     0         0      
        autoinit.c.obj               84     0         0      
