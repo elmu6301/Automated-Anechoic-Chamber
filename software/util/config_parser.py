@@ -2,7 +2,7 @@
 import pydoc
 import os
 import json
-import experiments as expt
+import experiments
 '''
 config_parser.py
 This file contains functions to find, open, and.
@@ -91,47 +91,74 @@ def get_expt_flow(full_file_name):
 
 def gen_expt_cmds(flow):
     cmds = []
+    curr_theta = 0
+    curr_phi = 0
+    print(f"Currently at ({curr_phi},{curr_theta})")
     for expt in flow:
         type = expt.get("expType")
         print("Found experiment: " + type)
         if type == "sweepPhi":
+            # Get inputs for command generator
             freq = expt.get("freq")
             startPhi = expt.get("startPhi")
             endPhi = expt.get("endPhi")
             samples = expt.get("samples")
-            print("Phi Sweep:")
-            print(f"\tFrequency: {freq} Hz")
-            print(f"\tStarting Angle: {startPhi}")
-            print(f"\tEnding Angle: {endPhi}")
-            print(f"\tEnding Angle: {samples}")
+            theta = expt.get("theta")
+            # Generate commands
+            phi_cmds = experiments.gen_sweepPhi_cmds(startPhi, endPhi, theta, samples, freq)
+            # Check to see if commands were generated incorrectly
+            if phi_cmds:
+                cmds.append(phi_cmds[0])
+                curr_phi = phi_cmds[1]
+                curr_theta += phi_cmds[2]
+                print(f"Currently at ({curr_phi},{curr_theta})")
+            else:
+                return False
 
         elif type == "sweepTheta":
+            # Get inputs for command generator
             freq = expt.get("freq")
             startTheta = expt.get("startTheta")
             endTheta = expt.get("endTheta")
             samples = expt.get("samples")
-            print("Phi Sweep:")
-            print(f"\tFrequency: {freq} Hz")
-            print(f"\tStarting Angle: {startTheta}")
-            print(f"\tEnding Angle: {endTheta}")
-            print(f"\tEnding Angle: {samples}")
-
-        elif type  == "sweepFreq":
-            freq = expt.get("freq")
             phi = expt.get("phi")
-            theta = expt.get("theta")
-            print(f"\tFrequencies: {freq} Hz")
-            print(f"\tPhi Angle: {phi}")
-            print(f"\tTheta Angle: {theta}")
+            # Generate commands
+            theta_cmds = experiments.gen_sweepTheta_cmds(startTheta, endTheta, phi, samples, freq)
+            # Check to see if commands were generated incorrectly
+            if theta_cmds:
+                cmds.append(theta_cmds[0])
+                curr_phi += theta_cmds[1]
+                curr_theta = theta_cmds[2]
+                print(f"Currently at ({curr_phi},{curr_theta})")
+            else:
+                return False
+
+        elif type == "sweepFreq":
+            # Get inputs for command generator
+            freq = expt.get("freq")
+            orients = expt.get("orientations")
+            # Generate commands
+            freq_cmds = experiments.gen_sweepFreq_cmds(curr_phi, curr_theta, orients)
+            # Check to see if commands were generated incorrectly
+            if freq_cmds:
+                cmds.append(freq_cmds[0])
+                curr_phi = freq_cmds[1]
+                curr_theta = freq_cmds[2]
+                print(f"Currently at ({curr_phi},{curr_theta})")
+            else:
+                return False
         elif type.endswith(".json"):
-            print(f"\tOpening {type}")
+            # print(f"\tOpening {type}")
             inner_flow = get_expt_flow(type)
             # print(inner_flow)
             inner_cmds = gen_expt_cmds(inner_flow)
-            # print(inner_cmds)
+            if inner_cmds:
+                cmds.append(inner_cmds)
+            else:
+                return False
         else:
             return False
-    return True
+    return cmds
 
 
 # main
@@ -140,6 +167,7 @@ def main():
     file_name = "sample_exp.json"
     flow = get_expt_flow(file_name)
     cmds = gen_expt_cmds(flow)
+    print(f"\nGenerated the following commands: \n{cmds}")
 
 if __name__ == "__main__":
     main()

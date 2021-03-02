@@ -20,7 +20,7 @@
 			"expType": "sweepFreq",
 			"freq": [120, 140], 
 			"orientations":[
-				["phi1","theta1"], ["phi2","theta2"]
+				["0","0"], ["360","180"]
 			]
 		},
 		{
