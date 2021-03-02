@@ -2,6 +2,7 @@
 import pydoc
 import os
 import json
+import experiments as expt
 '''
 config_parser.py
 This file contains functions to find, open, and.
@@ -91,8 +92,9 @@ def get_expt_flow(full_file_name):
 def gen_expt_cmds(flow):
     cmds = []
     for expt in flow:
-        print("Found experiment: " + expt.get("expType"))
-        if expt.get("expType") == "sweepPhi":
+        type = expt.get("expType")
+        print("Found experiment: " + type)
+        if type == "sweepPhi":
             freq = expt.get("freq")
             startPhi = expt.get("startPhi")
             endPhi = expt.get("endPhi")
@@ -103,7 +105,7 @@ def gen_expt_cmds(flow):
             print(f"\tEnding Angle: {endPhi}")
             print(f"\tEnding Angle: {samples}")
 
-        elif expt.get("expType") == "sweepTheta":
+        elif type == "sweepTheta":
             freq = expt.get("freq")
             startTheta = expt.get("startTheta")
             endTheta = expt.get("endTheta")
@@ -114,13 +116,19 @@ def gen_expt_cmds(flow):
             print(f"\tEnding Angle: {endTheta}")
             print(f"\tEnding Angle: {samples}")
 
-        elif expt.get("expType") == "sweepFreq":
+        elif type  == "sweepFreq":
             freq = expt.get("freq")
             phi = expt.get("phi")
             theta = expt.get("theta")
-            print(f"\tFrequenies: {freq} Hz")
+            print(f"\tFrequencies: {freq} Hz")
             print(f"\tPhi Angle: {phi}")
             print(f"\tTheta Angle: {theta}")
+        elif type.endswith(".json"):
+            print(f"\tOpening {type}")
+            inner_flow = get_expt_flow(type)
+            # print(inner_flow)
+            inner_cmds = gen_expt_cmds(inner_flow)
+            # print(inner_cmds)
         else:
             return False
     return True
