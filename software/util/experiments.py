@@ -80,7 +80,7 @@ def gen_sweepTheta_cmds(start_angle, end_angle, phi_offset, samples, freq):
     return cmds, phi_offset, end_angle
 
 
-def gen_sweepFreq_cmds(start_phi, start_theta, orients):
+def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq=None):
     test_cmds = []
     probe_cmds = []
     gpib_cmds = []
@@ -115,7 +115,9 @@ def gen_sweepFreq_cmds(start_phi, start_theta, orients):
         prevPhi = phi
         prevTheta = theta
     # TODO Generate gpib commands
-    gpib_cmds.append('TODO')
+    if freq is not None:
+        for f in freq:
+            gpib_cmds.append('TODO')
 
     cmds = {"test": test_cmds, "probe": probe_cmds, "gpib": gpib_cmds}
     return cmds, prevPhi, prevTheta
@@ -124,9 +126,9 @@ def gen_sweepFreq_cmds(start_phi, start_theta, orients):
 # main
 def main():
     print("Experiments!!!")
-    cmds = gen_sweepPhi_cmds(360,180,-10,10,1.4)
+    # cmds = gen_sweepPhi_cmds(360,180,-10,10,1.4)
     # cmds = gen_sweepTheta_cmds(360, 180, -10, 10, 1.4)
-    # cmds = gen_sweepFreq_cmds(100,100,[[100,100],[0,0], [100,100]])
+    cmds = gen_sweepFreq_cmds(100,100,[[100,100],[0,0], [100,100]], [100])
     print(f"Final orientation: {cmds[1]},{cmds[2]}")
     print(cmds[0])
     # for cmd in cmds.get("test"):
