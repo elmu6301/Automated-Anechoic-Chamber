@@ -32,5 +32,6 @@ def test_gen_expt_cmds():
     file_name = "sample_exp.json"
     flow = cfg.get_expt_flow(file_name)
     cmds = cfg.gen_expt_cmds(flow)
-
-    assert True
+    assert cmds
+    r_cmds = cmds[0]
+    assert r_cmds
