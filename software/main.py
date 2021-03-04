@@ -1,8 +1,11 @@
 import sys
 import getopt
+import json
+
+# Custom Modules
 from drivers import MSP430_usb as usb
 from util import config_parser as parser
-import json
+from util import experiments as expt
 
 
 def print_menu():
@@ -31,29 +34,32 @@ def process_cmd_line(argv):
     try:
         opts, args = getopt.gnu_getopt(argv, "hlc:")
     except getopt.GetoptError as err:
-        print("Error: Invalid command line input entered...")
-        print_usage()
-        sys.exit()
+        # print("Error: Invalid command line input entered...")
+        # print_usage()
+        return False
     config = ''
+    run_alignment = True
     # Parse all options
     for opt, arg in opts:
         # Check to see if the user needs help
         if opt == "-h":
             print_usage()
-            sys.exit()
+            return False
         # Check to see if
         elif opt == '-c':
             config = arg
             if config == '' or config is None:
                 print("Error: No config file detected...")
-                sys.exit()
+                return False
             elif config.endswith(".json") is False:
                 print("Error: Config file must be a json file...")
-                sys.exit()
-            print(f"Opening {config}...")
+                return False
+            # print(f"Opening {config}...")
         # Run the system without
         elif opt == '-l':
             print("Running direcMeasure without laser alignment...")
+            run_alignment = False
+    return config, run_alignment
 
 
 def connect_to_devices():
@@ -86,12 +92,54 @@ def disconnect_from_devices(devices):
     return devices
 
 
+def process_config(config_name):
+    print(f"\nStarting configuration file parsing process on {config_name}...")
+    if config_name != '':
+        # Find Config
+        full_cfg_name = parser.find_config(config_name)
+        if not full_cfg_name:
+            print(f"Error: Could not locate the file '{config_name}'. Ensure that '{config_name}' "
+                  f"is located in the configuration file repository.")
+            return False
+        # print(f"Found file: {full_cfg_name}")
+        # Get flow
+        flow = parser.get_expt_flow(full_cfg_name)
+        if not flow:
+            print(f"Error: Could read in data from '{config_name}'. Ensure that '{config_name}' "
+                  f"is the correct format. See the User Manual for Details.")
+            return False
+        # print(flow)
+        # Generate commands
+        cmds = parser.gen_expt_cmds(flow)
+        if not cmds:
+            print(f"Error: Could generate experiment commnands from '{config_name}'.")
+            return False
+        # print(cmds)
+        return cmds
+    else:
+        return True
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print_welcome_sign()
-    print_usage()
-    process_cmd_line(sys.argv[1:])
 
+    # Process Command Line
+    args = process_cmd_line(sys.argv[1:])
+    if not args:
+        print("Error: Could not parse command line arguments. See usage below:")
+        print_usage()
+        exit(-1)
+    cfg = args[0]
+    align = args[1]
+
+    # Process Configuration File
+    cmds = process_config(cfg)
+    if not cmds:
+        print("Error: Could not process configuration file. ")
+        exit(-1)
+
+    # Connect to devices
     devices = connect_to_devices()
     if not devices:
         print("Unable to connect to devices...")
@@ -145,6 +193,6 @@ if __name__ == '__main__':
         else:
             print("Command not recognized. Enter 'h' for help")
 
-    print("Closing down direcMeasure...")
+    print("\nClosing down direcMeasure...")
 
     exit(1)

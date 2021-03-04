@@ -3,7 +3,7 @@
 		{
 			"expType": "sweepPhi",
 			"freq": 120, 
-			"samples": 1000,
+			"samples": 5,
 			"startPhi": 0, 
 			"endPhi": 180,
 			"theta": 90

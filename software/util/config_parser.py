@@ -2,10 +2,15 @@
 import pydoc
 import os
 import json
-import experiments
+try:
+    import experiments
+except ImportError:
+    from util import experiments
+#
+
 '''
 config_parser.py
-This file contains functions to find, open, and.
+This file contains functions to find, open, and generate flows and commands.
 '''
 
 root_base = "software"
@@ -72,20 +77,6 @@ def get_expt_flow(full_file_name):
         data = json.load(file)
         flow = data.get("flow")
         # print(flow)
-    # # Search for other config files and load them into the
-    # index = 0
-    # for expt in flow:
-    #     expType = expt.get("expType")
-    #     if expType.endswith(".json"):
-    #         print(f"Found other config file: {expType}")
-    #         full_file_name = find_config(expType)
-    #         if full_file_name is False:
-    #             print(f"Unable to locate {expType}")
-    #         with open(full_file_name, "r") as file:
-    #             data = json.load(file)
-    #             flow = data.get("flow")
-    #
-    #     index += 1
     return flow
 
 
@@ -93,10 +84,10 @@ def gen_expt_cmds(flow):
     cmds = []
     curr_theta = 0
     curr_phi = 0
-    print(f"Currently at ({curr_phi},{curr_theta})")
+    # print(f"Currently at ({curr_phi},{curr_theta})")
     for expt in flow:
         type = expt.get("expType")
-        print("Found experiment: " + type)
+        # print("Found experiment: " + type)
         if type == "sweepPhi":
             # Get inputs for command generator
             freq = expt.get("freq")
@@ -111,7 +102,7 @@ def gen_expt_cmds(flow):
                 cmds.append(phi_cmds[0])
                 curr_phi = phi_cmds[1]
                 curr_theta += phi_cmds[2]
-                print(f"Currently at ({curr_phi},{curr_theta})")
+                # print(f"Currently at ({curr_phi},{curr_theta})")
             else:
                 return False
 
@@ -129,7 +120,7 @@ def gen_expt_cmds(flow):
                 cmds.append(theta_cmds[0])
                 curr_phi += theta_cmds[1]
                 curr_theta = theta_cmds[2]
-                print(f"Currently at ({curr_phi},{curr_theta})")
+                # print(f"Currently at ({curr_phi},{curr_theta})")
             else:
                 return False
 
@@ -144,7 +135,7 @@ def gen_expt_cmds(flow):
                 cmds.append(freq_cmds[0])
                 curr_phi = freq_cmds[1]
                 curr_theta = freq_cmds[2]
-                print(f"Currently at ({curr_phi},{curr_theta})")
+                # print(f"Currently at ({curr_phi},{curr_theta})")
             else:
                 return False
         elif type.endswith(".json"):
