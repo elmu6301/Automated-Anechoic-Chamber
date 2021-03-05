@@ -1,42 +1,30 @@
 {
-	/*
-		Automated Anechoic Chamber
-		DirectRF
-
-		Sample config file.
-	*/
-
-	//Experiment flow: defines what orientations to take measurements and the frequency
 	"flow": [
-		//Custom Sweep Phi experiment example
 		{
 			"expType": "sweepPhi",
 			"freq": 120, 
-			"samples": 1000,
+			"samples": 5,
 			"startPhi": 0, 
 			"endPhi": 180,
 			"theta": 90
-		}, 
-		//Custom Sweep Theta experiment example
+		},
 		{
 			"expType": "sweepTheta",
 			"freq": 120, 
-			"samples": 1000,
+			"samples": 5,
 			"startTheta": 0, 
 			"endTheta": 180,
 			"phi": 90
-		}, 
-		//Frequency Sweep at Custom Specificed Orientations experiment example
+		},
 		{
 			"expType": "sweepFreq",
 			"freq": [120, 140], 
 			"orientations":[
-				["phi1","theta1"], ["phi2","theta2"]
+				["0","0"], ["360","180"]
 			]
-		}, 
-		//Referencing anotherd Config File
+		},
 		{
-			"expType": "sample_exp_single"
+			"expType": "sample_exp_single.json"
 		}
 	]
 
