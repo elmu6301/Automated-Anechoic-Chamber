@@ -144,12 +144,27 @@ def gen_expt_cmds(flow):
             # print(inner_flow)
             inner_cmds = gen_expt_cmds(inner_flow)
             if inner_cmds:
-                cmds.append(inner_cmds)
+                for i_cmd in inner_cmds:
+                    cmds.append(i_cmd)
             else:
                 return False
         else:
             return False
     return cmds
+
+
+def print_cmds(cmds):
+    for cmd_set in cmds:
+        print(f"\nExperiment Type: {cmd_set['type']}")
+        t_cmds = cmd_set['test']
+        p_cmds = cmd_set['probe']
+        g_cmds = cmd_set['gpib']
+        for t in t_cmds:
+            print(f"\t TEST: {t}")
+        for p in p_cmds:
+            print(f"\tPROBE: {p}")
+        for g in g_cmds:
+            print(f"\t GPIB: {g}")
 
 
 # main
@@ -158,8 +173,9 @@ def main():
     file_name = "sample_exp.json"
     flow = get_expt_flow(file_name)
     cmds = gen_expt_cmds(flow)
-    print(f"\nGenerated the following commands: \n{cmds}")
+    # print(f"\nGenerated the following commands: \n{cmds}")
 
+    print_cmds(cmds)
 
 if __name__ == "__main__":
     main()

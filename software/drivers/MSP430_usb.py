@@ -10,7 +10,7 @@ This file contains the USB library for the host machine.
 '''
 
 def_port_name = "MSP430-USB Example"
-
+dev_identifier = "IDEN"
 
 class MSP430:
 
@@ -21,6 +21,8 @@ class MSP430:
         self.MSP430 = None
         self.baudrate = 9600
         self.port_name = def_port_name
+        self.curr_phi = 0
+        self.curr_theta = 0
         if open:
             try:
                 self.connect_to_port()
@@ -44,13 +46,17 @@ class MSP430:
                 self.port = self.find_port()
             # Open COM port
             self.MSP430 = serial.Serial(self.port, baudrate=self.baudrate)
+
+            if self.MSP430 is None:
+                self.port = self.find_port()
+                self.MSP430 = serial.Serial(self.port, baudrate=self.baudrate)
             # if self.MSP430.isOpen():
             #     print(f"{self.port} is open")
             while self.MSP430.in_waiting:
                 self.MSP430.read()
             # print(f"Connected to {self.port}")
             # identify if the port is TX or RX
-            loc = self.write_to_device("idTxRx")
+            loc = self.write_to_device(dev_identifier)
             if loc == "TX\n":
                 self.devLoc = "TX"
             elif loc == "RX\n":
