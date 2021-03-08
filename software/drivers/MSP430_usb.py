@@ -105,6 +105,7 @@ class MSP430:
             return False
         return False
 
+
     def set_orientation(self, phi, theta):
         # Check inputs
         if not isinstance(phi, int) and not isinstance(theta, int):

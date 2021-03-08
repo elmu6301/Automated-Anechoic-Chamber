@@ -120,6 +120,22 @@ def process_config(config_name):
         return True
 
 
+def run_experiments(devices, cmds):
+    for sub_expt in cmds:
+        print(f"\nRunning Type: {sub_expt['type']}")
+        t_cmds = sub_expt['test']
+        p_cmds = sub_expt['probe']
+        g_cmds = sub_expt['gpib']
+        for cmd in t_cmds:
+            print(f"\tSending '{cmd}' to test device...")
+            resp = devices[0].write_to_device(cmd)
+            print(resp)
+            # if resp != cmd:
+            #     return False, cmd
+    return True, True
+
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print_welcome_sign()
@@ -138,7 +154,7 @@ if __name__ == '__main__':
     if not cmds:
         print("Error: Could not process configuration file. ")
         exit(-1)
-
+    # parser.print_cmds(cmds)
     # Connect to devices
     devices = connect_to_devices()
     if not devices:
@@ -147,52 +163,57 @@ if __name__ == '__main__':
         exit(-1)
     numDev = len(devices)
 
-    print_menu()
+    res = run_experiments(devices, cmds)
+    if res[0] is False:
+        print(f"Error: Issue executing {res[1]}...")
+        exit(-1)
 
-    active = True
-    curDev = 0
-
-    while active:
-        action = input("--> ")
-        if action == 'a':
-            i = 0
-            for dev in devices:
-                print(f"Device[{i}]: {dev.port} {dev.devLoc}")
-                i += 1
-            print(f"Current device is Device[{curDev}]: {devices[curDev].port} {devices[curDev].devLoc}")
-        elif action == 'd':
-            if numDev != 1:
-
-                device = input("device (TX/RX): ")
-                if device in ("TX", "tx"):
-                    curDev = 0
-                    print(f"Current device is Device[{curDev}]: {devices[curDev].port} {devices[curDev].devLoc}")
-                elif device in ("RX", "rx"):
-                    curDev = 1
-                    print(f"Current device is Device[{curDev}]: {devices[curDev].port} {devices[curDev].devLoc}")
-                else:
-                    print("Unable to identify the device. Use TX or RX to specify the device you would like to "
-                          "switch to...")
-            else:
-                print("Only one device connected. Cannot switch to other device...")
-
-        elif action == 'w':
-            data = input("data: ")
-            res = devices[curDev].write_to_device(data)
-            if res == 'NACK\n':
-                print("Data transfer was not successful!")
-            else:
-                print("Data transfer was successful!")
-                print(f"Received: {res}")
-        elif action == 'h':
-            print_menu()
-        elif action == 'q':
-            print("Disconnecting device...")
-            disconnect_from_devices(devices)
-            active = False
-        else:
-            print("Command not recognized. Enter 'h' for help")
-
+    # print_menu()
+    #
+    # active = True
+    # curDev = 0
+    #
+    # while active:
+    #     action = input("--> ")
+    #     if action == 'a':
+    #         i = 0
+    #         for dev in devices:
+    #             print(f"Device[{i}]: {dev.port} {dev.devLoc}")
+    #             i += 1
+    #         print(f"Current device is Device[{curDev}]: {devices[curDev].port} {devices[curDev].devLoc}")
+    #     elif action == 'd':
+    #         if numDev != 1:
+    #
+    #             device = input("device (TX/RX): ")
+    #             if device in ("TX", "tx"):
+    #                 curDev = 0
+    #                 print(f"Current device is Device[{curDev}]: {devices[curDev].port} {devices[curDev].devLoc}")
+    #             elif device in ("RX", "rx"):
+    #                 curDev = 1
+    #                 print(f"Current device is Device[{curDev}]: {devices[curDev].port} {devices[curDev].devLoc}")
+    #             else:
+    #                 print("Unable to identify the device. Use TX or RX to specify the device you would like to "
+    #                       "switch to...")
+    #         else:
+    #             print("Only one device connected. Cannot switch to other device...")
+    #
+    #     elif action == 'w':
+    #         data = input("data: ")
+    #         res = devices[curDev].write_to_device(data)
+    #         if res == 'NACK\n':
+    #             print("Data transfer was not successful!")
+    #         else:
+    #             print("Data transfer was successful!")
+    #             print(f"Received: {res}")
+    #     elif action == 'h':
+    #         print_menu()
+    #     elif action == 'q':
+    #
+    #         active = False
+    #     else:
+    #         print("Command not recognized. Enter 'h' for help")
+    print("Disconnecting device...")
+    disconnect_from_devices(devices)
     print("\nClosing down direcMeasure...")
 
     exit(1)
