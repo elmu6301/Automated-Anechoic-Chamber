@@ -12,6 +12,7 @@ This file contains the USB library for the host machine.
 def_port_name = "MSP430-USB Example"
 dev_identifier = "IDEN"
 
+
 class MSP430:
 
     def __init__(self, port=None, name=None, open=True):

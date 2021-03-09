@@ -130,8 +130,8 @@ def run_experiments(devices, cmds):
             print(f"\tSending '{cmd}' to test device...")
             resp = devices[0].write_to_device(cmd)
             print(resp)
-            # if resp != cmd:
-            #     return False, cmd
+            if resp != cmd:
+                return False, cmd
     return True, True
 
 
