@@ -36,11 +36,12 @@ def gen_sweepPhi_cmds(start_angle, end_angle, theta_offset, samples, freq):
 
     # Compute offset for each sample
     rel_phi = degrees_to_steps(float(end_angle - start_angle)/samples)
+    print(rel_phi)
     dir = "CC:"
     if rel_phi < 0:
         dir = "CW:"
     # Generate Phi commands
-    cmd_str = "MOVE:PHI:"+dir+ '%d' % (abs(degrees_to_steps(abs(rel_phi))))
+    cmd_str = "MOVE:PHI:"+dir+ '%d' % (abs(rel_phi))
     test_cmds += [cmd_str] * samples
 
     # TODO Generate gpib commands
@@ -72,7 +73,7 @@ def gen_sweepTheta_cmds(start_angle, end_angle, phi_offset, samples, freq):
     if rel_theta < 0:
         dir = "CW:"
     # Generate Phi commands
-    cmd_str = "MOVE:THETA:" + dir + '%d' % (abs(degrees_to_steps(abs(rel_theta))))
+    cmd_str = "MOVE:THETA:" + dir + '%d' % (abs(rel_theta))
     test_cmds += [cmd_str] * samples
 
     # TODO Generate gpib commands

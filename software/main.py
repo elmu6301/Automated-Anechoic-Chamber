@@ -135,7 +135,6 @@ def run_experiments(devices, cmds):
     return True, True
 
 
-
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print_welcome_sign()
@@ -154,19 +153,19 @@ if __name__ == '__main__':
     if not cmds:
         print("Error: Could not process configuration file. ")
         exit(-1)
-    # parser.print_cmds(cmds)
+    parser.print_cmds(cmds)
     # Connect to devices
-    devices = connect_to_devices()
-    if not devices:
-        print("Unable to connect to devices...")
-        print("Closing down direcMeasure...")
-        exit(-1)
-    numDev = len(devices)
-
-    res = run_experiments(devices, cmds)
-    if res[0] is False:
-        print(f"Error: Issue executing {res[1]}...")
-        exit(-1)
+    # devices = connect_to_devices()
+    # if not devices:
+    #     print("Unable to connect to devices...")
+    #     print("Closing down direcMeasure...")
+    #     exit(-1)
+    # numDev = len(devices)
+    #
+    # res = run_experiments(devices, cmds)
+    # if res[0] is False:
+    #     print(f"Error: Issue executing {res[1]}...")
+    #     exit(-1)
 
     # print_menu()
     #
