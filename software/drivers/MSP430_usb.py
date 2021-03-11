@@ -117,50 +117,6 @@ class MSP430:
             return False
         return False
 
-    def send_orient_cmd(self, data):
-        if data is not None:
-            # Convert Data to a USB string
-            usb_data = to_usb_str(data)
-            if usb_data:
-                # Try writing to device
-                try:
-                    self.MSP430.write(usb_data)
-                except Exception as e:
-                    print(f"Error: Could not write to the MSP340 because {e}")
-                    return False
-                # Wait for ACK or NACK
-                while self.MSP430.in_waiting == 0:
-                    pass
-                cmd_received = self.MSP430.readline().decode()
-                if cmd_received != "a\n":
-                    print(f"Error: Device did not acknowledge command, received {cmd_received[0:len(cmd_received)-1]}")
-                    return False
-
-                # Wait for Done Response
-                while self.MSP430.in_waiting == 0:
-                    pass
-                done_resp = self.MSP430.readline().decode()
-                if done_resp.endswith("\n"):
-                    done_resp = done_resp[0:len(done_resp) - 1]
-                return done_resp
-            return False
-        return False
-
-
-    def set_orientation(self, phi, theta):
-        # Check inputs
-        if not isinstance(phi, int) and not isinstance(theta, int):
-            return False
-        if not isinstance(phi, int) or not (0 <= phi <= 360):
-            phi = 1000
-        if not isinstance(theta, int) or not (0 <= theta <= 360):
-            theta = 1000
-
-        # combine string
-        orient_str = '%d,%d' % (phi,theta)
-        # send orientations to the device
-        return orient_str # self.write_to_device(orient_str)
-
 
 def sort_devices_by(msp430):
     return msp430.devLoc
