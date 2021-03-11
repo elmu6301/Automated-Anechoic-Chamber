@@ -74,6 +74,7 @@ def connect_to_devices():
         if not dev:
             return False
         devices.append(dev)
+        print(f"Identified device as {dev.devLoc}")
     if len(devices) == 2:
         if devices[0].devLoc == devices[1].devLoc:
             print(f"Cannot have two devices located on the {devices[1].devLoc} side.")
@@ -126,13 +127,16 @@ def run_experiments(devices, cmds):
         t_cmds = sub_expt['test']
         p_cmds = sub_expt['probe']
         g_cmds = sub_expt['gpib']
+        t_cmds.append("BAD CMD")
         for cmd in t_cmds:
             print(f"\tSending '{cmd}' to test device...")
-            resp = devices[0].write_to_device(cmd)
-            print(resp)
+            # resp = devices[0].write_to_device(cmd)
+            resp = devices[0].send_orient_cmd(cmd)
             if resp != cmd:
-                return False, cmd
-    return True, True
+                return False, cmd, resp
+            print(f"\tReceived: '{resp}'\n")
+
+    return True, True, True
 
 
 # Press the green button in the gutter to run the script.
@@ -155,18 +159,18 @@ if __name__ == '__main__':
         exit(-1)
     parser.print_cmds(cmds)
     # Connect to devices
-    # devices = connect_to_devices()
-    # if not devices:
-    #     print("Unable to connect to devices...")
-    #     print("Closing down direcMeasure...")
-    #     exit(-1)
-    # numDev = len(devices)
-    #
-    # res = run_experiments(devices, cmds)
-    # if res[0] is False:
-    #     print(f"Error: Issue executing {res[1]}...")
-    #     exit(-1)
+    devices = connect_to_devices()
+    if not devices:
+        print("Unable to connect to devices...")
+        print("Closing down direcMeasure...")
+        exit(-1)
+    numDev = len(devices)
+    res = run_experiments(devices, cmds)
+    if res[0] is False:
+        print(f"Error: Issue executing {res[1]} received {res[2]} instead")
+        exit(-1)
 
+    # Direct command line input reads
     # print_menu()
     #
     # active = True
@@ -213,6 +217,6 @@ if __name__ == '__main__':
     #         print("Command not recognized. Enter 'h' for help")
     print("Disconnecting device...")
     disconnect_from_devices(devices)
-    print("\nClosing down direcMeasure...")
+    print("Closing down direcMeasure...")
 
     exit(1)

@@ -36,7 +36,6 @@ def gen_sweepPhi_cmds(start_angle, end_angle, theta_offset, samples, freq):
 
     # Compute offset for each sample
     rel_phi = degrees_to_steps(float(end_angle - start_angle)/samples)
-    print(rel_phi)
     dir = "CC:"
     if rel_phi < 0:
         dir = "CW:"

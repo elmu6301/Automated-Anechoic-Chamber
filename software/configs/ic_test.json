@@ -1,25 +1,10 @@
 {
 	"flow": [
 		{
-			"expType": "sweepPhi",
-			"freq": 120, 
-			"samples": 5,
-			"startPhi": 0, 
-			"endPhi": 10,
-			"theta": 10
-		},{
-			"expType": "sweepTheta",
-			"freq": 120,
-			"samples": 5,
-			"startTheta": 0,
-			"endTheta": 10,
-			"phi": 10
-		},
-		{
 			"expType": "sweepFreq",
 			"freq": [120, 140], 
 			"orientations":[
-				["0","0"], ["10","10"]
+				["0","0"], ["10","10"], ["0","0"], ["-10","-10"], ["0","0"]
 			]
 		}
 	]

@@ -56,12 +56,12 @@ class MSP430:
             while self.MSP430.in_waiting:
                 self.MSP430.read()
             # print(f"Connected to {self.port}")
-            # identify if the port is TX or RX
+            # identify if the port is test or probe
             loc = self.write_to_device(dev_identifier)
-            if loc == "TX\n":
-                self.devLoc = "TX"
-            elif loc == "RX\n":
-                self.devLoc = "RX"
+            if loc == "TEST":
+                self.devLoc = "TEST"
+            elif loc == "PROBE":
+                self.devLoc = "PROBE"
             else:
                 print(f"Could not identify device location: {loc}")
                 return False
@@ -96,13 +96,44 @@ class MSP430:
                 try:
                     self.MSP430.write(usb_data)
                 except Exception as e:
-                    print(f"Could write to the MSP340")
+                    print(f"Could not write to the MSP340 because {e}")
                     return False
                 # Wait for response
                 while self.MSP430.in_waiting == 0:
                     pass
-                response = self.MSP430.readline()
-                return response.decode()
+                response = self.MSP430.readline().decode()
+                if response.endswith("\n"):
+                    response = response[0:len(response)-1]
+                return response
+            return False
+        return False
+
+    def send_orient_cmd(self, data):
+        if data is not None:
+            # Convert Data to a USB string
+            usb_data = to_usb_str(data)
+            if usb_data:
+                # Try writing to device
+                try:
+                    self.MSP430.write(usb_data)
+                except Exception as e:
+                    print(f"Error: Could not write to the MSP340 because {e}")
+                    return False
+                # Wait for ACK or NACK
+                while self.MSP430.in_waiting == 0:
+                    pass
+                cmd_received = self.MSP430.readline().decode()
+                if cmd_received != "a\n":
+                    print(f"Error: Device did not acknowledge command, received {cmd_received[0:len(cmd_received)-1]}")
+                    return False
+
+                # Wait for Done Response
+                while self.MSP430.in_waiting == 0:
+                    pass
+                done_resp = self.MSP430.readline().decode()
+                if done_resp.endswith("\n"):
+                    done_resp = done_resp[0:len(done_resp) - 1]
+                return done_resp
             return False
         return False
 
