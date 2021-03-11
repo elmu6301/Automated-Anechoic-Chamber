@@ -96,15 +96,24 @@ class MSP430:
                 try:
                     self.MSP430.write(usb_data)
                 except Exception as e:
-                    print(f"Could not write to the MSP340 because {e}")
+                    print(f"Error: Could not write to the MSP340 because {e}")
                     return False
-                # Wait for response
+                # Wait for ACK or NACK
                 while self.MSP430.in_waiting == 0:
                     pass
-                response = self.MSP430.readline().decode()
-                if response.endswith("\n"):
-                    response = response[0:len(response)-1]
-                return response
+                cmd_received = self.MSP430.readline().decode()
+                if cmd_received != "a\n":
+                    print(
+                        f"Error: Device did not acknowledge command, received {cmd_received[0:len(cmd_received) - 1]}")
+                    return False
+
+                # Wait for Done Response
+                while self.MSP430.in_waiting == 0:
+                    pass
+                done_resp = self.MSP430.readline().decode()
+                if done_resp.endswith("\n"):
+                    done_resp = done_resp[0:len(done_resp) - 1]
+                return done_resp
             return False
         return False
 

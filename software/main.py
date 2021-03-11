@@ -127,11 +127,11 @@ def run_experiments(devices, cmds):
         t_cmds = sub_expt['test']
         p_cmds = sub_expt['probe']
         g_cmds = sub_expt['gpib']
+        # Send a command not recognized by the MCU
         t_cmds.append("BAD CMD")
         for cmd in t_cmds:
             print(f"\tSending '{cmd}' to test device...")
-            # resp = devices[0].write_to_device(cmd)
-            resp = devices[0].send_orient_cmd(cmd)
+            resp = devices[0].write_to_device(cmd)
             if resp != cmd:
                 return False, cmd, resp
             print(f"\tReceived: '{resp}'\n")
