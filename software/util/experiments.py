@@ -104,12 +104,12 @@ def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq=None):
         else:
             t_cmd += "MOVE:PHI:CC:"
         t_cmd += '%d' % (abs(degrees_to_steps(relPhi)))
-        p_cmd = t_cmd
-        if relPhi < 0:
-            t_cmd += ";MOVE:THETA:CW:"
-        else:
-            t_cmd += ";MOVE:THETA:CC:"
-        t_cmd += '%d' % (abs(degrees_to_steps(relTheta)))
+        # # p_cmd = t_cmd
+        # if relPhi < 0:
+        #     t_cmd += ";MOVE:THETA:CW:"
+        # else:
+        #     t_cmd += ";MOVE:THETA:CC:"
+        # t_cmd += '%d' % (abs(degrees_to_steps(relTheta)))
         # Add command to test commands
         test_cmds.append(t_cmd)
         # probe_cmds.append(p_cmd)

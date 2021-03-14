@@ -132,10 +132,9 @@ def run_experiments(devices, cmds):
         for cmd in t_cmds:
             print(f"\tSending '{cmd}' to test device...")
             resp = devices[0].write_to_device(cmd)
+            print(f"\tReceived: '{resp}'\n")
             if resp != cmd:
                 return False, cmd, resp
-            print(f"\tReceived: '{resp}'\n")
-
     return True, True, True
 
 
@@ -164,15 +163,14 @@ if __name__ == '__main__':
         print("Unable to connect to devices...")
         print("Closing down direcMeasure...")
         exit(-1)
-    numDev = len(devices)
+
     res = run_experiments(devices, cmds)
     if res[0] is False:
         print(f"Error: Issue executing {res[1]} received {res[2]} instead")
-        exit(-1)
 
     # Direct command line input reads
     # print_menu()
-    #
+    # numDev = len(devices)
     # active = True
     # curDev = 0
     #

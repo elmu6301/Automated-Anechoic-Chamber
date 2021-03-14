@@ -9,7 +9,7 @@ host_usb.py
 This file contains the USB library for the host machine.
 '''
 
-def_port_name = "MSP430-USB Example"
+def_port_name = "USB Serial Device" #"MSP430-USB Example" #Update with the interface name for Jimmy's code
 dev_identifier = "IDEN"
 
 
@@ -65,6 +65,13 @@ class MSP430:
             else:
                 print(f"Could not identify device location: {loc}")
                 return False
+            # Wait for Done Response
+            while self.MSP430.in_waiting == 0:
+                pass
+            done_resp = self.MSP430.readline().decode()
+            if done_resp != dev_identifier+"\n":
+                return False
+
             # print(f"Device identified as: {loc}")
         except Exception as e:
             print(f"Could not connect to {self.port} because {e}")
@@ -137,8 +144,8 @@ def to_usb_str(cmdStr):
     if cmdStr is not None and isinstance(cmdStr, str):
         usb_str = cmdStr
         # add carriage return if not already added
-        if not usb_str.endswith('\r'):
-            usb_str += '\r'
+        if not usb_str.endswith('\n'):
+            usb_str += '\n'
         # encode the string to ascii and return
         return usb_str.encode('ascii')
     return None
