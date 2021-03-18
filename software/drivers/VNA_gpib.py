@@ -8,7 +8,7 @@ def init_VNA(address):
     print(rm.list_resources()) #this prints all connected devices (not needed in code but should run once to get device name)
     print("")
     instrument = rm.open_resource('GPIB0::%d::INSTR' % address)  #Open the VNA connection
-    # instrument.read_termination = '\n'      #Set the read termination character
+    # instrument.read_termination = '\n'      #Set the read termination character  (due to VNA's data output, this truncated the output data too early)
     # instrument.write_termination = '\n'     #Set the write termination character
     identify = instrument.query("*IDN?")      #Query the instrument to ensure it is connected
     print("Selected GPIB device: " + identify)
@@ -16,10 +16,8 @@ def init_VNA(address):
         instrument.write("*RST")            #Reset to default setup
         instrument.write("FORM4")           # Set input/output data format to ASCII
 
-        #set # points
-        #collect phase, get freq
-
-        #do we need phase measurements, set channel?
+        #To Do: read freq data, set number of points, manual triggereing
+        #Do we want more features such as setting channel 2?
 
     return instrument
 
@@ -34,7 +32,7 @@ def init_freq_sweep(instrument, start_freq, stop_freq):
 
 #Commands to collect dB and Phase values
 def collect_freq_sweep_data(instrument):
-    # instrument.write("LISFREQ")  # Set to frequency list sweep mode ---> Does this change to 0 to frequency in the output command?
+    # instrument.write("LISFREQ")  # Set to frequency list sweep mode ---> Doesn't seem to work yet
 
     instrument.write("LOGM")  # Set display to log magnitude format
     instrument.write("LINFREQ")  # Select linear frequency sweep  ---> Do we want logarithmic?
@@ -97,10 +95,10 @@ def sparam_data(instrument): #Will we ever want to do only a couple (not all 4)?
     #return one large array which can be easily parsed into file columns
     return np.array([freq, s11_db_only, s11_degree_only, s12_db_only, s12_degree_only, s21_db_only, s21_degree_only, s22_db_only, s22_degree_only],dtype=object)
 
-#Remove column of 0's from VNA's output data
+#Remove column of 0's from VNA's output data by reformatting and splitting the input data string to create a list with all 0's at odd list indices
 def data_formatting(data):
 
-    data_col1 = data.replace(" ", "").replace("\n", ",").split(',')[0::2]
+    data_col1 = data.replace(" ", "").replace("\n", ",").split(',')[0::2] #[0::2] takes every other list element starting at index 0
 
     return np.array(data_col1[:-1],dtype=float)
 
@@ -140,7 +138,7 @@ def plot(filename):
 
 def marker(instrument, freq_val):
     instrument.write("MARK1 " + freq_val) #Can set up to 4 marks
-    print(instrument.query("OUTPMARK")) #(dB, ?, freq)
+    print(instrument.query("OUTPMARK")) #(dB or degree, ?, freq)
 
 def exit(instrument):  #This hasn't been tested
     instrument.write("NOOP")
@@ -148,11 +146,11 @@ def exit(instrument):  #This hasn't been tested
 def main():
     print("Beginning execution of VNA commands")
     print("-----------------------------------")
-    hp8719a = init_VNA(16)    #Connect to the VNA
-    init_freq_sweep(hp8719a, "1 GHz", "3 GHz") #Set the desired frequency range
-    data_out = sparam_data(hp8719a)
-    file_save("antenna_s_params.csv", data_out)
-    plot("antenna_s_params.csv")
+    hp8719a = init_VNA(16)                      #Connect to the VNA
+    init_freq_sweep(hp8719a, "1 GHz", "3 GHz")  #Set the desired frequency range
+    data_out = sparam_data(hp8719a)             #Measure the data (dB and degree for all s-param)
+    file_save("antenna_s_params.csv", data_out) #Store the data
+    plot("antenna_s_params.csv")                #Plot the data
 
     # exit(hp8719a)
     # marker(hp8719a, "2 GHz") #Can use to verify values at a freq
