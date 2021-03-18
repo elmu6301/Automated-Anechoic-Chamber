@@ -8,10 +8,11 @@ from drivers import MSP430_usb as usb
 experiments.py
 This file contains functions generate commands and run various experiments.
 '''
-
+div = 2
+steps_per_degree = 4494400 #9144000
 
 def degrees_to_steps(degree):
-    return int((9144000*float(degree))/360)
+    return int((steps_per_degree*float(degree))/360)
 
 
 def steps_to_degrees(steps):

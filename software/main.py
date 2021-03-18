@@ -156,7 +156,7 @@ if __name__ == '__main__':
     if not cmds:
         print("Error: Could not process configuration file. ")
         exit(-1)
-    parser.print_cmds(cmds)
+    # parser.print_cmds(cmds)
     # Connect to devices
     devices = connect_to_devices()
     if not devices:
