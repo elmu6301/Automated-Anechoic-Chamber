@@ -128,20 +128,47 @@ def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq=None):
 
 
 def run_sweepFreq(devices, t_cmds, p_cmds, g_cmds):
-    print("running sweepFreq")
     test_dev = devices[0]
     probe_dev = devices[0]
     if len(devices) == 2:
         probe_dev = devices[1]
 
-    # Send commands to the test side
-    for cmd in t_cmds:
-        print(f"\tSending '{cmd}' to test device...")
-        resp = test_dev.write_to_device(cmd)
-        print(f"\tReceived: '{resp}'\n")
-        if resp != cmd:
-            return False, cmd, resp
+    # TODO configure VNA HERE
+    print("Configuring the VNA...")
+
+    # Setup loop control variables
+    pi, gi = 0, 0
+    done = False
+    print("Running through orientations...")
+    for ti in range(len(t_cmds)-1):
+        # Test side commands
+        phi_cmd = t_cmds[ti]
+        theta_cmd = t_cmds[ti+1]
+        print(f"Sending {phi_cmd}...")
+        resp = test_dev.write_to_device(phi_cmd)  # phi
+        if resp != phi_cmd:
+            return False, phi_cmd, resp
+        print(f"Sending {theta_cmd}...")
+        resp = test_dev.write_to_device(theta_cmd)  # theta
+        if resp != theta_cmd:
+            return False, theta_cmd, resp
+
+        # TODO trigger vna measurment here
+        print(f"Triggering measurment on the VNA\n")
+
+        # Update loop control variables
+        ti += 1
+
     return True, True, True
+
+
+def run_sweepPhi(devices, t_cmds, p_cmds, g_cmds):
+    return True, True, True
+
+
+def run_sweepTheta(devices, t_cmds, p_cmds, g_cmds):
+    return True, True, True
+
 
 # main
 def main():
@@ -153,14 +180,8 @@ def main():
     # print(cmds[0])
     # for cmd in cmds.get("test"):
     #     print(cmd)
-    test = usb.MSP430("COM1", "Eval Board", open=True)
-    # if test.MSP430.isOpen():
-    #     print("Device is open")
-    # print(type(test))
-    # test2 = "Hello"
-    # runner = ExperimentRunner(test, test)
-    # print(runner.test_dev)
-    # print(runner.probe_dev)
+    # test = usb.MSP430("COM1", "Eval Board", open=True)
+
 
 if __name__ == "__main__":
     main()

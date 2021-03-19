@@ -138,8 +138,14 @@ def run_experiments(devices, cmds):
                 return False, expt_res[1], expt_res[2]
         elif expt_type == "sweepPhi":
             print(f"\nRunning Type: {expt_type}")
+            expt_res = expt.run_sweepPhi(devices, t_cmds, p_cmds, g_cmds)
+            if expt_res[0] is False:
+                return False, expt_res[1], expt_res[2]
         elif expt_type == "sweepTheta":
             print(f"\nRunning Type: {expt_type}")
+            expt_res = expt.run_sweepTheta(devices, t_cmds, p_cmds, g_cmds)
+            if expt_res[0] is False:
+                return False, expt_res[1], expt_res[2]
         else:
             print(f"\nError: Could not run experiment of type '{expt_type}'")
             return False, expt_type
