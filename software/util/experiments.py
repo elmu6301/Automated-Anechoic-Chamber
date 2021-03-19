@@ -105,12 +105,13 @@ def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq=None):
         else:
             t_cmd += "MOVE:PHI:CC:"
         t_cmd += '%d' % (abs(degrees_to_steps(relPhi)))
-        # # p_cmd = t_cmd
-        # if relPhi < 0:
-        #     t_cmd += ";MOVE:THETA:CW:"
-        # else:
-        #     t_cmd += ";MOVE:THETA:CC:"
-        # t_cmd += '%d' % (abs(degrees_to_steps(relTheta)))
+        test_cmds.append(t_cmd)
+
+        if relPhi < 0:
+            t_cmd = "MOVE:THETA:CW:"
+        else:
+            t_cmd = "MOVE:THETA:CC:"
+        t_cmd += '%d' % (abs(degrees_to_steps(relTheta)))
         # Add command to test commands
         test_cmds.append(t_cmd)
         # probe_cmds.append(p_cmd)
@@ -126,31 +127,22 @@ def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq=None):
     return cmds, prevPhi, prevTheta
 
 
-class ExperimentRunner:
-    def __init__(self, test_dev, probe_dev):
-        self.test_dev = test_dev if type(test_dev) is usb.MSP430 else None
-        if self.test_dev is None:
-            print("Error: Could not connect to test side device...")
-            return
-        if self.test_dev.MSP430 is None:
-            res = self.test_dev.connect_to_port()
-            if not res:
-                print("Error: Could not connect to test side device...")
-                return
-        self.probe_dev = probe_dev if type(probe_dev) is usb.MSP430 else None
-        if self.probe_dev is None:
-            print("Error: Could not connect to receive side device...")
-            return
-        if self.probe_dev.MSP430 is None:
-            res = self.probe_dev.connect_to_port()
-            if not res:
-                print("Error: Could not connect to receive side device...")
-                return
+def run_sweepFreq(devices, t_cmds, p_cmds, g_cmds):
+    print("running sweepFreq")
+    test_dev = devices[0]
+    probe_dev = devices[0]
+    if len(devices) == 2:
+        probe_dev = devices[1]
 
-#     def __del__(self):
-#         self.test_dev.disconnect_from_port()
-#         self.probe_dev.disconnect_from_port()
-#
+    # Send commands to the test side
+    for cmd in t_cmds:
+        print(f"\tSending '{cmd}' to test device...")
+        resp = test_dev.write_to_device(cmd)
+        print(f"\tReceived: '{resp}'\n")
+        if resp != cmd:
+            return False, cmd, resp
+    return True, True, True
+
 # main
 def main():
     print("Experiments!!!")

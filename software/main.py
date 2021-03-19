@@ -123,18 +123,26 @@ def process_config(config_name):
 
 def run_experiments(devices, cmds):
     for sub_expt in cmds:
-        print(f"\nRunning Type: {sub_expt['type']}")
+        # Split cmds into usable pieces
+        expt_type = sub_expt['type']
         t_cmds = sub_expt['test']
         p_cmds = sub_expt['probe']
         g_cmds = sub_expt['gpib']
-        # Send a command not recognized by the MCU
-        t_cmds.append("BAD CMD")
-        for cmd in t_cmds:
-            print(f"\tSending '{cmd}' to test device...")
-            resp = devices[0].write_to_device(cmd)
-            print(f"\tReceived: '{resp}'\n")
-            if resp != cmd:
-                return False, cmd, resp
+        # expt_res = ''
+
+        # Run the appropriate function for the sub-experiment
+        if expt_type == "sweepFreq":
+            print(f"\nRunning Type: {expt_type}")
+            expt_res = expt.run_sweepFreq(devices, t_cmds, p_cmds, g_cmds)
+            if expt_res[0] is False:
+                return False, expt_res[1], expt_res[2]
+        elif expt_type == "sweepPhi":
+            print(f"\nRunning Type: {expt_type}")
+        elif expt_type == "sweepTheta":
+            print(f"\nRunning Type: {expt_type}")
+        else:
+            print(f"\nError: Could not run experiment of type '{expt_type}'")
+            return False, expt_type
     return True, True, True
 
 
@@ -156,7 +164,8 @@ if __name__ == '__main__':
     if not cmds:
         print("Error: Could not process configuration file. ")
         exit(-1)
-    # parser.print_cmds(cmds)
+    parser.print_cmds(cmds)
+
     # Connect to devices
     devices = connect_to_devices()
     if not devices:
@@ -168,6 +177,7 @@ if __name__ == '__main__':
     if res[0] is False:
         print(f"Error: Issue executing {res[1]} received {res[2]} instead")
 
+    #
     print("Disconnecting device...")
     disconnect_from_devices(devices)
     print("Closing down direcMeasure...")
