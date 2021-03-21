@@ -32,13 +32,14 @@ def print_welcome_sign():
 def process_cmd_line(argv):
     # Get all options and their arguments
     try:
-        opts, args = getopt.gnu_getopt(argv, "hlc:")
+        opts, args = getopt.gnu_getopt(argv, "halc:")
     except getopt.GetoptError as err:
         # print("Error: Invalid command line input entered...")
         # print_usage()
         return False
     config = ''
     run_alignment = True
+    align_only = False
     # Parse all options
     for opt, arg in opts:
         # Check to see if the user needs help
@@ -54,12 +55,16 @@ def process_cmd_line(argv):
             elif config.endswith(".json") is False:
                 print("Error: Config file must be a json file...")
                 return False
-            # print(f"Opening {config}...")
-        # Run the system without
+        elif opt == '-a':
+            print("Running direcMeasure laser alignment routine only...")
+            align_only = True
+        # Run the system without laser alignment
         elif opt == '-l':
-            print("Running direcMeasure without laser alignment...")
+            # print("Running direcMeasure without laser alignment...")
             run_alignment = False
-    return config, run_alignment
+        # Run the system without laser alignment
+
+    return config, align_only, run_alignment
 
 
 def connect_to_devices():
@@ -113,9 +118,10 @@ def process_config(config_name):
         # Generate commands
         cmds = parser.gen_expt_cmds(flow)
         if not cmds:
-            print(f"Error: Could generate experiment commnands from '{config_name}'.")
+            print(f"Error: Could generate experiment commands from '{config_name}'.")
             return False
         # print(cmds)
+        print(f"Successfully generated experiment commands from '{config_name}'.")
         return cmds
     else:
         return True
@@ -152,10 +158,16 @@ def run_experiments(devices, cmds):
     return True, True, True
 
 
+def run_alignment_routine(devices):
+    print("\nStarting alignment process...")
+    return True
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print_welcome_sign()
-
+    # Setup Phase
+    print("\nSetting up system...")
     # Process Command Line
     args = process_cmd_line(sys.argv[1:])
     if not args:
@@ -163,14 +175,16 @@ if __name__ == '__main__':
         print_usage()
         exit(-1)
     cfg = args[0]
-    align = args[1]
-
-    # Process Configuration File
-    cmds = process_config(cfg)
-    if not cmds:
-        print("Error: Could not process configuration file. ")
-        exit(-1)
-    parser.print_cmds(cmds)
+    full_run = not args[1]
+    align = args[2]
+    cmds = ''
+    # Process Configuration File if running the entire system
+    if full_run:
+        cmds = process_config(cfg)
+        if not cmds:
+            print("Error: Could not process configuration file. ")
+            exit(-1)
+        # parser.print_cmds(cmds) # Print out the commands
 
     # Connect to devices
     devices = connect_to_devices()
@@ -179,13 +193,22 @@ if __name__ == '__main__':
         print("Closing down direcMeasure...")
         exit(-1)
 
-    res = run_experiments(devices, cmds)
-    if res[0] is False:
-        print(f"Error: Issue executing {res[1]} received {res[2]} instead")
+    # Run alignment routine
+    if align:
+        print("\nStarting device connection process...")
 
-    #
-    print("Disconnecting device...")
-    disconnect_from_devices(devices)
-    print("Closing down direcMeasure...")
+    print("Successfully completed setup phase.")
+
+    if full_run:
+        # Start Running the experiments
+        res = run_experiments(devices, cmds)
+        if res[0] is False:
+            print(f"Error: Issue executing {res[1]} received {res[2]} instead")
+
+    # Shutdown Phase
+    print("\nClosing down system...")
+    # print("Disconnecting devices...")
+    # disconnect_from_devices(devices)
+    print("Successfully closed down system...")
 
     exit(1)
