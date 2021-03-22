@@ -63,7 +63,6 @@ def process_cmd_line(argv):
             # print("Running direcMeasure without laser alignment...")
             run_alignment = False
         # Run the system without laser alignment
-
     return config, align_only, run_alignment
 
 
@@ -99,9 +98,9 @@ def disconnect_from_devices(devices):
 
 
 def process_config(config_name):
-    print(f"\nStarting configuration file parsing process on {config_name}...")
     if config_name != '':
         # Find Config
+        print(f"\nStarting configuration file parsing process on {config_name}...")
         full_cfg_name = parser.find_config(config_name)
         if not full_cfg_name:
             print(f"Error: Could not locate the file '{config_name}'. Ensure that '{config_name}' "
@@ -124,7 +123,7 @@ def process_config(config_name):
         print(f"Successfully generated experiment commands from '{config_name}'.")
         return cmds
     else:
-        return True
+        return False
 
 
 def run_experiments(devices, cmds):
@@ -160,6 +159,8 @@ def run_experiments(devices, cmds):
 
 def run_alignment_routine(devices):
     print("\nStarting alignment process...")
+    # TODO
+    print("Successfully completed alignment process...")
     return True
 
 
@@ -177,7 +178,7 @@ if __name__ == '__main__':
     cfg = args[0]
     full_run = not args[1]
     align = args[2]
-    cmds = ''
+    cmds = False
     # Process Configuration File if running the entire system
     if full_run:
         cmds = process_config(cfg)
@@ -196,6 +197,12 @@ if __name__ == '__main__':
     # Run alignment routine
     if align:
         print("\nStarting device connection process...")
+        res = run_alignment_routine(devices)
+        if res is False:
+            print("Unable to align system...")
+            print("Closing down direcMeasure...")
+            exit(-1)
+
 
     print("Successfully completed setup phase.")
 
