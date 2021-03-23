@@ -1,6 +1,7 @@
 import sys
 import getopt
 import json
+from optparse import OptionParser
 
 # Custom Modules
 from drivers import MSP430_usb as usb
@@ -164,28 +165,58 @@ def run_alignment_routine(devices):
     return True
 
 
+def config_run(option, opt, value, parser):
+    if parser.values.run_type == "f":
+        parser.values.run_type = opt[1]
+    else:
+        parser.values.run_type = "e"
+
+
+def process_cmd_line_optparser():
+    parser = OptionParser()
+    # Options
+    usage = "verbose usage: direcMeasure --config<config_file>"
+    usage += "\nusage: direcMeasure --c<config_file> -"
+    parser.set_usage(usage)
+    parser.set_defaults(run_type=["f"])
+
+    parser.add_option("-c", "--config", type="string", action="store", dest="cfg", default='',
+                      help="Configuration file used to control the system. Must be a JSON file.")
+    parser.add_option("-a", "--alignOnly", action="callback", callback=config_run, dest="run_type",
+                      help="Only run the alignment routine.")
+    parser.add_option("-s", "--skipAlign", action="callback", callback=config_run, dest="run_type",
+                      help="Skip the alignment routine.")
+    (options, args) = parser.parse_args()
+    # Testing optparser
+    print(f"Options: {options}")
+    print(f"config file: {options.cfg}")
+    print(f"Run Configuration: {options.run_type}")
+
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_welcome_sign()
-    # Setup Phase
-    print("\nSetting up system...")
-    # Process Command Line
-    args = process_cmd_line(sys.argv[1:])
-    if not args:
-        print("Error: Could not parse command line arguments. See usage below:")
-        print_usage()
-        exit(-1)
-    cfg = args[0]
-    full_run = not args[1]
-    align = args[2]
-    # cmds = False
-    # Process Configuration File if running the entire system
-    # if full_run:
-    cmds = process_config(cfg)
-    if not cmds:
-        print("Error: Could not process configuration file. ")
-        exit(-1)
-    parser.print_cmds(cmds) # Print out the commands
+    process_cmd_line_optparser()
+    # print_welcome_sign()
+    # # Setup Phase
+    # print("\nSetting up system...")
+    # # Process Command Line
+    # args = process_cmd_line(sys.argv[1:])
+    # if not args:
+    #     print("Error: Could not parse command line arguments. See usage below:")
+    #     print_usage()
+    #     exit(-1)
+    # cfg = args[0]
+    # full_run = not args[1]
+    # align = args[2]
+    # # cmds = False
+    # # Process Configuration File if running the entire system
+    # # if full_run:
+    # cmds = process_config(cfg)
+    # if not cmds:
+    #     print("Error: Could not process configuration file. ")
+    #     exit(-1)
+    # parser.print_cmds(cmds) # Print out the commands
 
     # Connect to USB devices
     # devices = connect_to_devices()
@@ -205,8 +236,8 @@ if __name__ == '__main__':
     #         print("Unable to align system...")
     #         print("Closing down direcMeasure...")
     #         exit(-1)
-
-    print("Successfully completed setup phase.")
+    #
+    # print("Successfully completed setup phase.")
 
     # if full_run:
     #     # Start Running the experiments
