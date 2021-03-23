@@ -108,7 +108,7 @@ def process_config(config_name):
             return False
         # print(f"Found file: {full_cfg_name}")
         # Get flow
-        flow = parser.get_expt_flow(full_cfg_name)
+        flow, meas = parser.get_expt_flow_meas(full_cfg_name)
         if not flow:
             print(f"Error: Could read in data from '{config_name}'. Ensure that '{config_name}' "
                   f"is the correct format. See the User Manual for Details.")
@@ -178,44 +178,46 @@ if __name__ == '__main__':
     cfg = args[0]
     full_run = not args[1]
     align = args[2]
-    cmds = False
+    # cmds = False
     # Process Configuration File if running the entire system
-    if full_run:
-        cmds = process_config(cfg)
-        if not cmds:
-            print("Error: Could not process configuration file. ")
-            exit(-1)
-        # parser.print_cmds(cmds) # Print out the commands
-
-    # Connect to devices
-    devices = connect_to_devices()
-    if not devices:
-        print("Unable to connect to devices...")
-        print("Closing down direcMeasure...")
+    # if full_run:
+    cmds = process_config(cfg)
+    if not cmds:
+        print("Error: Could not process configuration file. ")
         exit(-1)
+    parser.print_cmds(cmds) # Print out the commands
+
+    # Connect to USB devices
+    # devices = connect_to_devices()
+    # if not devices:
+    #     print("Unable to connect to devices...")
+    #     print("Closing down direcMeasure...")
+    #     exit(-1)
+
+    # Connect to VNA here
+    # TODO
 
     # Run alignment routine
-    if align:
-        print("\nStarting device connection process...")
-        res = run_alignment_routine(devices)
-        if res is False:
-            print("Unable to align system...")
-            print("Closing down direcMeasure...")
-            exit(-1)
-
+    # if align:
+    #     print("\nStarting device connection process...")
+    #     res = run_alignment_routine(devices)
+    #     if res is False:
+    #         print("Unable to align system...")
+    #         print("Closing down direcMeasure...")
+    #         exit(-1)
 
     print("Successfully completed setup phase.")
 
-    if full_run:
-        # Start Running the experiments
-        res = run_experiments(devices, cmds)
-        if res[0] is False:
-            print(f"Error: Issue executing {res[1]} received {res[2]} instead")
-
-    # Shutdown Phase
-    print("\nClosing down system...")
-    # print("Disconnecting devices...")
-    # disconnect_from_devices(devices)
-    print("Successfully closed down system...")
+    # if full_run:
+    #     # Start Running the experiments
+    #     res = run_experiments(devices, cmds)
+    #     if res[0] is False:
+    #         print(f"Error: Issue executing {res[1]} received {res[2]} instead")
+    #
+    # # Shutdown Phase
+    # print("\nClosing down system...")
+    # # print("Disconnecting devices...")
+    # # disconnect_from_devices(devices)
+    # print("Successfully closed down system...")
 
     exit(1)

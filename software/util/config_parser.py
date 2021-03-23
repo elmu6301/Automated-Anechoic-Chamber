@@ -2,6 +2,7 @@
 import pydoc
 import os
 import json
+
 try:
     import experiments
 except ImportError:
@@ -63,7 +64,7 @@ def find_config(file_name, file_path=None):
 
 
 # Opens the file and returns the contents of flow
-def get_expt_flow(full_file_name):
+def get_expt_flow_meas(full_file_name):
     if full_file_name == '':
         return False
     if full_file_name.rfind(root_base) == -1:
@@ -72,12 +73,15 @@ def get_expt_flow(full_file_name):
 
     #
     flow = False
+    meas = False
     # print(f"full_file_name {full_file_name}")
     with open(full_file_name, "r") as file:
         data = json.load(file)
         flow = data.get("flow")
+        meas = data.get("meas")
         # print(flow)
-    return flow
+        # print(meas)
+    return flow, meas
 
 
 def gen_expt_cmds(flow):
@@ -85,6 +89,7 @@ def gen_expt_cmds(flow):
     curr_theta = 0
     curr_phi = 0
     # print(f"Currently at ({curr_phi},{curr_theta})")
+
     for expt in flow:
         type = expt.get("expType")
         # print("Found experiment: " + type)
@@ -140,10 +145,10 @@ def gen_expt_cmds(flow):
                 return False
         elif type.endswith(".json"):
             # print(f"\tOpening {type}")
-            inner_flow = get_expt_flow(type)
+            inner_flow, inner_meas = get_expt_flow_meas(type)  # ignore meas of the referenced config
             # print(inner_flow)
             inner_cmds = gen_expt_cmds(inner_flow)
-            if inner_cmds:
+            if inner_cmds is not False:
                 for i_cmd in inner_cmds:
                     cmds.append(i_cmd)
             else:

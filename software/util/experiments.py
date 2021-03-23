@@ -10,6 +10,7 @@ This file contains functions generate commands and run various experiments.
 '''
 div = 2
 steps_per_degree = 4494400 #9144000
+polarization_amt = 90
 
 def degrees_to_steps(degree):
     return int((steps_per_degree*float(degree))/360)
@@ -114,14 +115,22 @@ def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq=None):
         t_cmd += '%d' % (abs(degrees_to_steps(relTheta)))
         # Add command to test commands
         test_cmds.append(t_cmd)
-        # probe_cmds.append(p_cmd)
         # update previous angles
         prevPhi = phi
         prevTheta = theta
+
+    # Polarization
+    p_cmd = '%d' % len(test_cmds)
+    # print("p_cmd = {}",p_cmd)
+    probe_cmds.append(p_cmd)
+    p_cmd = "MOVE:THETA:CC:" + '%d' % (abs(degrees_to_steps(polarization_amt)))
+    probe_cmds.append(p_cmd)
+    test_cmds += test_cmds.copy()
+
     # TODO Generate gpib commands
-    # if freq is not None:
-    #     for f in freq:
-    #         gpib_cmds.append('TODO')
+    if freq is not None:
+        for f in freq:
+            gpib_cmds.append('TODO')
 
     cmds = {"type": "sweepFreq", "test": test_cmds, "probe": probe_cmds, "gpib": gpib_cmds}
     return cmds, prevPhi, prevTheta
@@ -134,7 +143,7 @@ def run_sweepFreq(devices, t_cmds, p_cmds, g_cmds):
         probe_dev = devices[1]
 
     # TODO configure VNA HERE
-    print("Configuring the VNA...")
+    print("Configuring the VNA for frequency sweeps...")
 
     # Setup loop control variables
     pi, gi = 0, 0

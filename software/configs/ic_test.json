@@ -2,11 +2,19 @@
 	"flow": [
 		{
 			"expType": "sweepFreq",
-			"freq": [120, 140], 
+			"freq": ["Start GHz", "Stop GHz","num Points"],
 			"orientations":[
 				["20","20"], ["0","0"], ["-20","-20"], ["0","0"]
 			]
 		}
-	]
+	],
+	"meas":
+		{
+			"deviceAddress": "NONE",
+			"freqSweepMode": "log"
+		}
+
+
+
 
 }
