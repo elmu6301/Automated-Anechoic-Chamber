@@ -134,7 +134,8 @@ def gen_expt_cmds(flow):
             freq = expt.get("freq")
             orients = expt.get("orientations")
             # Generate commands
-            freq_cmds = experiments.gen_sweepFreq_cmds(curr_phi, curr_theta, orients)
+            # print(freq)
+            freq_cmds = experiments.gen_sweepFreq_cmds(curr_phi, curr_theta, orients, freq)
             # Check to see if commands were generated incorrectly
             if freq_cmds:
                 cmds.append(freq_cmds[0])
@@ -142,6 +143,7 @@ def gen_expt_cmds(flow):
                 curr_theta = freq_cmds[2]
                 # print(f"Currently at ({curr_phi},{curr_theta})")
             else:
+                # print("Error detected")
                 return False
         elif type.endswith(".json"):
             # print(f"\tOpening {type}")

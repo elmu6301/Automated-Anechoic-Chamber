@@ -12,6 +12,7 @@ div = 2
 steps_per_degree = 4494400 #9144000
 polarization_amt = 90
 
+
 def degrees_to_steps(degree):
     return int((steps_per_degree*float(degree))/360)
 
@@ -84,10 +85,24 @@ def gen_sweepTheta_cmds(start_angle, end_angle, phi_offset, samples, freq):
     return cmds, phi_offset, end_angle
 
 
-def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq=None):
+def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq):
     test_cmds = []
     probe_cmds = []
     gpib_cmds = []
+
+    # Generate gpib commands
+    num_points = 0
+    if len(freq) != 3:
+        return False
+    if not freq[0].endswith(" GHz") and not freq[0].endswith(" MHz"):
+        return False
+    if not freq[1].endswith(" GHz") and not freq[1].endswith(" MHz"):
+        return False
+    try:
+        num_points = int(freq[2])
+    except ValueError:
+        return False
+    gpib_cmds.append({"startF": freq[0], "stopF": freq[1], "num_points":num_points})
 
     # Generate usb commands
     prevPhi = start_phi
@@ -127,10 +142,6 @@ def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq=None):
     probe_cmds.append(p_cmd)
     test_cmds += test_cmds.copy()
 
-    # TODO Generate gpib commands
-    if freq is not None:
-        for f in freq:
-            gpib_cmds.append('TODO')
 
     cmds = {"type": "sweepFreq", "test": test_cmds, "probe": probe_cmds, "gpib": gpib_cmds}
     return cmds, prevPhi, prevTheta
@@ -162,8 +173,8 @@ def run_sweepFreq(devices, t_cmds, p_cmds, g_cmds):
         if resp != theta_cmd:
             return False, theta_cmd, resp
 
-        # TODO trigger vna measurment here
-        print(f"Triggering measurment on the VNA\n")
+        # TODO trigger vna measurement here
+        print(f"Triggering measurement on the VNA\n")
 
         # Update loop control variables
         ti += 1
