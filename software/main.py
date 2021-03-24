@@ -30,43 +30,6 @@ def print_welcome_sign():
     print("  ********************************************************\n")
 
 
-def process_cmd_line(argv):
-    # Get all options and their arguments
-    try:
-        opts, args = getopt.gnu_getopt(argv, "halc:")
-    except getopt.GetoptError as err:
-        # print("Error: Invalid command line input entered...")
-        # print_usage()
-        return False
-    config = ''
-    run_alignment = True
-    align_only = False
-    # Parse all options
-    for opt, arg in opts:
-        # Check to see if the user needs help
-        if opt == "-h":
-            print_usage()
-            return False
-        # Check to see if
-        elif opt == '-c':
-            config = arg
-            if config == '' or config is None:
-                print("Error: No config file detected...")
-                return False
-            elif config.endswith(".json") is False:
-                print("Error: Config file must be a json file...")
-                return False
-        elif opt == '-a':
-            print("Running direcMeasure laser alignment routine only...")
-            align_only = True
-        # Run the system without laser alignment
-        elif opt == '-l':
-            # print("Running direcMeasure without laser alignment...")
-            run_alignment = False
-        # Run the system without laser alignment
-    return config, align_only, run_alignment
-
-
 def connect_to_devices():
     print("\nStarting device connection process...")
     devices = []
@@ -118,12 +81,13 @@ def process_config(config_name):
         # Generate commands
         cmds = parser.gen_expt_cmds(flow)
         if not cmds:
-            print(f"Error: Could generate experiment commands from '{config_name}'.")
+            print(f"Error: Could not generate experiment commands from '{config_name}'.")
             return False
         # print(cmds)
         print(f"Successfully generated experiment commands from '{config_name}'.")
         return cmds
     else:
+        print(f"Error: No configuration file was passed in, could not generate experiment commands.")
         return False
 
 
@@ -172,83 +136,91 @@ def config_run(option, opt, value, parser):
         parser.values.run_type = "e"
 
 
-def process_cmd_line_optparser():
-    parser = OptionParser()
-    # Options
-    usage = "verbose usage: direcMeasure --config<config_file>"
-    usage += "\nusage: direcMeasure --c<config_file> -"
-    parser.set_usage(usage)
-    parser.set_defaults(run_type=["f"])
+def process_cmd_line():
 
+    # Set up parser
+    parser = OptionParser()
+    usage = "usage: ./direcMeasure --config<config_file>"
+    parser.set_usage(usage)
+    parser.set_defaults(run_type="f")
+
+    # Add options
     parser.add_option("-c", "--config", type="string", action="store", dest="cfg", default='',
                       help="Configuration file used to control the system. Must be a JSON file.")
     parser.add_option("-a", "--alignOnly", action="callback", callback=config_run, dest="run_type",
                       help="Only run the alignment routine.")
     parser.add_option("-s", "--skipAlign", action="callback", callback=config_run, dest="run_type",
                       help="Skip the alignment routine.")
+    # Parse command line
     (options, args) = parser.parse_args()
-    # Testing optparser
-    print(f"Options: {options}")
-    print(f"config file: {options.cfg}")
-    print(f"Run Configuration: {options.run_type}")
 
+    # Error Checking
+    if options.run_type == "e":
+        print("Error: Cannot simultaneously only run the alignment routine and with out the alignment routine. "
+              "See usage below:")
+        parser.print_help()
+        return False
+    return options
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    process_cmd_line_optparser()
-    # print_welcome_sign()
-    # # Setup Phase
-    # print("\nSetting up system...")
-    # # Process Command Line
-    # args = process_cmd_line(sys.argv[1:])
-    # if not args:
-    #     print("Error: Could not parse command line arguments. See usage below:")
-    #     print_usage()
-    #     exit(-1)
-    # cfg = args[0]
-    # full_run = not args[1]
-    # align = args[2]
-    # # cmds = False
-    # # Process Configuration File if running the entire system
-    # # if full_run:
-    # cmds = process_config(cfg)
-    # if not cmds:
-    #     print("Error: Could not process configuration file. ")
-    #     exit(-1)
-    # parser.print_cmds(cmds) # Print out the commands
+
+    print_welcome_sign()
+    # Setup Phase
+    print("\nSetting up system...")
+
+    # Process Command Line
+    args = process_cmd_line()
+    if not args:
+        exit(-1)
+    cfg = args.cfg
+    run_type = args.run_type
+    if run_type == "s":
+        print("Running the alignment routine only.")
+    elif run_type == "s":
+        print("Skipping the alignment routine.")
+    cmds = False
+    # Process Configuration File if running the entire system
+    if run_type in ("f", "s"):
+        cmds = process_config(cfg)
+        if not cmds:
+            exit(-1)
+        parser.print_cmds(cmds) # Print out the commands
 
     # Connect to USB devices
-    # devices = connect_to_devices()
-    # if not devices:
-    #     print("Unable to connect to devices...")
-    #     print("Closing down direcMeasure...")
-    #     exit(-1)
+    devices = connect_to_devices()
+    if not devices:
+        print("Unable to connect to devices...")
+        # TODO Add call to shutdown
+        print("Closing down direcMeasure...")
+        exit(-1)
 
-    # Connect to VNA here
+    # Connect to VNA
     # TODO
 
     # Run alignment routine
-    # if align:
-    #     print("\nStarting device connection process...")
-    #     res = run_alignment_routine(devices)
-    #     if res is False:
-    #         print("Unable to align system...")
-    #         print("Closing down direcMeasure...")
-    #         exit(-1)
-    #
-    # print("Successfully completed setup phase.")
+    if run_type in ("f", "a"):
+        print("\nStarting device connection process...")
+        res = run_alignment_routine(devices)
+        if res is False:
+            print("Unable to align system...")
+            # TODO Add call to shutdown
+            print("Closing down direcMeasure...")
+            exit(-1)
+    print("Successfully completed setup phase.")
 
-    # if full_run:
-    #     # Start Running the experiments
-    #     res = run_experiments(devices, cmds)
-    #     if res[0] is False:
-    #         print(f"Error: Issue executing {res[1]} received {res[2]} instead")
-    #
-    # # Shutdown Phase
-    # print("\nClosing down system...")
-    # # print("Disconnecting devices...")
-    # # disconnect_from_devices(devices)
-    # print("Successfully closed down system...")
+    if run_type in ("f", "s"):
+        # Start Running the experiments
+        res = run_experiments(devices, cmds)
+        if res[0] is False:
+            print(f"Error: Issue executing {res[1]} received {res[2]} instead")
+
+    # Shutdown Phase
+    print("\nClosing down system...")
+    print("Disconnecting devices...")
+    if devices != "":
+        disconnect_from_devices(devices)
+    print("Successfully closed down system...")
 
     exit(1)
