@@ -8,14 +8,9 @@ from drivers import MSP430_usb as usb
 from util import config_parser as parser
 from util import experiments as expt
 
-
-def print_menu():
-    print("~~~~~~~~~Menu~~~~~~~~~~")
-    print("'a' : check available devices")
-    print("'d' : set current device")
-    print("'w' : write data")
-    print("'h' : get help")
-    print("'q' : quit")
+# Global Variables
+curr_phase = "Setup"
+mode = "Debug"
 
 
 def print_usage():
@@ -25,111 +20,22 @@ def print_usage():
 
 
 def print_welcome_sign():
+    """ Prints the welcome sign"""
     print("\n  ********************************************************")
-    print("  *             Welcome to direcMeasure v0.0             *")
+    print("  *             Welcome to direcMeasure v1.0             *")
     print("  ********************************************************\n")
 
 
-def connect_to_devices():
-    print("\nStarting device connection process...")
-    devices = []
-    # Find device port names
-    ports = usb.find_ports(usb.def_port_name)
-    # print(f"Found ports: {ports}")
-    # Open devices and add to devices
-    for port in ports:
-        dev = usb.MSP430(port, None, True)
-        if not dev:
-            return False
-        devices.append(dev)
-        print(f"Identified device as {dev.devLoc}")
-    if len(devices) == 2:
-        if devices[0].devLoc == devices[1].devLoc:
-            print(f"Cannot have two devices located on the {devices[1].devLoc} side.")
-            disconnect_from_devices(devices)
-            return False
-        devices.sort(reverse=True, key=usb.sort_devices_by)
-    return devices
-
-
-def disconnect_from_devices(devices):
-    print("\nStarting device disconnection process...")
-    for dev in devices:
-        res = dev.disconnect_from_port()
-        if not res:
-            return False
-    return devices
-
-
-def process_config(config_name):
-    if config_name != '':
-        # Find Config
-        print(f"\nStarting configuration file parsing process on {config_name}...")
-        full_cfg_name = parser.find_config(config_name)
-        if not full_cfg_name:
-            print(f"Error: Could not locate the file '{config_name}'. Ensure that '{config_name}' "
-                  f"is located in the configuration file repository.")
-            return False
-        # print(f"Found file: {full_cfg_name}")
-        # Get flow
-        flow, meas = parser.get_expt_flow_meas(full_cfg_name)
-        if not flow:
-            print(f"Error: Could read in data from '{config_name}'. Ensure that '{config_name}' "
-                  f"is the correct format. See the User Manual for Details.")
-            return False
-        # print(flow)
-        # Generate commands
-        cmds = parser.gen_expt_cmds(flow)
-        if not cmds:
-            print(f"Error: Could not generate experiment commands from '{config_name}'.")
-            return False
-        # print(cmds)
-        print(f"Successfully generated experiment commands from '{config_name}'.")
-        return cmds
+def printf(phase, flag, msg):
+    """ Prints out messages to the command line by specifying flag and phase. """
+    if flag in ("Error", "Warning"):
+        print(f"({phase}) {flag}: {msg}")
     else:
-        print(f"Error: No configuration file was passed in, could not generate experiment commands.")
-        return False
-
-
-def run_experiments(devices, cmds):
-    for sub_expt in cmds:
-        # Split cmds into usable pieces
-        expt_type = sub_expt['type']
-        t_cmds = sub_expt['test']
-        p_cmds = sub_expt['probe']
-        g_cmds = sub_expt['gpib']
-        # expt_res = ''
-
-        # Run the appropriate function for the sub-experiment
-        if expt_type == "sweepFreq":
-            print(f"\nRunning Type: {expt_type}")
-            expt_res = expt.run_sweepFreq(devices, t_cmds, p_cmds, g_cmds)
-            if expt_res[0] is False:
-                return False, expt_res[1], expt_res[2]
-        elif expt_type == "sweepPhi":
-            print(f"\nRunning Type: {expt_type}")
-            expt_res = expt.run_sweepPhi(devices, t_cmds, p_cmds, g_cmds)
-            if expt_res[0] is False:
-                return False, expt_res[1], expt_res[2]
-        elif expt_type == "sweepTheta":
-            print(f"\nRunning Type: {expt_type}")
-            expt_res = expt.run_sweepTheta(devices, t_cmds, p_cmds, g_cmds)
-            if expt_res[0] is False:
-                return False, expt_res[1], expt_res[2]
-        else:
-            print(f"\nError: Could not run experiment of type '{expt_type}'")
-            return False, expt_type
-    return True, True, True
-
-
-def run_alignment_routine(devices):
-    print("\nStarting alignment process...")
-    # TODO
-    print("Successfully completed alignment process...")
-    return True
+        print(f"({phase}): {msg}")
 
 
 def config_run(option, opt, value, parser):
+    """ Used to set the run_type variable from the command line arguments"""
     if parser.values.run_type == "f":
         parser.values.run_type = opt[1]
     else:
@@ -137,6 +43,7 @@ def config_run(option, opt, value, parser):
 
 
 def process_cmd_line():
+    """ Processes the command line arguments and sets up the system control variables accordingly"""
 
     # Set up parser
     parser = OptionParser()
@@ -156,11 +63,141 @@ def process_cmd_line():
 
     # Error Checking
     if options.run_type == "e":
-        print("Error: Cannot simultaneously only run the alignment routine and with out the alignment routine. "
-              "See usage below:")
+        printf(curr_phase, "Error", "Cannot simultaneously only run the alignment routine and with out the "
+                                     "alignment routine. See usage below: ")
         parser.print_help()
         return False
     return options
+
+
+def connect_to_devices():
+    """ Connects to the devices. Raises errors if there are any issues connecting to the devices"""
+
+    printf(curr_phase, None, "Starting device connection process...")
+    devices = []
+    # Find device port names
+    ports = usb.find_ports(usb.def_port_name)
+    # print(f"Found ports: {ports}")
+    # Open devices and add to devices
+    for port in ports:
+        dev = usb.MSP430(port, None, True)
+        if dev:
+            devices.append(dev)
+        else:
+            printf(curr_phase, "Warning", " Could not connect to device...")
+
+    # Check for valid USB devices
+    if len(devices) == 0:  # No devices are connected
+        printf(curr_phase, "Error", "No USB devices connected. Ensure the test-side and probe-side devices are"
+                                    " connected and powered on.")
+        return False
+    elif len(devices) == 1:  # Only one device is connected
+        side = devices[0].devLoc.lower()
+        printf(curr_phase, "Error", f"No {side}-side USB devices connected. Ensure the {side}-side device"
+                                    " is connected and powered on.")
+        return False
+    else:
+        for dev in devices:
+            if not dev:
+                print()
+        if devices[0].devLoc == devices[1].devLoc:
+            printf(curr_phase, "Error", f"USB devices must be of different types, cannot have two devices located "
+                                        "on the {devices[0].devLoc.lower()}-side. Ensure that the test-side device"
+                                        " is set to TX and that the probe-side device is set to RX.")
+
+            disconnect_from_devices(devices)
+            return False
+        devices.sort(reverse=True, key=usb.sort_devices_by)
+
+    printf(curr_phase, None, "Successfully connected to all devices...")
+    return devices
+
+
+def disconnect_from_devices(devices):
+    """ Disconnects from the connected devices. """
+    printf(curr_phase, None, "Starting device disconnection process...")
+    result = True
+    if devices:
+        for dev in devices:
+            res = dev.disconnect_from_port()
+            if not res:
+                printf(curr_phase, "Error", f"Could not disconnect from device {dev}")
+                result = False
+    else:
+        result = False
+        printf(curr_phase, "Warning", f"No devices to disconnect from.")
+    return result
+
+
+def process_config(config_name):
+    """ Parses the configuration file and generates teh appropriate commands. """
+    if config_name != '':
+        # Find Config
+        printf(curr_phase, None, f"Starting configuration file parsing process on {config_name}...")
+        full_cfg_name = parser.find_config(config_name)
+        if not full_cfg_name:
+            printf(curr_phase, "Error", f"Could not locate the file '{config_name}'. Ensure that '{config_name}'"
+                                        f" is located in the configuration file repository.")
+            return False
+        # Get flow and meas config from the configuration file
+        flow, meas = parser.get_expt_flow_meas(full_cfg_name)
+        if not flow:
+            printf(curr_phase, "Error", f"Could read in data from '{config_name}'. Ensure that '{config_name}' "
+                                        f"is the correct format. See the User Manual for Details.")
+            return False
+        # Generate commands
+        cmds = parser.gen_expt_cmds(flow)
+        if not cmds:
+            printf(curr_phase, "Error", f"Could not generate experiment commands from '{config_name}'.")
+            return False
+        printf(curr_phase, None, f"Successfully generated experiment commands from '{config_name}'.")
+        return cmds
+    else:
+        printf(curr_phase, "Error", f"No configuration file was passed in, could not generate experiment commands.")
+        return False
+
+
+def run_experiments(devices, cmds):
+    """ Runs the experiments in cmds."""
+    if not devices or not cmds:
+        return False, False, False
+    for sub_expt in cmds:
+        # Split cmds into usable pieces
+        expt_type = sub_expt['type']
+        t_cmds = sub_expt['test']
+        p_cmds = sub_expt['probe']
+        g_cmds = sub_expt['gpib']
+        # expt_res = ''
+
+        # Run the appropriate function for the sub-experiment
+        if expt_type == "sweepFreq":
+            printf(curr_phase, "Debug", f"Running Type: {expt_type}")
+            expt_res = expt.run_sweepFreq(devices, t_cmds, p_cmds, g_cmds)
+            if expt_res[0] is False:
+                return False, expt_res[1], expt_res[2]
+        elif expt_type == "sweepPhi":
+            printf(curr_phase, "Debug", f"Running Type: {expt_type}")
+            expt_res = expt.run_sweepPhi(devices, t_cmds, p_cmds, g_cmds)
+            if expt_res[0] is False:
+                return False, expt_res[1], expt_res[2]
+        elif expt_type == "sweepTheta":
+            printf(curr_phase, "Debug", f"Running Type: {expt_type}")
+            expt_res = expt.run_sweepTheta(devices, t_cmds, p_cmds, g_cmds)
+            if expt_res[0] is False:
+                return False, expt_res[1], expt_res[2]
+        else:
+            printf(curr_phase, "Error", f"Could not run experiment of type '{expt_type}'")
+            return False, expt_type
+    return True, True, True
+
+
+def run_alignment_routine(devices):
+    """ Runs the alignment routine. """
+    print()
+    printf(curr_phase, None, "Starting alignment process...")
+    # TODO - add calls to alignment functions here
+    printf(curr_phase, None, "Successfully completed alignment process...")
+    return True
 
 
 # Press the green button in the gutter to run the script.
@@ -168,7 +205,7 @@ if __name__ == '__main__':
 
     print_welcome_sign()
     # Setup Phase
-    print("\nSetting up system...")
+    printf(curr_phase, None, "Setting up system...")
 
     # Process Command Line
     args = process_cmd_line()
@@ -177,23 +214,23 @@ if __name__ == '__main__':
     cfg = args.cfg
     run_type = args.run_type
     if run_type == "s":
-        print("Running the alignment routine only.")
+        printf(curr_phase, "Debug", "Running the alignment routine only.")
     elif run_type == "s":
-        print("Skipping the alignment routine.")
+        printf(curr_phase, "Debug", "Skipping the alignment routine.")
     cmds = False
     # Process Configuration File if running the entire system
     if run_type in ("f", "s"):
         cmds = process_config(cfg)
         if not cmds:
             exit(-1)
-        parser.print_cmds(cmds) # Print out the commands
+        # parser.print_cmds(cmds) # Print out the commands
 
     # Connect to USB devices
     devices = connect_to_devices()
     if not devices:
-        print("Unable to connect to devices...")
+        printf(curr_phase, "Error", "Unable to connect to devices...")
         # TODO Add call to shutdown
-        print("Closing down direcMeasure...")
+        printf(curr_phase, "Error", "Closing down direcMeasure...")
         exit(-1)
 
     # Connect to VNA
@@ -201,26 +238,31 @@ if __name__ == '__main__':
 
     # Run alignment routine
     if run_type in ("f", "a"):
-        print("\nStarting device connection process...")
+        print()
+        printf(curr_phase, None, "Starting alignment process...")
         res = run_alignment_routine(devices)
         if res is False:
-            print("Unable to align system...")
+            printf(curr_phase, "Error", "Unable to align system...")
             # TODO Add call to shutdown
-            print("Closing down direcMeasure...")
+            printf(curr_phase, "Error", "Closing down direcMeasure...")
             exit(-1)
-    print("Successfully completed setup phase.")
+    printf(curr_phase, None, "Successfully completed setup phase.")
 
+    # Start execution/running phase
+    curr_phase = "Running"
     if run_type in ("f", "s"):
         # Start Running the experiments
         res = run_experiments(devices, cmds)
         if res[0] is False:
-            print(f"Error: Issue executing {res[1]} received {res[2]} instead")
+            printf(curr_phase, "Error", f"Issue executing {res[1]} received {res[2]} instead")
 
     # Shutdown Phase
-    print("\nClosing down system...")
-    print("Disconnecting devices...")
+    curr_phase = "Shutdown"
+    print()
+    printf(curr_phase, None, "Closing down system...")
+    printf(curr_phase, None, "Disconnecting devices...")
     if devices != "":
         disconnect_from_devices(devices)
-    print("Successfully closed down system...")
+    printf(curr_phase, None, "Successfully closed down system...")
 
     exit(1)

@@ -154,27 +154,27 @@ def run_sweepFreq(devices, t_cmds, p_cmds, g_cmds):
         probe_dev = devices[1]
 
     # TODO configure VNA HERE
-    print("Configuring the VNA for frequency sweeps...")
+    # print("Configuring the VNA for frequency sweeps...")
 
     # Setup loop control variables
     pi, gi = 0, 0
     done = False
-    print("Running through orientations...")
+    # print("Running through orientations...")
     for ti in range(len(t_cmds)-1):
         # Test side commands
         phi_cmd = t_cmds[ti]
         theta_cmd = t_cmds[ti+1]
-        print(f"Sending {phi_cmd}...")
+        # print(f"Sending {phi_cmd}...")
         resp = test_dev.write_to_device(phi_cmd)  # phi
         if resp != phi_cmd:
             return False, phi_cmd, resp
-        print(f"Sending {theta_cmd}...")
+        # print(f"Sending {theta_cmd}...")
         resp = test_dev.write_to_device(theta_cmd)  # theta
         if resp != theta_cmd:
             return False, theta_cmd, resp
 
         # TODO trigger vna measurement here
-        print(f"Triggering measurement on the VNA\n")
+        # print(f"Triggering measurement on the VNA\n")
 
         # Update loop control variables
         ti += 1

@@ -9,7 +9,8 @@ host_usb.py
 This file contains the USB library for the host machine.
 '''
 
-def_port_name = "USB Serial Device" #"MSP430-USB Example" #Update with the interface name for Jimmy's code
+# def_port_name = "USB Serial Device"  # Value to use for final product
+def_port_name = "MSP430-USB Example" # Value to use for testing
 dev_identifier = "IDEN"
 
 
@@ -58,10 +59,8 @@ class MSP430:
             # print(f"Connected to {self.port}")
             # identify if the port is test or probe
             loc = self.write_to_device(dev_identifier)
-            if loc == "TEST":
-                self.devLoc = "TEST"
-            elif loc == "PROBE":
-                self.devLoc = "PROBE"
+            if loc == "TEST" or loc == "PROBE":
+                self.devLoc = loc
             else:
                 print(f"Could not identify device location: {loc}")
                 return False
