@@ -9,7 +9,9 @@ host_usb.py
 This file contains the USB library for the host machine.
 '''
 
-def_port_name = "MSP430-USB Example"
+# def_port_name = "USB Serial Device"  # Value to use for final product
+def_port_name = "MSP430-USB Example" # Value to use for testing
+dev_identifier = "IDEN"
 
 
 class MSP430:
@@ -21,6 +23,8 @@ class MSP430:
         self.MSP430 = None
         self.baudrate = 9600
         self.port_name = def_port_name
+        self.curr_phi = 0
+        self.curr_theta = 0
         if open:
             try:
                 self.connect_to_port()
@@ -44,20 +48,29 @@ class MSP430:
                 self.port = self.find_port()
             # Open COM port
             self.MSP430 = serial.Serial(self.port, baudrate=self.baudrate)
+
+            if self.MSP430 is None:
+                self.port = self.find_port()
+                self.MSP430 = serial.Serial(self.port, baudrate=self.baudrate)
             # if self.MSP430.isOpen():
             #     print(f"{self.port} is open")
             while self.MSP430.in_waiting:
                 self.MSP430.read()
             # print(f"Connected to {self.port}")
-            # identify if the port is TX or RX
-            loc = self.write_to_device("idTxRx")
-            if loc == "TX\n":
-                self.devLoc = "TX"
-            elif loc == "RX\n":
-                self.devLoc = "RX"
+            # identify if the port is test or probe
+            loc = self.write_to_device(dev_identifier)
+            if loc == "TEST" or loc == "PROBE":
+                self.devLoc = loc
             else:
                 print(f"Could not identify device location: {loc}")
                 return False
+            # Wait for Done Response
+            while self.MSP430.in_waiting == 0:
+                pass
+            done_resp = self.MSP430.readline().decode()
+            if done_resp != dev_identifier+"\n":
+                return False
+
             # print(f"Device identified as: {loc}")
         except Exception as e:
             print(f"Could not connect to {self.port} because {e}")
@@ -89,29 +102,26 @@ class MSP430:
                 try:
                     self.MSP430.write(usb_data)
                 except Exception as e:
-                    print(f"Could write to the MSP340")
+                    print(f"Error: Could not write to the MSP340 because {e}")
                     return False
-                # Wait for response
+                # Wait for ACK or NACK
                 while self.MSP430.in_waiting == 0:
                     pass
-                response = self.MSP430.readline()
-                return response.decode()
+                cmd_received = self.MSP430.readline().decode()
+                if cmd_received != "a\n":
+                    print(
+                        f"Error: Device did not acknowledge command, received {cmd_received[0:len(cmd_received) - 1]}")
+                    return False
+
+                # Wait for Done Response
+                while self.MSP430.in_waiting == 0:
+                    pass
+                done_resp = self.MSP430.readline().decode()
+                if done_resp.endswith("\n"):
+                    done_resp = done_resp[0:len(done_resp) - 1]
+                return done_resp
             return False
         return False
-
-    def set_orientation(self, phi, theta):
-        # Check inputs
-        if not isinstance(phi, int) and not isinstance(theta, int):
-            return False
-        if not isinstance(phi, int) or not (0 <= phi <= 360):
-            phi = 1000
-        if not isinstance(theta, int) or not (0 <= theta <= 360):
-            theta = 1000
-
-        # combine string
-        orient_str = '%d,%d' % (phi,theta)
-        # send orientations to the device
-        return orient_str # self.write_to_device(orient_str)
 
 
 def sort_devices_by(msp430):
@@ -133,8 +143,8 @@ def to_usb_str(cmdStr):
     if cmdStr is not None and isinstance(cmdStr, str):
         usb_str = cmdStr
         # add carriage return if not already added
-        if not usb_str.endswith('\r'):
-            usb_str += '\r'
+        if not usb_str.endswith('\n'):
+            usb_str += '\n'
         # encode the string to ascii and return
         return usb_str.encode('ascii')
     return None
