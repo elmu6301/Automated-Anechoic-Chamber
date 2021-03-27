@@ -63,8 +63,8 @@ def process_cmd_line():
 
     # Error Checking
     if options.run_type == "e":
-        printf(curr_phase, "Error", "Cannot simultaneously only run the alignment routine and with out the "
-                                     "alignment routine. See usage below: ")
+        printf(curr_phase, "Error", "Cannot simultaneously run the alignment routine only and run the system with out "
+                                    "the alignment routine. See usage below: ")
         parser.print_help()
         return False
     return options
@@ -130,7 +130,7 @@ def disconnect_from_devices(devices):
 
 
 def process_config(config_name):
-    """ Parses the configuration file and generates teh appropriate commands. """
+    """ Parses the configuration file and generates the appropriate commands. """
     if config_name != '':
         # Find Config
         printf(curr_phase, None, f"Starting configuration file parsing process on {config_name}...")
@@ -142,7 +142,7 @@ def process_config(config_name):
         # Get flow and meas config from the configuration file
         flow, meas = parser.get_expt_flow_meas(full_cfg_name)
         if not flow:
-            printf(curr_phase, "Error", f"Could read in data from '{config_name}'. Ensure that '{config_name}' "
+            printf(curr_phase, "Error", f"Could not read in data from '{config_name}'. Ensure that '{config_name}' "
                                         f"is the correct format. See the User Manual for Details.")
             return False
         # Generate commands
@@ -213,7 +213,7 @@ if __name__ == '__main__':
         exit(-1)
     cfg = args.cfg
     run_type = args.run_type
-    if run_type == "s":
+    if run_type == "a":
         printf(curr_phase, "Debug", "Running the alignment routine only.")
     elif run_type == "s":
         printf(curr_phase, "Debug", "Skipping the alignment routine.")

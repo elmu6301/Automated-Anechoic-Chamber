@@ -142,7 +142,6 @@ def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq):
     probe_cmds.append(p_cmd)
     test_cmds += test_cmds.copy()
 
-
     cmds = {"type": "sweepFreq", "test": test_cmds, "probe": probe_cmds, "gpib": gpib_cmds}
     return cmds, prevPhi, prevTheta
 
@@ -177,7 +176,7 @@ def run_sweepFreq(devices, t_cmds, p_cmds, g_cmds):
         # print(f"Triggering measurement on the VNA\n")
 
         # Update loop control variables
-        ti += 1
+        ti += 2
 
     return True, True, True
 
