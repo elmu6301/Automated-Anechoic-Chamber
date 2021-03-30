@@ -5,10 +5,10 @@ import numpy as np
 class VNA_HP8719A:
     def __init__(self, address):
         self.address = 16  #CHECK THIS IT MAY HAVE CHANGED
-        try:
-            self.instrument = self.connect_VNA()
-        except:
-            pass
+        # try:
+        self.instrument = self.connect_VNA()
+        # except:
+        #     pass
 
     def connect_VNA(self):
         rm = pyvisa.ResourceManager()  # Download https://www.keysight.com/main/software.jspx?id=2175637&pageMode=CV&cc=US&lc=eng
@@ -21,12 +21,13 @@ class VNA_HP8719A:
         identify = instrument.query("*IDN?")      #Query the instrument to ensure it is connected
         print("Selected GPIB device: " + identify)
         if "HEWLETT PACKARD,8719A" in identify:     #If the instrument is correctly found
-            self.reset()                            #Reset to default setup
+            instrument.write("*RST")                #Reset to default setup
             instrument.write("FORM4")               # Set input/output data format to ASCII
             return instrument
         else:
             print("Error: An instrument other than the VNA HP8719A has been connected. Please connect the correct instrument or run alternative code.")
             return False
+        return False
 
             #To Do: read freq data, set number of points, manual triggereing
             #Do we want more features such as setting channel 2?
@@ -122,58 +123,54 @@ class VNA_HP8719A:
 
         return np.array(data_col1[:-1], dtype=float)
 
-    # def file_save(filename, data): #Do we want to pass in user comments too?
-    #     print("\nSaving collected data to: " + filename)
-    #     data_transpose = data.T
-    #     col_names = "Freq (GHz), S11 Mag (dB), S11 Phase (deg), S12 Mag (dB), S12 Phase (deg), S21 Mag (dB), S21 Phase (deg), S22 Mag (dB), S22 Phase (deg)" #Will frequency ever not be GHz?
-    #     np.savetxt(filename, data_transpose, delimiter=',', header=col_names, comments="") #More specification options available
-    #
-    # def plot(filename):
-    #     print("Plotting data stored in: " + filename)
-    #     freq, s11_db, s11_degree, s12_db, s12_degree, s21_db, s21_degree, s22_db, s22_degree = np.loadtxt(filename, delimiter=',', skiprows=1, comments="#", unpack=True)
-    #
-    #     fig1 = plt.figure("Figure 1: Magnitude")
-    #     plt.title("S-parameter Magnitude Values")
-    #     plt.xlabel("Frequency (GHz)")
-    #     plt.ylabel("Magnitude (dB)")
-    #     plt.plot(freq, s11_db, label="S11")
-    #     plt.plot(freq, s12_db, label="S12")
-    #     plt.plot(freq, s21_db, label="S21")
-    #     plt.plot(freq, s22_db, label="S22")
-    #     plt.legend()
-    #     fig1.savefig("antenna_s_params_magnitude.jpg")
-    #
-    #     fig2 = plt.figure("Figure 2: Phase")
-    #     plt.title("S-parameter Phase Values")
-    #     plt.xlabel("Frequency (GHz)")
-    #     plt.ylabel("Phase (Degrees)")
-    #     plt.plot(freq, s11_degree, label="S11")
-    #     plt.plot(freq, s12_degree, label="S12")
-    #     plt.plot(freq, s21_degree, label="S21")
-    #     plt.plot(freq, s22_degree, label="S22")
-    #     plt.legend()
-    #     fig2.savefig("antenna_s_params_phase.jpg")
-    #     # plt.show() #Shows the plots on screen but code halts until they are closed (which is why I saved them as files instead)
+    def file_save(self, filename, data): #Do we want to pass in user comments too?
+        print("\nSaving collected data to: " + filename)
+        data_transpose = data.T
+        col_names = "Freq (GHz), S11 Mag (dB), S11 Phase (deg), S12 Mag (dB), S12 Phase (deg), S21 Mag (dB), S21 Phase (deg), S22 Mag (dB), S22 Phase (deg)" #Will frequency ever not be GHz?
+        np.savetxt(filename, data_transpose, delimiter=',', header=col_names, comments="") #More specification options available
+
+    def plot(self, filename):
+        print("Plotting data stored in: " + filename)
+        freq, s11_db, s11_degree, s12_db, s12_degree, s21_db, s21_degree, s22_db, s22_degree = np.loadtxt(filename, delimiter=',', skiprows=1, comments="#", unpack=True)
+
+        fig1 = plt.figure("Figure 1: Magnitude")
+        plt.title("S-parameter Magnitude Values")
+        plt.xlabel("Frequency (GHz)")
+        plt.ylabel("Magnitude (dB)")
+        plt.plot(freq, s11_db, label="S11")
+        plt.plot(freq, s12_db, label="S12")
+        plt.plot(freq, s21_db, label="S21")
+        plt.plot(freq, s22_db, label="S22")
+        plt.legend()
+        fig1.savefig("antenna_s_params_magnitude.jpg")
+
+        fig2 = plt.figure("Figure 2: Phase")
+        plt.title("S-parameter Phase Values")
+        plt.xlabel("Frequency (GHz)")
+        plt.ylabel("Phase (Degrees)")
+        plt.plot(freq, s11_degree, label="S11")
+        plt.plot(freq, s12_degree, label="S12")
+        plt.plot(freq, s21_degree, label="S21")
+        plt.plot(freq, s22_degree, label="S22")
+        plt.legend()
+        fig2.savefig("antenna_s_params_phase.jpg")
+        # plt.show() #Shows the plots on screen but code halts until they are closed (which is why I saved them as files instead)
 
     #Set a marker on the VNA display and print the value to the command line
     def marker(self, freq_val):
         self.instrument.write("MARK1 " + freq_val) #Can set up to 4 marks
         print(self.instrument.query("OUTPMARK")) #(dB or degree, ?, freq)
 
-    # def exit(self):  #This hasn't been tested
-    #     self.instrument.write("NOOP")
+def main():
+    print("Beginning execution of VNA commands")
+    print("-----------------------------------")
+    hp8719a = VNA_HP8719A(16) #DO WE WANT TO RESET HERE EVERYTIME OR JUST CALL THE RESET FUNCTION IN MAIN?
+    hp8719a.init_freq_sweep("2 GHz", "2.5 GHz")  #Set the desired frequency range
+    data_out = hp8719a.sparam_data(1)             #Measure the data (dB and degree for all s-param)
+    hp8719a.file_save("antenna_s_params2.csv", data_out) #Store the data
+    hp8719a.plot("antenna_s_params2.csv")                #Plot the data
 
-# def main():
-#     print("Beginning execution of VNA commands")
-#     print("-----------------------------------")
-#     hp8719a = init_VNA(16)                      #Connect to the VNA
-#     init_freq_sweep(hp8719a, "1 GHz", "3 GHz")  #Set the desired frequency range
-#     data_out = sparam_data(hp8719a)             #Measure the data (dB and degree for all s-param)
-#     file_save("antenna_s_params.csv", data_out) #Store the data
-#     plot("antenna_s_params.csv")                #Plot the data
-#
-#     # exit(hp8719a)
-#     # marker(hp8719a, "2 GHz") #Can use to verify values at a freq
-#
-# if __name__ == "__main__":
-#     main()
+    # hp8719a.marker("2 GHz") #Can use to verify values at a freq
+
+if __name__ == "__main__":
+    main()
