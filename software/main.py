@@ -93,8 +93,14 @@ def connect_to_devices():
         return False
     elif len(devices) == 1:  # Only one device is connected
         side = devices[0].devLoc.lower()
-        printf(curr_phase, "Error", f"No {side}-side USB devices connected. Ensure the {side}-side device"
+        if side == "test":
+            side = "probe"
+            printf(curr_phase, "Error", f"No {side}-side USB devices connected. Ensure the {side}-side device"
                                     " is connected and powered on.")
+        elif side == "probe":
+            side = "test"
+            printf(curr_phase, "Error", f"No {side}-side USB devices connected. Ensure the {side}-side device"
+                                        " is connected and powered on.")
         return False
     else:
         for dev in devices:
