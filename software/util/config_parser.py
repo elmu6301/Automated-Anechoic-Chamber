@@ -2,6 +2,7 @@
 import pydoc
 import os
 import json
+
 try:
     import experiments
 except ImportError:
@@ -63,7 +64,7 @@ def find_config(file_name, file_path=None):
 
 
 # Opens the file and returns the contents of flow
-def get_expt_flow(full_file_name):
+def get_expt_flow_meas(full_file_name):
     if full_file_name == '':
         return False
     if full_file_name.rfind(root_base) == -1:
@@ -72,12 +73,15 @@ def get_expt_flow(full_file_name):
 
     #
     flow = False
+    meas = False
     # print(f"full_file_name {full_file_name}")
     with open(full_file_name, "r") as file:
         data = json.load(file)
         flow = data.get("flow")
+        meas = data.get("meas")
         # print(flow)
-    return flow
+        # print(meas)
+    return flow, meas
 
 
 def gen_expt_cmds(flow):
@@ -85,6 +89,7 @@ def gen_expt_cmds(flow):
     curr_theta = 0
     curr_phi = 0
     # print(f"Currently at ({curr_phi},{curr_theta})")
+
     for expt in flow:
         type = expt.get("expType")
         # print("Found experiment: " + type)
@@ -129,7 +134,8 @@ def gen_expt_cmds(flow):
             freq = expt.get("freq")
             orients = expt.get("orientations")
             # Generate commands
-            freq_cmds = experiments.gen_sweepFreq_cmds(curr_phi, curr_theta, orients)
+            # print(freq)
+            freq_cmds = experiments.gen_sweepFreq_cmds(curr_phi, curr_theta, orients, freq)
             # Check to see if commands were generated incorrectly
             if freq_cmds:
                 cmds.append(freq_cmds[0])
@@ -137,19 +143,35 @@ def gen_expt_cmds(flow):
                 curr_theta = freq_cmds[2]
                 # print(f"Currently at ({curr_phi},{curr_theta})")
             else:
+                # print("Error detected")
                 return False
         elif type.endswith(".json"):
             # print(f"\tOpening {type}")
-            inner_flow = get_expt_flow(type)
+            inner_flow, inner_meas = get_expt_flow_meas(type)  # ignore meas of the referenced config
             # print(inner_flow)
             inner_cmds = gen_expt_cmds(inner_flow)
-            if inner_cmds:
-                cmds.append(inner_cmds)
+            if inner_cmds is not False:
+                for i_cmd in inner_cmds:
+                    cmds.append(i_cmd)
             else:
                 return False
         else:
             return False
     return cmds
+
+
+def print_cmds(cmds):
+    for cmd_set in cmds:
+        print(f"\nExperiment Type: {cmd_set['type']}")
+        t_cmds = cmd_set['test']
+        p_cmds = cmd_set['probe']
+        g_cmds = cmd_set['gpib']
+        for t in t_cmds:
+            print(f"\t TEST: {t}")
+        for p in p_cmds:
+            print(f"\tPROBE: {p}")
+        for g in g_cmds:
+            print(f"\t GPIB: {g}")
 
 
 # main
@@ -158,8 +180,9 @@ def main():
     file_name = "sample_exp.json"
     flow = get_expt_flow(file_name)
     cmds = gen_expt_cmds(flow)
-    print(f"\nGenerated the following commands: \n{cmds}")
+    # print(f"\nGenerated the following commands: \n{cmds}")
 
+    print_cmds(cmds)
 
 if __name__ == "__main__":
     main()

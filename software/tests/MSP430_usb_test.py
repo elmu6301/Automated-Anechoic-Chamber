@@ -42,7 +42,6 @@ def test_connect_to_port():
     assert not msp430.connect_to_port()
 
 
-
 def test_write_to_device():
     # Turn the LED ON
     res = msp430.write_to_device('LED ON')
