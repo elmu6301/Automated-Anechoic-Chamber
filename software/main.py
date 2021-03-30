@@ -47,7 +47,10 @@ def process_cmd_line():
 
     # Set up parser
     parser = OptionParser()
-    usage = "usage: ./direcMeasure --config<config_file>"
+    welcome = "\n  ********************************************************  *             " \
+             "Welcome to direcMeasure v1.0             * \n  " \
+             "********************************************************\n"
+    usage = welcome + "usage: ./direcMeasure --config<config_file>"
     parser.set_usage(usage)
     parser.set_defaults(run_type="f")
 
