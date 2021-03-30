@@ -5,13 +5,15 @@ from optparse import OptionParser
 
 # Custom Modules
 from drivers import MSP430_usb as usb
+from drivers import VNA_gpib as hpVna
 from util import config_parser as parser
 from util import experiments as expt
+
 
 # Global Variables
 curr_phase = "Setup"
 mode = "Debug"
-
+default_vna_cfg = {'deviceAddress': '16', 'freqSweepMode': 'log'}
 
 def print_usage():
     print("\tDirecMeasure Usage")
@@ -73,15 +75,16 @@ def process_cmd_line():
     return options
 
 
-def connect_to_devices():
+def connect_to_usb_devices():
     """ Connects to the devices. Raises errors if there are any issues connecting to the devices"""
 
-    printf(curr_phase, None, "Starting device connection process...")
+    printf(curr_phase, None, "Starting USB device connection process...")
+
     devices = []
     # Find device port names
     ports = usb.find_ports(usb.def_port_name)
     # print(f"Found ports: {ports}")
-    # Open devices and add to devices
+    #Open devices and add to devices
     for port in ports:
         dev = usb.MSP430(port, None, True)
         if dev:
@@ -122,6 +125,14 @@ def connect_to_devices():
     return devices
 
 
+def connect_to_devices():
+    devices = []
+    # devices = connect_to_usb_devices()
+    # vna = connect_to_vna()
+    devices.append(vna)
+    return devices
+
+
 def disconnect_from_devices(devices):
     """ Disconnects from the connected devices. """
     printf(curr_phase, None, "Starting device disconnection process...")
@@ -154,13 +165,22 @@ def process_config(config_name):
             printf(curr_phase, "Error", f"Could not read in data from '{config_name}'. Ensure that '{config_name}' "
                                         f"is the correct format. See the User Manual for Details.")
             return False
+
+        # Check to see if the user configured the VNA otherwise use the default values
+        if not meas:
+            print("Using default meas")
+            meas = default_vna_cfg
+        printf(curr_phase, None, f"Running with VNA with address {meas['deviceAddress']} "
+                                 f"and in {meas['freqSweepMode']} mode.")
+
         # Generate commands
         cmds = parser.gen_expt_cmds(flow)
+
         if not cmds:
             printf(curr_phase, "Error", f"Could not generate experiment commands from '{config_name}'.")
             return False
         printf(curr_phase, None, f"Successfully generated experiment commands from '{config_name}'.")
-        return cmds
+        return cmds, meas
     else:
         printf(curr_phase, "Error", f"No configuration file was passed in, could not generate experiment commands.")
         return False
@@ -209,6 +229,21 @@ def run_alignment_routine(devices):
     return True
 
 
+def connect_to_vna(vna_cfg):
+    printf(curr_phase, None, "Starting VNA connection process...")
+    if not vna_cfg:
+        printf(curr_phase, "Error", "No GPIB devices connected. Ensure the VNA is connected and powered on.")
+        return False
+    dev_addr = vna_cfg['deviceAddress']
+    dev_vna = hpVna.VNA_HP8719A(dev_addr)
+    if not dev_vna.instrument:
+        printf(curr_phase, "Error", "No GPIB devices connected. Ensure the VNA is connected and powered on.")
+        return False
+    # print(dev_vna)
+    printf(curr_phase, None, "Successfully connected to VNA...")
+    return True
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
@@ -221,7 +256,9 @@ if __name__ == '__main__':
     if not args:
         exit(-1)
     cfg = args.cfg
+    vna_cfg = ''
     run_type = args.run_type
+
     if run_type == "a":
         printf(curr_phase, "Debug", "Running the alignment routine only.")
     elif run_type == "s":
@@ -229,49 +266,50 @@ if __name__ == '__main__':
     cmds = False
     # Process Configuration File if running the entire system
     if run_type in ("f", "s"):
-        cmds = process_config(cfg)
+        cmds, vna_cfg = process_config(cfg)
         if not cmds:
             exit(-1)
         # parser.print_cmds(cmds) # Print out the commands
 
     # Connect to USB devices
-    devices = connect_to_devices()
-    if not devices:
-        printf(curr_phase, "Error", "Unable to connect to devices...")
-        # TODO Add call to shutdown
-        printf(curr_phase, "Error", "Closing down direcMeasure...")
-        exit(-1)
+    # devices = connect_to_devices()
+    # if not devices:
+    #     printf(curr_phase, "Error", "Unable to connect to devices...")
+    #     # TODO Add call to shutdown
+    #     printf(curr_phase, "Error", "Closing down direcMeasure...")
+    #     exit(-1)
 
     # Connect to VNA
     # TODO
+    vna = connect_to_vna(vna_cfg)
 
     # Run alignment routine
-    if run_type in ("f", "a"):
-        print()
-        printf(curr_phase, None, "Starting alignment process...")
-        res = run_alignment_routine(devices)
-        if res is False:
-            printf(curr_phase, "Error", "Unable to align system...")
-            # TODO Add call to shutdown
-            printf(curr_phase, "Error", "Closing down direcMeasure...")
-            exit(-1)
+    # if run_type in ("f", "a"):
+    #     print()
+    #     printf(curr_phase, None, "Starting alignment process...")
+    #     res = run_alignment_routine(devices)
+    #     if res is False:
+    #         printf(curr_phase, "Error", "Unable to align system...")
+    #         # TODO Add call to shutdown
+    #         printf(curr_phase, "Error", "Closing down direcMeasure...")
+    #         exit(-1)
     printf(curr_phase, None, "Successfully completed setup phase.")
 
     # Start execution/running phase
-    curr_phase = "Running"
-    if run_type in ("f", "s"):
-        # Start Running the experiments
-        res = run_experiments(devices, cmds)
-        if res[0] is False:
-            printf(curr_phase, "Error", f"Issue executing {res[1]} received {res[2]} instead")
+    # curr_phase = "Running"
+    # if run_type in ("f", "s"):
+    #     # Start Running the experiments
+    #     res = run_experiments(devices, cmds)
+    #     if res[0] is False:
+    #         printf(curr_phase, "Error", f"Issue executing {res[1]} received {res[2]} instead")
 
     # Shutdown Phase
     curr_phase = "Shutdown"
     print()
     printf(curr_phase, None, "Closing down system...")
     printf(curr_phase, None, "Disconnecting devices...")
-    if devices != "":
-        disconnect_from_devices(devices)
+    # if devices != "":
+        # disconnect_from_devices(devices)
     printf(curr_phase, None, "Successfully closed down system...")
 
     exit(1)

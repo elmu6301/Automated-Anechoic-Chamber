@@ -2,6 +2,7 @@ import pyvisa
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 class VNA_HP8719A:
     def __init__(self, address):
         self.address = 16  #CHECK THIS IT MAY HAVE CHANGED
@@ -15,7 +16,10 @@ class VNA_HP8719A:
         # print("All connected GPIB devices: ")
         # print(rm.list_resources()) #this prints all connected devices (not needed in code but should run once to get device name)
         # print("")
-        instrument = rm.open_resource('GPIB0::%d::INSTR' % self.address)  #Open the VNA connection
+        try:
+            instrument = rm.open_resource('GPIB0::%d::INSTR' % self.address)  #Open the VNA connection
+        except:
+            return False
         # instrument.read_termination = '\n'      #Set the read termination character  (due to VNA's data output, this truncated the output data too early)
         # instrument.write_termination = '\n'     #Set the write termination character
         identify = instrument.query("*IDN?")      #Query the instrument to ensure it is connected
@@ -27,7 +31,7 @@ class VNA_HP8719A:
         else:
             print("Error: An instrument other than the VNA HP8719A has been connected. Please connect the correct instrument or run alternative code.")
             return False
-        return False
+        # return False
 
             #To Do: read freq data, set number of points, manual triggereing
             #Do we want more features such as setting channel 2?
@@ -165,10 +169,11 @@ def main():
     print("Beginning execution of VNA commands")
     print("-----------------------------------")
     hp8719a = VNA_HP8719A(16) #DO WE WANT TO RESET HERE EVERYTIME OR JUST CALL THE RESET FUNCTION IN MAIN?
-    hp8719a.init_freq_sweep("2 GHz", "2.5 GHz")  #Set the desired frequency range
-    data_out = hp8719a.sparam_data(1)             #Measure the data (dB and degree for all s-param)
-    hp8719a.file_save("antenna_s_params2.csv", data_out) #Store the data
-    hp8719a.plot("antenna_s_params2.csv")                #Plot the data
+    if hp8719a.instrument:
+        hp8719a.init_freq_sweep("2 GHz", "2.5 GHz")  #Set the desired frequency range
+        data_out = hp8719a.sparam_data(1)             #Measure the data (dB and degree for all s-param)
+        hp8719a.file_save("antenna_s_params2.csv", data_out) #Store the data
+        hp8719a.plot("antenna_s_params2.csv")                #Plot the data
 
     # hp8719a.marker("2 GHz") #Can use to verify values at a freq
 
