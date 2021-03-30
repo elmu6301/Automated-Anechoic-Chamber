@@ -16,7 +16,7 @@ dev_identifier = "IDEN"
 
 class MSP430:
 
-    def __init__(self, port=None, name=None, open=True):
+    def __init__(self, port, name=None, open=True):
         self.port = port
         self.name = name
         self.devLoc = ''
