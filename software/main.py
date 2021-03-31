@@ -137,7 +137,7 @@ def connect_to_vna(vna_cfg):
         return False
     # print(dev_vna)
     printf(curr_phase, None, "Successfully connected to VNA...")
-    return True
+    return dev_vna
 
 
 def disconnect_from_devices(devices):
@@ -196,34 +196,35 @@ def process_config(config_name):
         return False
 
 
-def run_experiments(devices, cmds):
+def run_experiments(usb_devs, vna, cmds):
     """ Runs the experiments in cmds."""
-    if not devices or not cmds:
+    if not usb_devs or not vna or not cmds:
         return False, False, False
     for sub_expt in cmds:
         # Split cmds into usable pieces
         expt_type = sub_expt['type']
         t_cmds = sub_expt['test']
         p_cmds = sub_expt['probe']
+        print(p_cmds)
         g_cmds = sub_expt['gpib']
         # expt_res = ''
 
         # Run the appropriate function for the sub-experiment
         if expt_type == "sweepFreq":
             printf(curr_phase, "Debug", f"Running Type: {expt_type}")
-            expt_res = expt.run_sweepFreq(devices, t_cmds, p_cmds, g_cmds)
+            expt_res = expt.run_sweepFreq(usb_devs, vna, t_cmds, p_cmds, g_cmds)
             if expt_res[0] is False:
                 return False, expt_res[1], expt_res[2]
-        elif expt_type == "sweepPhi":
-            printf(curr_phase, "Debug", f"Running Type: {expt_type}")
-            expt_res = expt.run_sweepPhi(devices, t_cmds, p_cmds, g_cmds)
-            if expt_res[0] is False:
-                return False, expt_res[1], expt_res[2]
-        elif expt_type == "sweepTheta":
-            printf(curr_phase, "Debug", f"Running Type: {expt_type}")
-            expt_res = expt.run_sweepTheta(devices, t_cmds, p_cmds, g_cmds)
-            if expt_res[0] is False:
-                return False, expt_res[1], expt_res[2]
+        # elif expt_type == "sweepPhi":
+        #     printf(curr_phase, "Debug", f"Running Type: {expt_type}")
+        #     expt_res = expt.run_sweepPhi(devices, t_cmds, p_cmds, g_cmds)
+        #     if expt_res[0] is False:
+        #         return False, expt_res[1], expt_res[2]
+        # elif expt_type == "sweepTheta":
+        #     printf(curr_phase, "Debug", f"Running Type: {expt_type}")
+        #     expt_res = expt.run_sweepTheta(devices, t_cmds, p_cmds, g_cmds)
+        #     if expt_res[0] is False:
+        #         return False, expt_res[1], expt_res[2]
         else:
             printf(curr_phase, "Error", f"Could not run experiment of type '{expt_type}'")
             return False, expt_type
@@ -273,13 +274,12 @@ if __name__ == '__main__':
     if not devices:
         # TODO Add call to shutdown
         exit(-1)
-
     # Connect to VNA
     vna = connect_to_vna(vna_cfg)
     if not vna:
         # TODO Add a call to shutdown
         exit(-1)
-    devices.append(vna)
+    # devices.append(vna)
 
     # Run alignment routine
     if run_type in ("f", "a"):
@@ -291,16 +291,17 @@ if __name__ == '__main__':
             printf(curr_phase, "Error", "Closing down direcMeasure...")
             exit(-1)
     print()
-    printf(curr_phase, None, "Successfully completed setup phase.")
+    printf(curr_phase, None, f"Successfully completed {curr_phase} phase.")
 
     # Start execution/running phase
-    # curr_phase = "Running"
-    # if run_type in ("f", "s"):
-    #     # Start Running the experiments
-    #     res = run_experiments(devices, cmds)
-    #     if res[0] is False:
-    #         printf(curr_phase, "Error", f"Issue executing {res[1]} received {res[2]} instead")
+    curr_phase = "Running"
+    if run_type in ("f", "s"):
+        # Start Running the experiments
+        res = run_experiments(devices, vna, cmds)
+        if res[0] is False:
+            printf(curr_phase, "Error", f"Issue executing {res[1]} received {res[2]} instead")
 
+    printf(curr_phase, None, f"Successfully completed {curr_phase} phase.")
     # Shutdown Phase
     curr_phase = "Shutdown"
     print()

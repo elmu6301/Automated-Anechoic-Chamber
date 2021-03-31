@@ -146,7 +146,7 @@ def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq):
         prevTheta = theta
 
     # Polarization
-    p_cmd = '%d' % len(test_cmds)
+    p_cmd = len(test_cmds)
     # print("p_cmd = {}",p_cmd)
     probe_cmds.append(p_cmd)
     p_cmd = "MOVE:THETA:CC:" + '%d' % (abs(degrees_to_steps(polarization_amt)))
@@ -157,37 +157,55 @@ def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq):
     return cmds, prevPhi, prevTheta
 
 
-def run_sweepFreq(devices, t_cmds, p_cmds, g_cmds):
+def run_sweepFreq(devices, vna, t_cmds, p_cmds, g_cmds):
     test_dev = devices[0]
-    probe_dev = devices[0]
+    probe_dev = devices[0]  # Update to probe dev
+    data_out = []
     if len(devices) == 2:
         probe_dev = devices[1]
 
-    # TODO configure VNA HERE
-    # print("Configuring the VNA for frequency sweeps...")
+    # Configure VNA start and stop frequency and number of points
+    vna_cfg_cmds = g_cmds[0]
+    vna.init_freq_sweep(vna_cfg_cmds['startF'], vna_cfg_cmds['stopF'])  # Set start and stop freq
+    # TODO add call to set the number of points
 
     # Setup loop control variables
-    pi, gi = 0, 0
+    polarziation_pnt = p_cmds[0]
+    pi, gi = 1, 1
     done = False
-    # print("Running through orientations...")
+
+    # Send out commands
     for ti in range(len(t_cmds)-1):
+        # Check for polarization request
+        if polarziation_pnt == ti:
+            polar_cmd = p_cmds[pi]
+            pi += 1
+            print(f"[{ti}] Sending {polar_cmd} to PROBE DEV...")
+
+            resp = probe_dev.write_to_device(polar_cmd)  # polarization
+            if resp != polar_cmd:
+                return False, polar_cmd, resp
+
         # Test side commands
         phi_cmd = t_cmds[ti]
         theta_cmd = t_cmds[ti+1]
-        # print(f"Sending {phi_cmd}...")
+        print(f"[{ti}] Sending {phi_cmd} to TEST DEV...")
         resp = test_dev.write_to_device(phi_cmd)  # phi
         if resp != phi_cmd:
             return False, phi_cmd, resp
-        # print(f"Sending {theta_cmd}...")
+        print(f"[{ti}] Sending {theta_cmd} to TEST DEV...")
         resp = test_dev.write_to_device(theta_cmd)  # theta
         if resp != theta_cmd:
             return False, theta_cmd, resp
 
-        # TODO trigger vna measurement here
+        # Collect Data
         # print(f"Triggering measurement on the VNA\n")
+        data = vna.sparam_data(1)
+        data_out.append(data)
 
         # Update loop control variables
         ti += 2
+
 
     return True, True, True
 
