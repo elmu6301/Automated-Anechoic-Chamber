@@ -193,7 +193,7 @@ def run_sweepFreq(devices, vna, t_cmds, p_cmds, g_cmds):
         resp = test_dev.write_to_device(phi_cmd)  # phi
         if resp != phi_cmd:
             return False, phi_cmd, resp
-        print(f"[{ti}] Sending {theta_cmd} to TEST DEV...")
+        print(f"[{ti+1}] Sending {theta_cmd} to TEST DEV...")
         resp = test_dev.write_to_device(theta_cmd)  # theta
         if resp != theta_cmd:
             return False, theta_cmd, resp
