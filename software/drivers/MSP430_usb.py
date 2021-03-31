@@ -9,8 +9,8 @@ host_usb.py
 This file contains the USB library for the host machine.
 '''
 
-def_port_name = "USB Serial Device"  # Value to use for final product
-# def_port_name = "MSP430-USB Example" # Value to use for testing
+# def_port_name = "USB Serial Device"  # Value to use for final product
+def_port_name = "MSP430-USB Example" # Value to use for testing
 dev_identifier = "IDEN"
 
 

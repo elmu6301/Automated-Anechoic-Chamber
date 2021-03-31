@@ -80,12 +80,11 @@ def connect_to_usb_devices():
     """ Connects to the devices. Raises errors if there are any issues connecting to the devices"""
 
     printf(curr_phase, None, "Starting USB device connection process...")
-
     devices = []
     # Find device port names
     ports = usb.find_ports(usb.def_port_name)
-    # print(f"Found ports: {ports}")
-    #Open devices and add to devices
+
+    # Open devices and add to devices
     for port in ports:
         dev = usb.MSP430(port, None, True)
         if dev:
@@ -98,40 +97,47 @@ def connect_to_usb_devices():
         printf(curr_phase, "Error", "No USB devices connected. Ensure the test-side and probe-side devices are"
                                     " connected and powered on.")
         return False
-    elif len(devices) == 1:  # Only one device is connected
-        side = devices[0].devLoc.lower()
-        if side == "test":
-            side = "probe"
-            printf(curr_phase, "Error", f"No {side}-side USB devices connected. Ensure the {side}-side device"
-                                    " is connected and powered on.")
-        elif side == "probe":
-            side = "test"
-            printf(curr_phase, "Error", f"No {side}-side USB devices connected. Ensure the {side}-side device"
-                                        " is connected and powered on.")
-        return False
-    else:
-        for dev in devices:
-            if not dev:
-                print()
-        if devices[0].devLoc == devices[1].devLoc:
-            printf(curr_phase, "Error", f"USB devices must be of different types, cannot have two devices located "
-                                        "on the {devices[0].devLoc.lower()}-side. Ensure that the test-side device"
-                                        " is set to TX and that the probe-side device is set to RX.")
-
-            disconnect_from_devices(devices)
-            return False
-        devices.sort(reverse=True, key=usb.sort_devices_by)
+    # elif len(devices) == 1:  # Only one device is connected
+    #     side = devices[0].devLoc.lower()
+    #     if side == "test":
+    #         side = "probe"
+    #         printf(curr_phase, "Error", f"No {side}-side USB devices connected. Ensure the {side}-side device"
+    #                                 " is connected and powered on.")
+    #     elif side == "probe":
+    #         side = "test"
+    #         printf(curr_phase, "Error", f"No {side}-side USB devices connected. Ensure the {side}-side device"
+    #                                     " is connected and powered on.")
+    #     return False
+    # else:
+    #     for dev in devices:
+    #         if not dev:
+    #             print()
+    #     if devices[0].devLoc == devices[1].devLoc:
+    #         printf(curr_phase, "Error", f"USB devices must be of different types, cannot have two devices located "
+    #                                     "on the {devices[0].devLoc.lower()}-side. Ensure that the test-side device"
+    #                                     " is set to TX and that the probe-side device is set to RX.")
+    #
+    #         disconnect_from_devices(devices)
+    #         return False
+    #     devices.sort(reverse=True, key=usb.sort_devices_by)
 
     printf(curr_phase, None, "Successfully connected to all devices...")
     return devices
 
 
-def connect_to_devices():
-    devices = []
-    # devices = connect_to_usb_devices()
-    # vna = connect_to_vna()
-    devices.append(vna)
-    return devices
+def connect_to_vna(vna_cfg):
+    printf(curr_phase, None, "Starting VNA connection process...")
+    if not vna_cfg:
+        printf(curr_phase, "Error", "No GPIB devices connected. Ensure the VNA is connected and powered on.")
+        return False
+    dev_addr = vna_cfg['deviceAddress']
+    dev_vna = hpVna.VNA_HP8719A(dev_addr)
+    if not dev_vna.instrument:
+        printf(curr_phase, "Error", "No GPIB devices connected. Ensure the VNA is connected and powered on.")
+        return False
+    # print(dev_vna)
+    printf(curr_phase, None, "Successfully connected to VNA...")
+    return True
 
 
 def disconnect_from_devices(devices):
@@ -233,21 +239,6 @@ def run_alignment_routine(devices):
     return True
 
 
-def connect_to_vna(vna_cfg):
-    printf(curr_phase, None, "Starting VNA connection process...")
-    if not vna_cfg:
-        printf(curr_phase, "Error", "No GPIB devices connected. Ensure the VNA is connected and powered on.")
-        return False
-    dev_addr = vna_cfg['deviceAddress']
-    dev_vna = hpVna.VNA_HP8719A(dev_addr)
-    if not dev_vna.instrument:
-        printf(curr_phase, "Error", "No GPIB devices connected. Ensure the VNA is connected and powered on.")
-        return False
-    # print(dev_vna)
-    printf(curr_phase, None, "Successfully connected to VNA...")
-    return True
-
-
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
@@ -273,30 +264,33 @@ if __name__ == '__main__':
         cmds, vna_cfg = process_config(cfg)
         if not cmds:
             exit(-1)
-        # parser.print_cmds(cmds) # Print out the commands
 
-    # Connect to USB devices
-    # devices = connect_to_devices()
-    # if not devices:
-    #     printf(curr_phase, "Error", "Unable to connect to devices...")
-    #     # TODO Add call to shutdown
-    #     printf(curr_phase, "Error", "Closing down direcMeasure...")
-    #     exit(-1)
+        parser.print_cmds(cmds) # Print out the commands
+        print()
+
+    # Connect to usb devices
+    devices = connect_to_usb_devices()
+    if not devices:
+        # TODO Add call to shutdown
+        exit(-1)
 
     # Connect to VNA
-    # TODO
     vna = connect_to_vna(vna_cfg)
+    if not vna:
+        # TODO Add a call to shutdown
+        exit(-1)
+    devices.append(vna)
 
     # Run alignment routine
-    # if run_type in ("f", "a"):
-    #     print()
-    #     printf(curr_phase, None, "Starting alignment process...")
-    #     res = run_alignment_routine(devices)
-    #     if res is False:
-    #         printf(curr_phase, "Error", "Unable to align system...")
-    #         # TODO Add call to shutdown
-    #         printf(curr_phase, "Error", "Closing down direcMeasure...")
-    #         exit(-1)
+    if run_type in ("f", "a"):
+        print()
+        res = run_alignment_routine(devices)
+        if res is False:
+            printf(curr_phase, "Error", "Unable to align system...")
+            # TODO Add call to shutdown
+            printf(curr_phase, "Error", "Closing down direcMeasure...")
+            exit(-1)
+    print()
     printf(curr_phase, None, "Successfully completed setup phase.")
 
     # Start execution/running phase
@@ -313,7 +307,7 @@ if __name__ == '__main__':
     printf(curr_phase, None, "Closing down system...")
     printf(curr_phase, None, "Disconnecting devices...")
     # if devices != "":
-        # disconnect_from_devices(devices)
+        # disconnect_from_usb_devices(devices)
     printf(curr_phase, None, "Successfully closed down system...")
 
     exit(1)
