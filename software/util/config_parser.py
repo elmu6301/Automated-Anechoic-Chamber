@@ -2,12 +2,12 @@
 import pydoc
 import os
 import json
+from drivers import VNA_gpib as vna
 
 try:
     import experiments
 except ImportError:
     from util import experiments
-#
 
 '''
 config_parser.py
@@ -71,12 +71,15 @@ def get_expt_flow_meas(full_file_name):
         # Get file name with file path
         full_file_name = find_config(full_file_name)
 
-    #
     flow = False
     meas = False
     # print(f"full_file_name {full_file_name}")
     with open(full_file_name, "r") as file:
-        data = json.load(file)
+        try:
+            data = json.load(file)
+        except json.decoder.JSONDecodeError:
+            return False, False
+
         flow = data.get("flow")
         meas = data.get("meas")
         # print(flow)
@@ -137,14 +140,19 @@ def gen_expt_cmds(flow):
             # print(freq)
             freq_cmds = experiments.gen_sweepFreq_cmds(curr_phi, curr_theta, orients, freq)
             # Check to see if commands were generated incorrectly
-            if freq_cmds:
+            if freq_cmds and not isinstance(freq_cmds, int):
                 cmds.append(freq_cmds[0])
                 curr_phi = freq_cmds[1]
                 curr_theta = freq_cmds[2]
                 # print(f"Currently at ({curr_phi},{curr_theta})")
+            elif isinstance(freq_cmds, int):
+                err = f"Invalid number of points entered in experiment '{type}'. Number of points must match" \
+                      f"one of the following \n\t\t\t   {str(vna.allowed_num_points)}. Try using {freq_cmds} instead."
+                return err
             else:
                 # print("Error detected")
                 return False
+
         elif type.endswith(".json"):
             # print(f"\tOpening {type}")
             inner_flow, inner_meas = get_expt_flow_meas(type)  # ignore meas of the referenced config
@@ -183,6 +191,7 @@ def main():
     # print(f"\nGenerated the following commands: \n{cmds}")
 
     print_cmds(cmds)
+
 
 if __name__ == "__main__":
     main()

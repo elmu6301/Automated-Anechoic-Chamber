@@ -3,6 +3,7 @@ import pydoc
 import os
 import json
 from drivers import MSP430_usb as usb
+from drivers import VNA_gpib as vna
 
 '''
 experiments.py
@@ -100,6 +101,15 @@ def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq):
         return False
     try:
         num_points = int(freq[2])
+        if num_points not in vna.allowed_num_points:
+            min_diff = abs(vna.allowed_num_points[0] - num_points)
+            for point in vna.allowed_num_points:
+                min_diff = min(min_diff, abs(point - num_points))
+            if min_diff+num_points in vna.allowed_num_points:
+                num_points = min_diff+num_points
+            else:
+                num_points = num_points - min_diff
+            return num_points
     except ValueError:
         return False
     # TODO add checks for valid number of points

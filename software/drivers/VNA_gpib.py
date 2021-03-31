@@ -2,6 +2,8 @@ import pyvisa
 import matplotlib.pyplot as plt
 import numpy as np
 
+allowed_num_points = (3, 11, 21, 51, 101, 201, 401, 801, 1601)
+
 
 class VNA_HP8719A:
     def __init__(self, address):

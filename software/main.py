@@ -3,6 +3,7 @@ import getopt
 import json
 from optparse import OptionParser
 
+
 # Custom Modules
 from drivers import MSP430_usb as usb
 from drivers import VNA_gpib as hpVna
@@ -164,7 +165,7 @@ def process_config(config_name):
         if not flow:
             printf(curr_phase, "Error", f"Could not read in data from '{config_name}'. Ensure that '{config_name}' "
                                         f"is the correct format. See the User Manual for Details.")
-            return False
+            return False, False
 
         # Check to see if the user configured the VNA otherwise use the default values
         if not meas:
@@ -178,7 +179,10 @@ def process_config(config_name):
 
         if not cmds:
             printf(curr_phase, "Error", f"Could not generate experiment commands from '{config_name}'.")
-            return False
+            return False, False
+        if isinstance(cmds, str):
+            printf(curr_phase, "Error", cmds)
+            return False, False
         printf(curr_phase, None, f"Successfully generated experiment commands from '{config_name}'.")
         return cmds, meas
     else:
