@@ -252,7 +252,10 @@ def shutdown(devices=None):
         res = disconnect_from_devices(devices)
     if res:
         printf(curr_phase, None, "Successfully closed down system...")
-    
+        exit(1)
+    else:
+        printf(curr_phase, "Error", "Unable to closed down system...")
+        exit(-1)
 
 
 # Press the green button in the gutter to run the script.
@@ -265,7 +268,7 @@ if __name__ == '__main__':
     # Process Command Line
     args = process_cmd_line()
     if not args:
-        exit(-1)
+        shutdown()
     cfg = args.cfg
     vna_cfg = ''
     run_type = args.run_type
@@ -321,11 +324,6 @@ if __name__ == '__main__':
 
     printf(curr_phase, None, f"Successfully completed {curr_phase} phase.")
     # Shutdown Phase
+    shutdown(devices)
 
-    printf(curr_phase, None, "Closing down system...")
-    printf(curr_phase, None, "Disconnecting devices...")
-    # if devices != "":
-        # disconnect_from_usb_devices(devices)
-    printf(curr_phase, None, "Successfully closed down system...")
 
-    exit(1)
