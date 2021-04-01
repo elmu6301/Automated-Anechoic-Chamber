@@ -159,7 +159,7 @@ def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq):
 
 def run_sweepFreq(devices, vna, t_cmds, p_cmds, g_cmds):
     test_dev = devices[0]
-    probe_dev = devices[0]  # Update to probe dev
+    probe_dev = devices[0]
     data_out = []
     if len(devices) == 2:
         probe_dev = devices[1]
@@ -200,7 +200,7 @@ def run_sweepFreq(devices, vna, t_cmds, p_cmds, g_cmds):
 
         # Collect Data
         # print(f"Triggering measurement on the VNA\n")
-        data = vna.sparam_data(1)
+        data = vna.sparam_data(0)
         data_out.append(data)
 
         # Update loop control variables
