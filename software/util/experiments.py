@@ -113,7 +113,7 @@ def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq):
     except ValueError:
         return False
     # TODO add checks for valid number of points
-    gpib_cmds.append({"startF": freq[0], "stopF": freq[1], "num_points":num_points})
+    gpib_cmds.append({"startF": freq[0], "stopF": freq[1], "num_points": num_points})
 
     # Generate usb commands
     prevPhi = start_phi

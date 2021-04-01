@@ -83,7 +83,15 @@ def get_expt_flow_meas(full_file_name):
         flow = data.get("flow")
         meas = data.get("meas")
         # print(flow)
-        # print(meas)
+        # print(f"meas: {meas}")
+    # Error check measurement
+    if meas is None or not meas:
+        meas = {"deviceAddress": 16, "freqSweepMode": "lin"}
+    meas.setdefault("deviceAddress", 16)  # TODO update to generic value
+    meas.setdefault("freqSweepMode", "lin")  # TODO update to generic value
+    if meas["freqSweepMode"] not in ("lin", "log"):
+        return False, False
+
     return flow, meas
 
 

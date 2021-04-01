@@ -1,6 +1,7 @@
 import sys
 import getopt
 import json
+import string
 from optparse import OptionParser
 
 
@@ -15,6 +16,7 @@ from util import experiments as expt
 curr_phase = "Setup"
 mode = "Debug"
 default_vna_cfg = {'deviceAddress': '16', 'freqSweepMode': 'log'}
+
 
 def print_usage():
     print("\tDirecMeasure Usage")
@@ -64,8 +66,12 @@ def process_cmd_line():
                       help="Only run the alignment routine.")
     parser.add_option("-s", "--skipAlign", action="callback", callback=config_run, dest="run_type",
                       help="Skip the alignment routine.")
+    parser.add_option("-p", "--sParams", type="string", action="store", dest="sParams", default="s1",
+                      help="Determines the s parameters to collect (i.e. s1, s2, s3, s4). To enter multiple s "
+                           "parameters, .Default is s1")
     # Parse command line
     (options, args) = parser.parse_args()
+
 
     # Error Checking
     if options.run_type == "e":
@@ -73,6 +79,7 @@ def process_cmd_line():
                                     "the alignment routine. See usage below: ")
         parser.print_help()
         return False
+    options.sParams = options.sParams.split(",", options.sParams.count(","))
     return options
 
 
@@ -174,11 +181,11 @@ def process_config(config_name):
             return False, False
 
         # Check to see if the user configured the VNA otherwise use the default values
-        if not meas:
-            print("Using default meas")
-            meas = default_vna_cfg
-        printf(curr_phase, None, f"Running with VNA with address {meas['deviceAddress']} "
-                                 f"and in {meas['freqSweepMode']} mode.")
+        # if not meas:
+        #     print("Using default meas")
+        #     meas = default_vna_cfg
+        printf(curr_phase, None, f"Running with VNA with address '{meas['deviceAddress']}' "
+                                 f"and in '{meas['freqSweepMode']}' mode.")
 
         # Generate commands
         cmds = parser.gen_expt_cmds(flow)
@@ -273,6 +280,7 @@ if __name__ == '__main__':
     vna_cfg = ''
     run_type = args.run_type
 
+
     if run_type == "a":
         printf(curr_phase, "Debug", "Running the alignment routine only.")
     elif run_type == "s":
@@ -284,22 +292,22 @@ if __name__ == '__main__':
         if not cmds:
             shutdown()
             exit(-1)
-
+        vna_cfg['sParams'] = args.sParams
+        # print(vna_cfg)
         # parser.print_cmds(cmds)  # Print out the commands
         # print()
 
     # Connect to usb devices
     devices = connect_to_usb_devices()
-    if not devices:
-        # TODO Add call to shutdown
-        shutdown(devices)
-        exit(-1)
+        # if not devices:
+        #     # TODO Add call to shutdown
+        #     shutdown(devices)
+
     # Connect to VNA
     vna = connect_to_vna(vna_cfg)
     if not vna:
         # TODO Add a call to shutdown
         shutdown(devices)
-        exit(-1)
     # devices.append(vna)
 
     # Run alignment routine
