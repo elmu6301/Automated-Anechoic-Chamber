@@ -299,9 +299,9 @@ if __name__ == '__main__':
 
     # Connect to usb devices
     devices = connect_to_usb_devices()
-        # if not devices:
-        #     # TODO Add call to shutdown
-        #     shutdown(devices)
+    if not devices:
+        # TODO Add call to shutdown
+        shutdown(devices)
 
     # Connect to VNA
     vna = connect_to_vna(vna_cfg)
