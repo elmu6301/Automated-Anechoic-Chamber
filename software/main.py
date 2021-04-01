@@ -240,6 +240,21 @@ def run_alignment_routine(devices):
     return True
 
 
+def shutdown(devices=None):
+    global curr_phase
+    curr_phase = "Shutdown"
+    print()
+    printf(curr_phase, None, "Starting to shutdown the system...")
+    res = True
+
+    # Disconnect devices
+    if devices is not None and devices:
+        res = disconnect_from_devices(devices)
+    if res:
+        printf(curr_phase, None, "Successfully closed down system...")
+    
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
@@ -264,20 +279,23 @@ if __name__ == '__main__':
     if run_type in ("f", "s"):
         cmds, vna_cfg = process_config(cfg)
         if not cmds:
+            shutdown()
             exit(-1)
 
-        parser.print_cmds(cmds) # Print out the commands
-        print()
+        # parser.print_cmds(cmds)  # Print out the commands
+        # print()
 
     # Connect to usb devices
     devices = connect_to_usb_devices()
     if not devices:
         # TODO Add call to shutdown
+        shutdown(devices)
         exit(-1)
     # Connect to VNA
     vna = connect_to_vna(vna_cfg)
     if not vna:
         # TODO Add a call to shutdown
+        shutdown(devices)
         exit(-1)
     # devices.append(vna)
 
@@ -303,8 +321,7 @@ if __name__ == '__main__':
 
     printf(curr_phase, None, f"Successfully completed {curr_phase} phase.")
     # Shutdown Phase
-    curr_phase = "Shutdown"
-    print()
+
     printf(curr_phase, None, "Closing down system...")
     printf(curr_phase, None, "Disconnecting devices...")
     # if devices != "":
