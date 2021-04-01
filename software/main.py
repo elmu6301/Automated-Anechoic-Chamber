@@ -50,7 +50,7 @@ def process_cmd_line():
 
     # Set up parser
     parser = OptionParser()
-    welcome = "\n  ********************************************************  *             " \
+    welcome = "\n  ********************************************************\n  *             " \
              "Welcome to direcMeasure v1.0             * \n  " \
              "********************************************************\n"
     usage = welcome + "usage: ./direcMeasure --config<config_file>"
@@ -193,7 +193,7 @@ def process_config(config_name):
         return cmds, meas
     else:
         printf(curr_phase, "Error", f"No configuration file was passed in, could not generate experiment commands.")
-        return False
+        return False, False
 
 
 def run_experiments(usb_devs, vna, cmds):
@@ -236,7 +236,7 @@ def run_alignment_routine(devices):
     print()
     printf(curr_phase, None, "Starting alignment process...")
     # TODO - add calls to alignment functions here
-    printf(curr_phase, None, "Successfully completed alignment process...")
+    printf(curr_phase, None, "Successfully completed alignment process!")
     return True
 
 
@@ -251,10 +251,10 @@ def shutdown(devices=None):
     if devices is not None and devices:
         res = disconnect_from_devices(devices)
     if res:
-        printf(curr_phase, None, "Successfully closed down system...")
+        printf(curr_phase, None, "Successfully shutdown down system!")
         exit(1)
     else:
-        printf(curr_phase, "Error", "Unable to closed down system...")
+        printf(curr_phase, "Error", "Unable to shutdown down system!")
         exit(-1)
 
 
