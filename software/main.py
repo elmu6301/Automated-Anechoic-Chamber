@@ -126,43 +126,43 @@ def connect_to_usb_devices():
         printf(curr_phase, "Error", "No USB devices connected. Ensure the test-side and probe-side devices are"
                                     " connected and powered on.")
         return False
-    elif len(devices) == 1:  # Only one device is connected
-        side = devices[0].devLoc.lower()
-
-        if side == "test":
-            other_side = "probe"
-            printf(curr_phase, "Error", f"Detected device on {side}-side. No {other_side}-side USB device connected. "
-                                        f"Ensure the {other_side}-side device is connected and powered on.")
-        elif side == "probe":
-            other_side = "test"
-            printf(curr_phase, "Error", f"Detected device on {side}-side. No {other_side}-side USB device connected. "
-                                        f"Ensure the {other_side}-side device is connected and powered on.")
-        else:
-            printf(curr_phase, "Error", f"Detected device on unknown side. No test or probe side USB devices connected. "
-                                        f"Ensure the connected device is set to TX for test-side or RX for probe-side. "
-                                        f"Ensure that the other device is connected, powered on, and set to the "
-                                        f"opposite configuration of the connected device.")
-        return False
-    else:
-        for dev in devices:
-            if not dev:
-                print()  # TODO fix??
-        if devices[0].devLoc not in ("test", "probe") or devices[1].devLoc not in ("test", "probe"):
-            printf(curr_phase, "Error",
-                   f"Detected device(s) on unknown side. No test or probe side USB devices connected. "
-                   f"Ensure the connected device(s) are set to TX for test-side or RX for probe-side. ")
-            disconnect_from_devices(devices)
-            return False
-        if devices[0].devLoc == devices[1].devLoc:
-            printf(curr_phase, "Error", f"USB devices must be of different types, cannot have two devices located "
-                                        "on the {devices[0].devLoc.lower()}-side. Ensure that the test-side device"
-                                        " is set to TX and that the probe-side device is set to RX.")
-
-            disconnect_from_devices(devices)
-            return False
-        devices.sort(reverse=True, key=usb.sort_devices_by)
-
-    printf(curr_phase, None, "Successfully connected to all devices...")
+    # elif len(devices) == 1:  # Only one device is connected
+    #     side = devices[0].devLoc.lower()
+    #
+    #     if side == "test":
+    #         other_side = "probe"
+    #         printf(curr_phase, "Error", f"Detected device on {side}-side. No {other_side}-side USB device connected. "
+    #                                     f"Ensure the {other_side}-side device is connected and powered on.")
+    #     elif side == "probe":
+    #         other_side = "test"
+    #         printf(curr_phase, "Error", f"Detected device on {side}-side. No {other_side}-side USB device connected. "
+    #                                     f"Ensure the {other_side}-side device is connected and powered on.")
+    #     else:
+    #         printf(curr_phase, "Error", f"Detected device on unknown side. No test or probe side USB devices connected. "
+    #                                     f"Ensure the connected device is set to TX for test-side or RX for probe-side. "
+    #                                     f"Ensure that the other device is connected, powered on, and set to the "
+    #                                     f"opposite configuration of the connected device.")
+    #     return False
+    # else:
+    #     for dev in devices:
+    #         if not dev:
+    #             print()  # TODO fix??
+    #     if devices[0].devLoc not in ("test", "probe") or devices[1].devLoc not in ("test", "probe"):
+    #         printf(curr_phase, "Error",
+    #                f"Detected device(s) on unknown side. No test or probe side USB devices connected. "
+    #                f"Ensure the connected device(s) are set to TX for test-side or RX for probe-side. ")
+    #         disconnect_from_devices(devices)
+    #         return False
+    #     if devices[0].devLoc == devices[1].devLoc:
+    #         printf(curr_phase, "Error", f"USB devices must be of different types, cannot have two devices located "
+    #                                     "on the {devices[0].devLoc.lower()}-side. Ensure that the test-side device"
+    #                                     " is set to TX and that the probe-side device is set to RX.")
+    #
+    #         disconnect_from_devices(devices)
+    #         return False
+    #     devices.sort(reverse=True, key=usb.sort_devices_by)
+    #
+    # printf(curr_phase, None, "Successfully connected to all devices...")
     return devices
 
 
@@ -240,8 +240,8 @@ def process_config(config_name):
 
 def run_experiments(usb_devs, vna, cmds):
     """ Runs the experiments in cmds."""
-    if not usb_devs or not vna or not cmds:
-        return False, False, False
+    # if not usb_devs or not vna or not cmds:
+    #     return False, False, False
     for sub_expt in cmds:
         # Split cmds into usable pieces
         expt_type = sub_expt['type']
@@ -334,14 +334,13 @@ if __name__ == '__main__':
     # Connect to usb devices
     devices = connect_to_usb_devices()
     if not devices:
-        # TODO Add call to shutdown
         shutdown(devices)
 
     # Connect to VNA
     vna = connect_to_vna(vna_cfg)
-    if not vna:
-        # TODO Add a call to shutdown
-        shutdown(devices)
+    # if not vna:
+    #     shutdown(devices)
+        # shutdown()
     # devices.append(vna)
 
     # Run alignment routine
