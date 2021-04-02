@@ -47,36 +47,53 @@ def config_run(option, opt, value, parser):
         parser.values.run_type = "e"
 
 
+def set_cfg_name(option, opt, value, parser):
+    """ Used to set the run_type variable from the command line arguments"""
+    if value == '' or value is None:
+        parser.values.cfg = ''
+    else:
+        print(value)
+        parser.values.cfg = value
+
+
 def process_cmd_line():
     """ Processes the command line arguments and sets up the system control variables accordingly"""
 
     # Set up parser
     parser = OptionParser()
     welcome = "\n  ********************************************************\n  *             " \
-             "Welcome to direcMeasure v1.0             * \n  " \
+             " Using direcMeasure v1.0                 * \n  " \
              "********************************************************\n"
     usage = welcome + "usage: ./direcMeasure --config<config_file>"
     parser.set_usage(usage)
-    parser.set_defaults(run_type="f")
+    parser.set_defaults(run_type="f", verbose=False)
+    parser.prog = "direcMeasure"
 
     # Add options
-    parser.add_option("-c", "--config", type="string", action="store", dest="cfg", default='',
+    parser.add_option("-c", "--config",type="string", action="callback", callback=set_cfg_name, dest="cfg",
                       help="Configuration file used to control the system. Must be a JSON file.")
     parser.add_option("-a", "--alignOnly", action="callback", callback=config_run, dest="run_type",
                       help="Only run the alignment routine.")
     parser.add_option("-s", "--skipAlign", action="callback", callback=config_run, dest="run_type",
                       help="Skip the alignment routine.")
-    parser.add_option("-p", "--sParams", type="string", action="store", dest="sParams", default="s1",
+    parser.add_option("-p", "--sParams", type="string", action="store", dest="sParams", default="s1,s2",
                       help="Determines the s parameters to collect (i.e. s1, s2, s3, s4). To enter multiple s "
-                           "parameters, .Default is s1")
+                           "parameters, enter as a comma separated list (ex: 's1,s2') . Default is s1,s2")
+
+    # Check to make sure we have arguments
+    if len(sys.argv) == 1:
+        printf(curr_phase, "Error", "Cannot configure system as no command lines arguments were inputted."
+                                    " See usage for more information on command line options.")
+        parser.print_help()
+        return False
+
     # Parse command line
     (options, args) = parser.parse_args()
-
 
     # Error Checking
     if options.run_type == "e":
         printf(curr_phase, "Error", "Cannot simultaneously run the alignment routine only and run the system with out "
-                                    "the alignment routine. See usage below: ")
+                                    "the alignment routine. See usage for more information on command line options.")
         parser.print_help()
         return False
     options.sParams = options.sParams.split(",", options.sParams.count(","))
@@ -171,8 +188,9 @@ def process_config(config_name):
         full_cfg_name = parser.find_config(config_name)
         if not full_cfg_name:
             printf(curr_phase, "Error", f"Could not locate the file '{config_name}'. Ensure that '{config_name}'"
-                                        f" is located in the configuration file repository.")
-            return False
+                                        f" is located in the configuration file repository: "
+                                        f"'{parser.get_root_path() + parser.config_base}'.")
+            return False, False
         # Get flow and meas config from the configuration file
         flow, meas = parser.get_expt_flow_meas(full_cfg_name)
         if not flow:
@@ -188,7 +206,7 @@ def process_config(config_name):
                                  f"and in '{meas['freqSweepMode']}' mode.")
 
         # Generate commands
-        cmds = parser.gen_expt_cmds(flow)
+        cmds, msg = parser.gen_expt_cmds(flow)
 
         if not cmds:
             printf(curr_phase, "Error", f"Could not generate experiment commands from '{config_name}'.")
@@ -289,9 +307,8 @@ if __name__ == '__main__':
     # Process Configuration File if running the entire system
     if run_type in ("f", "s"):
         cmds, vna_cfg = process_config(cfg)
-        if not cmds:
+        if not cmds or not vna_cfg:
             shutdown()
-            exit(-1)
         vna_cfg['sParams'] = args.sParams
         # print(vna_cfg)
         # parser.print_cmds(cmds)  # Print out the commands

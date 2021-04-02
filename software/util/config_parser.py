@@ -36,10 +36,10 @@ def find_config(file_name, file_path=None):
 
     # Check to see if name is valid
     if file_name is None or file_name == '':
-        print("Error: No config file detected...")
+        # print("Error: No config file detected...")
         return False
     elif file_name.endswith(".json") is False:
-        print("Error: Config file must be a json file...")
+        # print("Error: Config file must be a json file...")
         return False
 
     # Get the root path
@@ -51,7 +51,7 @@ def find_config(file_name, file_path=None):
         if file_name in files:
             full_name = os.path.join(root, file_name)
             return full_name
-    print(f"Unable to find '{file_name}' in configuration file repository located '{config_repo_path}'")
+    # print(f"Unable to find '{file_name}' in configuration file repository located '{config_repo_path}'")
     # Walking down file searching in the root path
     for root, dir, files in os.walk(root_path):
         if file_name in files:
@@ -59,7 +59,7 @@ def find_config(file_name, file_path=None):
             return full_name
 
     # File was not found
-    print(f"Unable to find '{file_name}' in direcMeasure path located '{root_path}'")
+    # print(f"Unable to find '{file_name}' in direcMeasure path located '{root_path}'")
     return False
 
 
