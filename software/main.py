@@ -52,7 +52,6 @@ def set_cfg_name(option, opt, value, parser):
     if value == '' or value is None:
         parser.values.cfg = ''
     else:
-        print(value)
         parser.values.cfg = value
 
 
@@ -70,7 +69,7 @@ def process_cmd_line():
     parser.prog = "direcMeasure"
 
     # Add options
-    parser.add_option("-c", "--config",type="string", action="callback", callback=set_cfg_name, dest="cfg",
+    parser.add_option("-c", "--config", type="string", action="callback", callback=set_cfg_name, dest="cfg",
                       help="Configuration file used to control the system. Must be a JSON file.")
     parser.add_option("-a", "--alignOnly", action="callback", callback=config_run, dest="run_type",
                       help="Only run the alignment routine.")
@@ -94,6 +93,12 @@ def process_cmd_line():
     if options.run_type == "e":
         printf(curr_phase, "Error", "Cannot simultaneously run the alignment routine only and run the system with out "
                                     "the alignment routine. See usage for more information on command line options.")
+        parser.print_help()
+        return False
+    if not options.cfg.endswith(".json"):
+        printf(curr_phase, "Error", f"The configuration file entered '{options.cfg}' is not a JSON file. "
+                                    f" See the User Manual for more information on configuration files and "
+                                    f"usage for more information on command line options.")
         parser.print_help()
         return False
     options.sParams = options.sParams.split(",", options.sParams.count(","))
@@ -121,29 +126,41 @@ def connect_to_usb_devices():
         printf(curr_phase, "Error", "No USB devices connected. Ensure the test-side and probe-side devices are"
                                     " connected and powered on.")
         return False
-    # elif len(devices) == 1:  # Only one device is connected
-    #     side = devices[0].devLoc.lower()
-    #     if side == "test":
-    #         side = "probe"
-    #         printf(curr_phase, "Error", f"No {side}-side USB devices connected. Ensure the {side}-side device"
-    #                                 " is connected and powered on.")
-    #     elif side == "probe":
-    #         side = "test"
-    #         printf(curr_phase, "Error", f"No {side}-side USB devices connected. Ensure the {side}-side device"
-    #                                     " is connected and powered on.")
-    #     return False
-    # else:
-    #     for dev in devices:
-    #         if not dev:
-    #             print()
-    #     if devices[0].devLoc == devices[1].devLoc:
-    #         printf(curr_phase, "Error", f"USB devices must be of different types, cannot have two devices located "
-    #                                     "on the {devices[0].devLoc.lower()}-side. Ensure that the test-side device"
-    #                                     " is set to TX and that the probe-side device is set to RX.")
-    #
-    #         disconnect_from_devices(devices)
-    #         return False
-    #     devices.sort(reverse=True, key=usb.sort_devices_by)
+    elif len(devices) == 1:  # Only one device is connected
+        side = devices[0].devLoc.lower()
+
+        if side == "test":
+            other_side = "probe"
+            printf(curr_phase, "Error", f"Detected device on {side}-side. No {other_side}-side USB device connected. "
+                                        f"Ensure the {other_side}-side device is connected and powered on.")
+        elif side == "probe":
+            other_side = "test"
+            printf(curr_phase, "Error", f"Detected device on {side}-side. No {other_side}-side USB device connected. "
+                                        f"Ensure the {other_side}-side device is connected and powered on.")
+        else:
+            printf(curr_phase, "Error", f"Detected device on unknown side. No test or probe side USB devices connected. "
+                                        f"Ensure the connected device is set to TX for test-side or RX for probe-side. "
+                                        f"Ensure that the other device is connected, powered on, and set to the "
+                                        f"opposite configuration of the connected device.")
+        return False
+    else:
+        for dev in devices:
+            if not dev:
+                print()  # TODO fix??
+        if devices[0].devLoc not in ("test", "probe") or devices[1].devLoc not in ("test", "probe"):
+            printf(curr_phase, "Error",
+                   f"Detected device(s) on unknown side. No test or probe side USB devices connected. "
+                   f"Ensure the connected device(s) are set to TX for test-side or RX for probe-side. ")
+            disconnect_from_devices(devices)
+            return False
+        if devices[0].devLoc == devices[1].devLoc:
+            printf(curr_phase, "Error", f"USB devices must be of different types, cannot have two devices located "
+                                        "on the {devices[0].devLoc.lower()}-side. Ensure that the test-side device"
+                                        " is set to TX and that the probe-side device is set to RX.")
+
+            disconnect_from_devices(devices)
+            return False
+        devices.sort(reverse=True, key=usb.sort_devices_by)
 
     printf(curr_phase, None, "Successfully connected to all devices...")
     return devices
@@ -194,8 +211,8 @@ def process_config(config_name):
         # Get flow and meas config from the configuration file
         flow, meas = parser.get_expt_flow_meas(full_cfg_name)
         if not flow:
-            printf(curr_phase, "Error", f"Could not read in data from '{config_name}'. Ensure that '{config_name}' "
-                                        f"is the correct format. See the User Manual for Details.")
+            printf(curr_phase, "Error", f"Could not read in data from '{config_name}'. Ensure that '{config_name}' is"
+                                        f" the correct format. See the User Manual for details on configuration files.")
             return False, False
 
         # Check to see if the user configured the VNA otherwise use the default values
@@ -206,7 +223,7 @@ def process_config(config_name):
                                  f"and in '{meas['freqSweepMode']}' mode.")
 
         # Generate commands
-        cmds, msg = parser.gen_expt_cmds(flow)
+        cmds = parser.gen_expt_cmds(flow)
 
         if not cmds:
             printf(curr_phase, "Error", f"Could not generate experiment commands from '{config_name}'.")
