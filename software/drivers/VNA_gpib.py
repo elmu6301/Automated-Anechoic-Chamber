@@ -2,20 +2,25 @@ import pyvisa
 import matplotlib.pyplot as plt
 import numpy as np
 
+allowed_num_points = (3, 11, 21, 51, 101, 201, 401, 801, 1601)
+
 class VNA_HP8719A:
-    def __init__(self, address):
-        self.address = 16  #CHECK THIS IT MAY HAVE CHANGED
-        # try:
+    def __init__(self, sparam_list, address=16, freq_mode="lin"):
+        self.address = address
+        self.freq_mode = freq_mode
+        self.sparam_list = sparam_list
         self.instrument = self.connect_VNA()
-        # except:
-        #     pass
 
     def connect_VNA(self):
         rm = pyvisa.ResourceManager()  # Download https://www.keysight.com/main/software.jspx?id=2175637&pageMode=CV&cc=US&lc=eng
         # print("All connected GPIB devices: ")
         # print(rm.list_resources()) #this prints all connected devices (not needed in code but should run once to get device name)
         # print("")
-        instrument = rm.open_resource('GPIB0::%d::INSTR' % self.address)  #Open the VNA connection
+        try:
+            instrument = rm.open_resource('GPIB0::%d::INSTR' % self.address)  #Open the VNA connection
+            instrument.timeout = 10000
+        except:
+            return False
         # instrument.read_termination = '\n'      #Set the read termination character  (due to VNA's data output, this truncated the output data too early)
         # instrument.write_termination = '\n'     #Set the write termination character
         identify = instrument.query("*IDN?")      #Query the instrument to ensure it is connected
@@ -29,104 +34,200 @@ class VNA_HP8719A:
             return False
         return False
 
-            #To Do: read freq data, set number of points, manual triggereing
+            #To Do: manual triggereing
             #Do we want more features such as setting channel 2?
-            #CREATE SEPARATE FUNCTION FOR DATA FORMAT/OTHER INITIALIZATION COMMANDS BESIDES CONNECT?
             #Is the Identify Error too specific? --> Note in User Manual where it's located in case they need to disable it?
 
     # Return instrument to default state
     def reset(self):
         self.instrument.write("*RST")
 
-    #Set start and stop freq. Note: Must pass in frequency units as "X GHz"
-    def init_freq_sweep(self, start_freq, stop_freq):
-        print("Setting frequency range from " + start_freq + " to " + stop_freq)
+    #Set start and stop freq. Note: Must pass in frequency units as "X GHz" or "X MHz"
+    #Also sets number of points and lin vs log freq sweep type
+    def init_freq_sweep(self, start_freq, stop_freq, num_pts):
+        print("Setting frequency range from " + start_freq + " to " + stop_freq + " with " + str(num_pts) + " points")
         self.instrument.write("STAR " + start_freq)
         self.instrument.write("STOP " + stop_freq)
+        self.instrument.write("POIN " + str(num_pts)) #Will round up to be one of the following values: 3, 11, 21, 51, 101, 201, 401, 801, 1601
+        #NOTE: there is a min freq span for each number of points see operating manual page 52
+        self.freq_sweep_type()  # Set the freq sweep mode for all following measurements (lin or log)
+
+        #Checking if Start and Stop Freq changed due to selected number of points or log freq sweep
+        real_start_freq = self.instrument.query("STAR?") #Ask VNA for set start frequency
+        real_stop_freq = self.instrument.query("STOP?")  # Ask VNA for set stop frequency
+        self.instrument.write("NOOP")  # No operation + sets operation bit to complete (puts VNA back in listen mode so can use front panel)
+
+        #Check if the span is too small for log freq sweep (automatically defaults to lin sweep in that case)
+        if self.freq_mode == "log" and int(self.instrument.query("LOGFREQ?")) == 0:
+            print("You need > 2 octaves in span to run a logarithmic frequency sweep")
+            return False, real_start_freq, real_stop_freq
+
+        user_start_freq = start_freq.split(" ") #Split the units from the number for start freq
+        if user_start_freq[1] == "GHz":
+            user_start_freq[0] = float(user_start_freq[0]) * 10**9 #Convert from GHz to Hz
+        elif user_start_freq[1] == "MHz":
+            user_start_freq[0] = float(user_start_freq[0]) * 10**6 #Convert MHz to Hz
+        else:
+            print("Units other than MHz or GHz were used")
+            return False, real_start_freq, real_stop_freq
+
+        user_stop_freq = stop_freq.split(" ")  # Split the units from the number for start freq
+        if user_stop_freq[1] == "GHz":
+            user_stop_freq[0] = float(user_stop_freq[0]) * 10 ** 9  # Convert from GHz to Hz
+        elif user_stop_freq[1] == "MHz":
+            user_stop_freq[0] = float(user_stop_freq[0]) * 10 ** 6  # Convert MHz to Hz
+        else:
+            print("Units other than MHz or GHz were used")
+            return False, real_start_freq, real_stop_freq
+
+        if float(real_start_freq) - user_start_freq[0] != 0 or float(real_stop_freq) - user_stop_freq[0] != 0:
+            return False, real_start_freq, real_stop_freq
+        else:
+            return True, real_start_freq, real_stop_freq
 
         #Do we care about setting CENTER or SPAN:FULL/SPAN:LINK ?
 
     #Select the ype of frequency sweep (linear or logarithmic)
-    def freq_sweep_type(self, type):
-        if type == 1:
-            self.instrument.write("LOGFREQ")  # Select logarithmic frequency sweep
-        else:
+    def freq_sweep_type(self):
+        if self.freq_mode == "log":
+            self.instrument.write("LOGFREQ")  # Select logarithmic frequency sweep - NOTE: requires at least 2 octave span
+        elif self.freq_mode == "lin":
             self.instrument.write("LINFREQ")  # Select linear frequency sweep
+        else:
+            print("Entered a non-valid frequency sweep type")
+            return False
+
+    #Collect frequency value at each data point
+    def freq_data(self):
+        try:
+            data_hz = self.instrument.query("OUTPLIML")  # Output format is a list of form (MHz or GHz, -1 or 0, 0, 0)
+        except Exception as e:
+            print(e)
+            return False
+        return data_hz
 
     #Collect logarithmic magnitude data for a frequency sweep
-    def logmag_data(self, type_freq_sweep):
-        self.freq_sweep_type(type_freq_sweep)
+    def logmag_data(self):
         self.instrument.write("LOGM")  # Set display to log magnitude format
-        data_db = self.instrument.query("OUTPFORM")  # Output format is a list of form (db, 0)
+        try:
+            data_db = self.instrument.query("OUTPFORM")  # Output format is a list of form (db, 0)
+        except Exception as e:
+            print(e)
+            return False
         return data_db
 
     #Collect phase data for a frequency sweep
-    def phase_data(self, type_freq_sweep):
-        self.freq_sweep_type(type_freq_sweep)
+    def phase_data(self):
         self.instrument.write("PHAS")  # Set display to phase format
-        data_degree = self.instrument.query("OUTPFORM")  # Output format is a list of form (degrees, 0)
+        try:
+            data_degree = self.instrument.query("OUTPFORM")  # Output format is a list of form (degrees, 0)
+        except Exception as e:
+            print(e)
+            return False
         return data_degree
 
-    # Collect frequency sweep data for all s-parameters
-    def sparam_data(self, type_freq_sweep):
+    #Collect data for the specified sparam
+    def sparam_select(self, sparam):
+        # Collect data for selected s-parameter
+        print("Collecting " + sparam + " data...")
+        self.instrument.write(sparam)
+        db = self.logmag_data()
+        degree = self.phase_data()
 
-        # Collect data for s-parameter S11
-        print("Collecting s11 data...")
-        self.instrument.write("S11")
-        s11_db = self.logmag_data(type_freq_sweep)
-        s11_degree = self.phase_data(type_freq_sweep)
+        if db is False or degree is False:
+            print("Ran into an error during data collection")
+            return [], []
+        else:
+            #Format the data (convert the raw VNA output to a numpy array):
+            db_only = self.data_formatting(db, False)
+            degree_only = self.data_formatting(degree, False)
 
-        # Collect data for s-parameter S12
-        print("Collecting s12 data...")
-        self.instrument.write("S12")
-        s12_db = self.logmag_data(type_freq_sweep)
-        s12_degree = self.phase_data(type_freq_sweep)
+            # return np.array([db_only, degree_only], dtype=object) #Return a single array of data for the sparam
+            return db_only, degree_only
 
-        # Collect data for s-parameter S21
-        print("Collecting s21 data...")
-        self.instrument.write("S21")
-        s21_db = self.logmag_data(type_freq_sweep)
-        s21_degree = self.phase_data(type_freq_sweep)
+    # Collect frequency sweep data for the chosen s-parameters
+    def sparam_data(self):
 
-        # Collect data for s-parameter S22
-        print("Collecting s22 data...")
-        self.instrument.write("S22")
-        s22_db = self.logmag_data(type_freq_sweep)
-        s22_degree = self.phase_data(type_freq_sweep)
+        data_all = []
+        col_names = []
+
+        if "S11" in self.sparam_list:
+            s11_db, s11_deg = self.sparam_select("S11")
+
+            if not len(s11_db) or not len(s11_deg):
+                # self.instrument.write("NOOP")
+                return False, False
+            else:
+                data_all.append(s11_db)
+                data_all.append(s11_deg)
+                col_names.append("S11 (db)")
+                col_names.append("S11 (deg)")
+
+        if "S12" in self.sparam_list:
+            s12_db, s12_deg = self.sparam_select("S12")
+
+            if not len(s12_db) or not len(s12_deg):
+                # self.instrument.write("NOOP")
+                return False, False
+            else:
+                data_all.append(s12_db)
+                data_all.append(s12_deg)
+                col_names.append("S12 (db)")
+                col_names.append("S12 (deg)")
+
+        if "S21" in self.sparam_list:
+            s21_db, s21_deg = self.sparam_select("S21")
+
+            if not len(s21_db) or not len(s21_deg):
+                # self.instrument.write("NOOP")
+                return False, False
+            else:
+                data_all.append(s21_db)
+                data_all.append(s21_deg)
+                col_names.append("S21 (db)")
+                col_names.append("S21 (deg)")
+
+        if "S22" in self.sparam_list:
+            s22_db, s22_deg = self.sparam_select("S22")
+
+            if not len(s22_db) or not len(s22_deg):
+                # self.instrument.write("NOOP")
+                return False, False
+            else:
+                data_all.append(s22_db)
+                data_all.append(s22_deg)
+                col_names.append("S22 (db)")
+                col_names.append("S22 (deg)")
+
+        #This must be run after sparam data is collected due to the nature of the GPIB command
+        freq = self.freq_data()  # Collect frequency data for each data point in the sweep defined by init_freq_sweep()
+
+        if freq is False:
+            # self.instrument.write("NOOP")
+            return False, False
+        else:
+            freq_only = self.data_formatting(freq, True)  # Format the data (convert the raw VNA output to a numpy array)
+            data_all.append(freq_only)
+            col_names.append("Freq (Hz)")
 
         self.instrument.write("NOOP")  # No operation + sets operation bit to complete (puts VNA back in listen mode so can use front panel)
 
-        #Set the frequency by using start/stop freq and default number of points (for demo) --> THIS DOES WEIRD THINGS, REPLACE WITH GPIB COMMAND
-        freq = []
-        i = 1.01
-        while i <= 3.01:
-            freq.append(i)
-            i = i + (3-1)/201
-        # freq_rounded = [round(elem, 3) for elem in freq]
+        #Return a dictionary containing the collected data
+        return np.array(data_all), col_names
 
-        #Format the data (convert the raw VNA output to a numpy array):
-        s11_db_only = self.data_formatting(s11_db)
-        s11_degree_only = self.data_formatting(s11_degree)
-        s12_db_only = self.data_formatting(s12_db)
-        s12_degree_only = self.data_formatting(s12_degree)
-        s21_db_only = self.data_formatting(s21_db)
-        s21_degree_only = self.data_formatting(s21_degree)
-        s22_db_only = self.data_formatting(s22_db)
-        s22_degree_only = self.data_formatting(s22_degree)
-
-        #return one large array which can be easily parsed into file columns
-        return np.array([freq, s11_db_only, s11_degree_only, s12_db_only, s12_degree_only, s21_db_only, s21_degree_only, s22_db_only, s22_degree_only], dtype=object)
-
-    #Remove column of 0's from VNA's output data by reformatting and splitting the input data string to create a list with all 0's at odd list indices
-    def data_formatting(self, data):
-        data_col1 = data.replace(" ", "").replace("\n", ",").split(',')[0::2] #[0::2] takes every other list element starting at index 0
+    #Remove extra columns of 0's from VNA data
+    def data_formatting(self, data, freq):
+        if freq:
+            data_col1 = data.replace(" ", "").replace("\n", ",").split(',')[0::4] #[0::4] takes every 4th list element starting at index 0
+        else:
+            data_col1 = data.replace(" ", "").replace("\n", ",").split(',')[0::2] #[0::2] takes every other list element starting at index 0
 
         return np.array(data_col1[:-1], dtype=float)
 
-    def file_save(self, filename, data): #Do we want to pass in user comments too?
+    def file_save(self, filename, data, col_names): #Do we want to pass in user comments too?
         print("\nSaving collected data to: " + filename)
         data_transpose = data.T
-        col_names = "Freq (GHz), S11 Mag (dB), S11 Phase (deg), S12 Mag (dB), S12 Phase (deg), S21 Mag (dB), S21 Phase (deg), S22 Mag (dB), S22 Phase (deg)" #Will frequency ever not be GHz?
+        # col_names = "Freq (GHz), S11 Mag (dB), S11 Phase (deg), S12 Mag (dB), S12 Phase (deg), S21 Mag (dB), S21 Phase (deg), S22 Mag (dB), S22 Phase (deg)" #Will frequency ever not be GHz?
         np.savetxt(filename, data_transpose, delimiter=',', header=col_names, comments="") #More specification options available
 
     def plot(self, filename):
@@ -164,12 +265,33 @@ class VNA_HP8719A:
 def main():
     print("Beginning execution of VNA commands")
     print("-----------------------------------")
-    hp8719a = VNA_HP8719A(16) #DO WE WANT TO RESET HERE EVERYTIME OR JUST CALL THE RESET FUNCTION IN MAIN?
-    hp8719a.init_freq_sweep("2 GHz", "2.5 GHz")  #Set the desired frequency range
-    data_out = hp8719a.sparam_data(1)             #Measure the data (dB and degree for all s-param)
-    hp8719a.file_save("antenna_s_params2.csv", data_out) #Store the data
-    hp8719a.plot("antenna_s_params2.csv")                #Plot the data
+    hp8719a = VNA_HP8719A("S11, S12, S21, S22")
+    # hp8719a = VNA_HP8719A("S21", freq_mode="log")
+    if hp8719a.instrument:
+        # print(hp8719a.init_freq_sweep("1000 MHz", "3000 MHz", 1601))  #Set the desired frequency range (tests changing start/stop freq)
+        print(hp8719a.init_freq_sweep("1 GHz", "1 GHz", 1601))
+        data_out, col_names = hp8719a.sparam_data()             #Measure the data (dB and degree for all s-param)
+        # print(data_out)
+        print(col_names)
+        # hp8719a.file_save("antenna_s_params3.csv", data_out, col_names) #Store the data
+        # hp8719a.plot("antenna_s_params3.csv")                #Plot the data
 
+
+    #Notes 4/3:
+    #Make sure Elena's code passes units as GHz or MHz (capitalzation is important) --> need any other units?
+    #Does Elena want real start/stop freq as strings or floats? (currently strings)
+    #log sweep must be > 2 octave span --> discuss how to handle this with Elena
+    #   #[should I also return a variable that indicates it isn't a log sweep? -> if want to say lin vs. log I should add code to check LINFREQ? as well
+    #Is handling of bad OUTP command okay?
+    #Do I need to add try/except stuff in the initialization of frequency? Or other place where weird time out errors occur such as IDN
+    #Issue: if I trigger an error, when I run the code again it timesout on the connection command which makes me think I'm
+    #not exiting properly but I can't write more commands in the session once its timed out.... (ie adding NO{ command before returning
+    #False creates an error
+            #Should I place NOPs after every query command instead of doing it once at the end of each function init_freq and sparam?
+            #Should i try reset instead of NOP?
+    #All errors seem to be timeout errors so far (which seem to occur inconsistenly)
+
+    # hp8719a.reset()
     # hp8719a.marker("2 GHz") #Can use to verify values at a freq
 
 if __name__ == "__main__":
