@@ -8,4 +8,5 @@ ERROR_CODE__TEST_THETA_FAULT = 6  # Fault signal from test-theta motor
 ERROR_CODE__TEST_PHI_FAULT   = 7  # Fault signal from test-phi motor
 ERROR_CODE__PROBE_PHI_FAULT  = 8  # Fault signal from probe-phi motor
 ERROR_CODE__ALIGNMENT        = 9  # Alignment routine was not successful
-ERROR_CODE__MISC             = 10 # Error other than those specified above
+ERROR_CODE__BAD_ARGS         = 10
+ERROR_CODE__MISC             = 11 # Error other than those specified above

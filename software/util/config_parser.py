@@ -83,80 +83,89 @@ def get_expt_flow_meas(full_file_name):
         # print(meas)
     return flow, meas
 
-
 def gen_expt_cmds(flow):
     cmds = []
-    curr_theta = 0
-    curr_phi = 0
-    # print(f"Currently at ({curr_phi},{curr_theta})")
-
-    for expt in flow:
-        type = expt.get("expType")
-        # print("Found experiment: " + type)
-        if type == "sweepPhi":
-            # Get inputs for command generator
-            freq = expt.get("freq")
-            startPhi = expt.get("startPhi")
-            endPhi = expt.get("endPhi")
-            samples = expt.get("samples")
-            theta = expt.get("theta")
-            # Generate commands
-            phi_cmds = experiments.gen_sweepPhi_cmds(startPhi, endPhi, theta, samples, freq)
-            # Check to see if commands were generated incorrectly
-            if phi_cmds:
-                cmds.append(phi_cmds[0])
-                curr_phi = phi_cmds[1]
-                curr_theta += phi_cmds[2]
-                # print(f"Currently at ({curr_phi},{curr_theta})")
+    try:
+        for expt in flow:
+            cmd = {}
+            experiment_type  = expt.get("expType")
+            if experiment_type.endswith(".json"):
+                inner_flow, inner_meas = get_expt_flow_meas(type)
+                inner_cmds = gen_expt_cmds(inner_flow)
+                if inner_cmds is not False:
+                    for i_cmd in inner_cmds:
+                        cmds.append(i_cmd)
             else:
-                return False
-
-        elif type == "sweepTheta":
-            # Get inputs for command generator
-            freq = expt.get("freq")
-            startTheta = expt.get("startTheta")
-            endTheta = expt.get("endTheta")
-            samples = expt.get("samples")
-            phi = expt.get("phi")
-            # Generate commands
-            theta_cmds = experiments.gen_sweepTheta_cmds(startTheta, endTheta, phi, samples, freq)
-            # Check to see if commands were generated incorrectly
-            if theta_cmds:
-                cmds.append(theta_cmds[0])
-                curr_phi += theta_cmds[1]
-                curr_theta = theta_cmds[2]
-                # print(f"Currently at ({curr_phi},{curr_theta})")
+                assert experiment_type in ['sweepFreq', 'sweepTheta', 'sweepPhi']
+            cmd['experiment type'] = experiment_type
+            if experiment_type != "sweepPhi":
+                test_theta_start = float(expt.get("startTestTheta"))
+                assert -180 <= test_theta_start <= 180
+                cmd['test-theta start'] = test_theta_start
+                test_theta_end   = float(expt.get("endTestTheta"))
+                assert -180 <= test_theta_end <= 180
+                cmd['test-theta end'] = test_theta_end
+                test_theta_steps = int(expt.get("stepsTestTheta"))
+                assert test_theta_steps > 0
+                cmd['test-theta steps'] = test_theta_steps
             else:
-                return False
-
-        elif type == "sweepFreq":
-            # Get inputs for command generator
-            freq = expt.get("freq")
-            orients = expt.get("orientations")
-            # Generate commands
-            # print(freq)
-            freq_cmds = experiments.gen_sweepFreq_cmds(curr_phi, curr_theta, orients, freq)
-            # Check to see if commands were generated incorrectly
-            if freq_cmds:
-                cmds.append(freq_cmds[0])
-                curr_phi = freq_cmds[1]
-                curr_theta = freq_cmds[2]
-                # print(f"Currently at ({curr_phi},{curr_theta})")
+                test_theta_orientation = float(expt.get("orientationTestTheta"))
+                assert -180 <= test_theta_orientation <= 180
+                cmd['test-theta orientation'] = test_theta_orientation
+            if experiment_type != "sweepTheta":
+                test_phi_start   = float(expt.get("startTestPhi"))
+                assert -180 <= test_phi_start <= 180
+                cmd['test-phi start'] = test_phi_start
+                test_phi_end     = float(expt.get("endTestPhi"))
+                assert -180 <= test_phi_end <= 180
+                cmd['test-phi end'] = test_phi_end
+                test_phi_steps   = int(expt.get("stepsTestPhi"))
+                assert test_phi_steps > 0
+                cmd['test-phi steps'] = test_phi_steps
             else:
-                # print("Error detected")
-                return False
-        elif type.endswith(".json"):
-            # print(f"\tOpening {type}")
-            inner_flow, inner_meas = get_expt_flow_meas(type)  # ignore meas of the referenced config
-            # print(inner_flow)
-            inner_cmds = gen_expt_cmds(inner_flow)
-            if inner_cmds is not False:
-                for i_cmd in inner_cmds:
-                    cmds.append(i_cmd)
+                test_phi_orientation = float(expt.get("orientationTestPhi"))
+                assert -180 <= test_phi_orientation <= 180
+                cmd['test-phi orientation'] = test_phi_orientation
+            probe_phi_start  = float(expt.get("startProbePhi"))
+            assert -180 <= probe_phi_start <= 180
+            cmd['probe-phi start'] = probe_phi_start
+            probe_phi_end    = float(expt.get("endProbePhi"))
+            assert -180 <= probe_phi_end <= 180
+            cmd['probe-phi end'] = probe_phi_end
+            probe_phi_steps  = int(expt.get("stepsProbePhi"))
+            assert probe_phi_steps > 0
+            cmd['probe-phi steps'] = probe_phi_steps
+            alignment        = bool(expt.get("alignment"))
+            cmd['alignment'] = alignment
+            if alignment == "True":
+                alignment_tolerance = float(expt.get("alignmentTolerance"))
+                assert alignment_tolerance >= 0
+                cmd['alignment_tolerance'] = alignment_tolerance
+            freq_start       = expt.get("startFrequency")
+            if 'MHz' in freq_start:
+                freq_start = 1e-3 * float(freq_start[:-3])
+            elif 'GHz' in freq_start:
+                freq_start = float(freq_start[:-3])
             else:
-                return False
-        else:
-            return False
+                assert False
+            cmd['start frequency'] = freq_start
+            freq_stop        = expt.get("stopFrequency")
+            if 'MHz' in freq_stop:
+                freq_stop = 1e-3 * float(freq_stop[:-3])
+            elif 'GHz' in freq_stop:
+                freq_stop = float(freq_stop[:-3])
+            else:
+                assert False
+            cmd['stop frequency'] = freq_stop
+            freq_sweep_type  = expt.get("sweepType")
+            assert freq_sweep_type in ['log', 'linear']
+            cmd['frequency sweep type'] = freq_sweep_type
+            data_type        = expt.get("vnaDataType").split(', ')
+            assert set(data_type).issubset(set(['logmag', 'phase', 'sparam']))
+            cmd['VNA data type'] = data_type
+            cmds.append(cmd)
+    except:
+        return False
     return cmds
 
 

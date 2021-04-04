@@ -2,191 +2,251 @@
 import pydoc
 import os
 import json
-from drivers import MSP430_usb as usb
+
+from drivers.motor_driver_interface_v2 import findSystemMotorDrivers, MotorDriver
+import numpy as np
+from drivers.VNA_gpib import VNA_HP8719A
+
 
 '''
 experiments.py
 This file contains functions generate commands and run various experiments.
 '''
-div = 2
-steps_per_degree = 4494400 #9144000
-polarization_amt = 90
 
-
-def degrees_to_steps(degree):
-    return int((steps_per_degree*float(degree))/360)
-
-
-def steps_to_degrees(steps):
-    return int((360*float(steps))/9144000)
-
-
-def gen_sweepPhi_cmds(start_angle, end_angle, theta_offset, samples, freq):
-    test_cmds = []
-    probe_cmds = []
-    gpib_cmds = []
-    # Check inputs
-    if samples == 0:
-        return False
-
-    # Set up the theta axis
-    t_cmd = "MOVE:THETA:"
-    if theta_offset < 0:
-        t_cmd += 'CW:%d' % (abs(degrees_to_steps(theta_offset)))
-    else:
-        t_cmd += 'CC:%d' % (abs(degrees_to_steps(theta_offset)))
-    test_cmds.append(t_cmd)
-
-    # Compute offset for each sample
-    rel_phi = degrees_to_steps(float(end_angle - start_angle)/samples)
-    dir = "CC:"
-    if rel_phi < 0:
-        dir = "CW:"
-    # Generate Phi commands
-    cmd_str = "MOVE:PHI:"+dir+ '%d' % (abs(rel_phi))
-    test_cmds += [cmd_str] * samples
-
-    # TODO Generate gpib commands
-    # gpib_cmds.append('TODO')
-
-    cmds = {"type": "sweepPhi", "test": test_cmds, "probe": probe_cmds, "gpib": gpib_cmds}
-    return cmds, end_angle, theta_offset
-
-
-def gen_sweepTheta_cmds(start_angle, end_angle, phi_offset, samples, freq):
-    test_cmds = []
-    probe_cmds = []
-    gpib_cmds = []
-    # Check inputs
-    if samples == 0:
-        return False
-
-    # Set up the theta axis
-    t_cmd = "MOVE:PHI:"
-    if phi_offset < 0:
-        t_cmd += 'CW:%d' % (abs(degrees_to_steps(phi_offset)))
-    else:
-        t_cmd += 'CC:%d' % (abs(degrees_to_steps(phi_offset)))
-    test_cmds.append(t_cmd)
-
-    # Compute offset for each sample
-    rel_theta = degrees_to_steps(float(end_angle - start_angle) / samples)
-    dir = "CC:"
-    if rel_theta < 0:
-        dir = "CW:"
-    # Generate Phi commands
-    cmd_str = "MOVE:THETA:" + dir + '%d' % (abs(rel_theta))
-    test_cmds += [cmd_str] * samples
-
-    # TODO Generate gpib commands
-    # gpib_cmds.append('TODO')
-
-    cmds = {"type": "sweepTheta", "test": test_cmds, "probe": probe_cmds, "gpib": gpib_cmds}
-    return cmds, phi_offset, end_angle
-
-
-def gen_sweepFreq_cmds(start_phi, start_theta, orients, freq):
-    test_cmds = []
-    probe_cmds = []
-    gpib_cmds = []
-
-    # Generate gpib commands
-    num_points = 0
-    if len(freq) != 3:
-        return False
-    if not freq[0].endswith(" GHz") and not freq[0].endswith(" MHz"):
-        return False
-    if not freq[1].endswith(" GHz") and not freq[1].endswith(" MHz"):
-        return False
+def run_sweepFreq(args):
+    # Get necessary configuration settings
     try:
-        num_points = int(freq[2])
-    except ValueError:
-        return False
-    gpib_cmds.append({"startF": freq[0], "stopF": freq[1], "num_points":num_points})
-
-    # Generate usb commands
-    prevPhi = start_phi
-    prevTheta = start_theta
-    for o in orients:
-        # Get orientation from user
-        phi = int(o[0])
-        theta = int(o[1])
-        # Compute relative angle
-        relPhi = phi - prevPhi
-        relTheta = theta - prevTheta
-        # Generate command
-        t_cmd = ""
-        if relPhi < 0:
-            t_cmd += "MOVE:PHI:CW:"
+        test_theta_start = args['test-theta start']
+        assert (type(test_theta_start) == float) and (-180 <= test_theta_start <= 180)
+        test_theta_end   = args['test-theta end']
+        assert (type(test_theta_end) == float) and (-180 <= test_theta_end <= 180)
+        if test_theta_end == test_theta_start:
+            test_theta_end += 360
+        test_theta_steps = args['test-theta steps']
+        assert (type(test_theta_steps) == int) and (test_theta_steps > 0)
+        test_phi_start   = args['test-phi start']
+        assert (type(test_phi_start) == float) and (-180 <= test_phi_start <= 180)
+        test_phi_end     = args['test-phi end']
+        assert (type(test_phi_end) == float) and (-180 <= test_phi_end <= 180)
+        if test_phi_end == test_phi_start:
+            test_phi_end += 360
+        test_phi_steps   = args['test-phi steps']
+        assert (type(test_phi_steps) == int) and (test_phi_steps > 0)
+        probe_phi_start  = args['probe-phi start']
+        assert type(probe_phi_start) == float) and (-180 <= probe_phi_start <= 180)
+        probe_phi_end    = args['probe-phi end']
+        assert (type(probe_phi_end) == float) and (-180 <= probe_phi_end <= 180)
+        if probe_phi_start == probe_phi_end:
+            probe_phi_end += 360
+        probe_phi_steps  = args['probe-phi steps']
+        assert (type(probe_phi_steps) == int) and (probe_phi_steps > 0)
+        alignment        = args['alignment']
+        assert type(alignment) == bool
+        if alignment == True:
+            alignment_tolerance = args['alignment tolerance'}
+            assert (type(alignment_tolerance) == float) and (alignment_tolerance >= 0)
+        freq_start       = args['start frequency']
+        assert type(freq_start) == float
+        freq_stop        = args['stop frequency']
+        assert type(freq_stop) == float
+        freq_sweep_type  = args['frequency sweep type']
+        assert freq_sweep_type in ['log', 'linear']
+        freq_sweep_type = 1 if freq_sweep_type == 'log' else 0
+        data_type        = args['VNA data type']
+        if type(data_type) == str:
+            assert data_type in ['logmag', 'phase', 'sparam']
+            data_type = [data_type]
         else:
-            t_cmd += "MOVE:PHI:CC:"
-        t_cmd += '%d' % (abs(degrees_to_steps(relPhi)))
-        test_cmds.append(t_cmd)
+            assert (type(data_type) == list) and set(data_type).issubset(set(['logmag', 'phase', 'sparam']))
+    except:
+        return ERROR_CODE__BAD_ARGS
+    
+    def disconnect():
+        try:
+            del Test_MD
+        except:
+            pass
+        try:
+            del Probe_MD
+        except:
+            pass
+        try:
+            del VNA # Close VNA connection -- no function in class
+        except:
+            pass
+    
+    # Connect to motor driver PCBs
+    rv = findSystemMotorDrivers()
+    if rv['error code'] != ERROR_CODE__SUCCESS:
+        return rv['error code']
+    Test_MD = rv['test motor driver']
+    Probe_MD = rv['probe motor driver']
+    
+    # Connect to VNA
+    try:
+        VNA = VNA_HP8719A(None) # unused parameter address
+        VNA.freq_sweep_type(freq_sweep_type)
+        VNA.init_freq_sweep(freq_start, freq_stop)
+    except:
+        disconnect()
+        return ERROR_CODE__VNA
+    
+    # Run alignment routine
+    if alignment == True:
+        Test_MD.writeLaser(False)
+        ambient_values = []
+        for i in range(100):
+            val = Probe_MD.readSensor()
+            ambient_values.append(val)
+        error_code = Test_MD.align('theta')
+        if error_code != ERROR_CODE__SUCCESS:
+            disconnect()
+            return ERROR_CODE__TEST_THETA_FAULT
+        error_code = Test_MD.align('phi')
+        if error_code != ERROR_CODE__SUCCESS:
+            disconnect()
+            return ERROR_CODE__TEST_PHI_FAULT
+        error_code = Probe_MD.align('phi')
+        if error_code != ERROR_CODE__SUCCESS:
+            disconnect()
+            return ERROR_CODE__PROBE_PHI_FAULT
+        Test_MD.writeLaser(True)
+        time.sleep(.1)
+        aligned_value = Probe_MD.readSensor()
+        Test_MD.writeLaser(False)
+        if (aligned_value < np.mean(ambient_values)) \
+          or ((np.abs(aligned_value-np.mean(ambient_values))/np.std(ambient_values)) > alignment_tolerance):
+            disconnect()
+            return ERROR_CODE__ALIGNMENT
+        if Test_MD.getOrientation('theta', 'aligned') != Test_MD.getOrientation('theta', 'current'):
+            disconnect()
+            return ERROR_CODE__ALIGNMENT
+        if Test_MD.getOrientation('phi', 'aligned') != Test_MD.getOrientation('phi', 'current'):
+            disconnect()
+            return ERROR_CODE__ALIGNMENT
+        if Probe_MD.getOrientation('phi', 'aligned') != Probe_MD.getOrientation('phi', 'current'):
+            disconnect()
+            return ERROR_CODE__ALIGNMENT
+    
+    # Move motors to start location
+    test_theta_offset = int(4494000*np.abs(test_theta_start)/360)
+    test_theta_dir    = 'cw' if test_theta_start >= 0 else 'ccw'
+    test_phi_offset   = int(9142000*np.abs(test_phi_start)/360)
+    test_phi_dir      = 'cw' if test_phi_start >= 0 else 'ccw'
+    probe_phi_offset  = int(9142000*np.abs(probe_phi_start)/360)
+    probe_phi_dir     = 'cw' if probe_phi_start >= 0 else 'ccw'
+    error_code = Test_MD.turnMotor('theta', test_theta_offset, test_theta_dir)
+    if error_code != ERROR_CODE__SUCCESS:
+        disconnect()
+        return ERROR_CODE__TEST_THETA_FAULT
+    error_code = Test_MD.turnMotor('phi', test_phi_offset, test_phi_dir)
+    if error_code != ERROR_CODE__SUCCESS:
+        disconnect()
+        return ERROR_CODE__TEST_PHI_FAULT
+    error_code = Probe_MD.turnMotor('phi', probe_phi_offset, probe_phi_dir)
+    if error_code != ERROR_CODE__SUCCESS:
+        disconnect()
+        return ERROR_CODE__PROBE_PHI_FAULT
+    
+    # Take measurements at specified orientations
+    Data = []
+    test_theta_increment = int(4494000*np.abs(test_theta_start-test_theta_end)/(360*test_theta_steps))
+    test_theta_direction = 'cw' if test_theta_end-test_theta_start > 0 else 'ccw'
+    test_phi_increment   = int(9142000*np.abs(test_phi_start-test_phi_end)/(360*test_phi_steps))
+    test_phi_direction   = 'cw' if test_phi_end-test_phi_start > 0 else 'ccw'
+    probe_phi_increment  = int(4494000*np.abs(probe_phi_start-probe_phi_end)/(360*probe_phi_steps))
+    probe_phi_direction  = 'cw' if probe_phi_end-probe_phi_start > 0 else 'ccw'
+    for idx__test_theta in np.arange(test_theta_steps):
+        for idx__probe_phi in np.arange(probe_phi_steps):
+            for idx__test_phi in np.arange(test_phi_steps):
+                test_theta_orientation = test_theta_start+idx__test_theta*((test_theta_end-test_theta_start)/test_theta_steps)
+                test_phi_orientation   = test_phi_start+idx__test_phi*((test_phi_end-test_phi_start)/test_phi_steps)
+                probe_phi_orientation  = probe_phi_start+idx__probe_phi*((probe_phi_end-probe_phi_start)/probe_phi_steps)
+                logmag_data = None
+                if 'logmag' in data_type:
+                    logmag_data = VNA.logmag_data(freq_sweep_type)
+                phase_data = None
+                if 'phase' in data_type:
+                    phase_data = VNA.phase_data(freq_sweep_type)
+                sparam_data = None
+                if 'sparam' in data_type:
+                    sparam_data = VNA.sparam_data(freq_sweep_type)
+                Data.append({'test-theta':  test_theta_orientation,
+                             'test-phi':    test_phi_orientation,
+                             'probe-phi':   probe_phi_orientation,
+                             'logmag data': logmag_data,
+                             'phase data':  phase_data,
+                             'sparam data': sparam_data})
+                error_code = Test_MD.turnMotor('phi', test_phi_increment, test_phi_direction)
+                if error_code != ERROR_CODE__SUCCESS:
+                    disconnect()
+                    return ERROR_CODE__TEST_PHI_FAULT
+            error_code = Probe_MD.turnMotor('phi', probe_phi_increment, probe_phi_direction)
+            if error_code != ERROR_CODE__SUCCESS:
+                disconnect()
+                return ERROR_CODE__PROBE_PHI_FAULT
+            if np.abs(test_phi_start-test_phi_end) != 360:
+                error_code = Test_MD.turnMotor('phi', test_phi_increment, 'ccw' if test_phi_direction == 'cw' else 'cw')
+                if error_code != ERROR_CODE__SUCCESS:
+                    disconnect()
+                    return ERROR_CODE__TEST_PHI_FAULT
+        error_code = Test_MD.turnMotor('theta', test_theta_increment, test_theta_direction)
+        if error_code != ERROR_CODE__SUCCESS:
+            disconnect()
+            return ERROR_CODE__TEST_THETA_FAULT
+        if np.abs(probe_phi_start-probe_phi_end) != 360:    
+            error_code = Probe_MD.turnMotor('phi', probe_phi_steps*probe_phi_increment, 'ccw' if probe_phi_direction == 'cw' else 'cw')
+            if error_code != ERROR_CODE__SUCCESS:
+                disconnect()
+                return ERROR_CODE__PROBE_PHI_FAULT
+    error_code = Test_MD.turnMotor('theta', test_theta_steps*test_theta_increment, 'ccw' if test_theta_direction == 'cw' else 'cw')
+    if error_code != ERROR_CODE__SUCCESS:
+        disconnect()
+        return ERROR_CODE__TEST_THETA_FAULT
+    
+    # Disconnect and save/plot data
+    disconnect()
+    # save data as CSV
+    # plot data
+    
+    return ERROR_CODE__SUCCESS
 
-        if relPhi < 0:
-            t_cmd = "MOVE:THETA:CW:"
-        else:
-            t_cmd = "MOVE:THETA:CC:"
-        t_cmd += '%d' % (abs(degrees_to_steps(relTheta)))
-        # Add command to test commands
-        test_cmds.append(t_cmd)
-        # update previous angles
-        prevPhi = phi
-        prevTheta = theta
 
-    # Polarization
-    p_cmd = '%d' % len(test_cmds)
-    # print("p_cmd = {}",p_cmd)
-    probe_cmds.append(p_cmd)
-    p_cmd = "MOVE:THETA:CC:" + '%d' % (abs(degrees_to_steps(polarization_amt)))
-    probe_cmds.append(p_cmd)
-    test_cmds += test_cmds.copy()
-
-    cmds = {"type": "sweepFreq", "test": test_cmds, "probe": probe_cmds, "gpib": gpib_cmds}
-    return cmds, prevPhi, prevTheta
+def run_sweepPhi(args):
+    try:
+        test_theta_orientation = args['test-theta orientation']
+        assert (type(test_theta_orientation) == float) and (-180 <= test_theta_orientation <= 180)
+        probe_phi_orientation  = args['probe-phi orientation']
+        assert (type(probe_phi_orientation) == float) and (-180 <= probe_phi_orientation <= 180)
+        args['test-theta start'] = test_theta_orientation
+        args['test-theta end'] = test_theta_orientation
+        args['test-theta steps'] = 1
+        args['probe-phi start'] = probe_phi_orientation
+        args['probe-phi end'] = probe_phi_orientation
+        args['probe-phi steps'] = 1
+    except:
+        return ERROR_CODE__BAD_ARGS
+    error_code = run_sweepFreq(args)
+    return error_code
+    
 
 
-def run_sweepFreq(devices, t_cmds, p_cmds, g_cmds):
-    test_dev = devices[0]
-    probe_dev = devices[0]
-    if len(devices) == 2:
-        probe_dev = devices[1]
-
-    # TODO configure VNA HERE
-    # print("Configuring the VNA for frequency sweeps...")
-
-    # Setup loop control variables
-    pi, gi = 0, 0
-    done = False
-    # print("Running through orientations...")
-    for ti in range(len(t_cmds)-1):
-        # Test side commands
-        phi_cmd = t_cmds[ti]
-        theta_cmd = t_cmds[ti+1]
-        # print(f"Sending {phi_cmd}...")
-        resp = test_dev.write_to_device(phi_cmd)  # phi
-        if resp != phi_cmd:
-            return False, phi_cmd, resp
-        # print(f"Sending {theta_cmd}...")
-        resp = test_dev.write_to_device(theta_cmd)  # theta
-        if resp != theta_cmd:
-            return False, theta_cmd, resp
-
-        # TODO trigger vna measurement here
-        # print(f"Triggering measurement on the VNA\n")
-
-        # Update loop control variables
-        ti += 2
-
-    return True, True, True
-
-
-def run_sweepPhi(devices, t_cmds, p_cmds, g_cmds):
-    return True, True, True
-
-
-def run_sweepTheta(devices, t_cmds, p_cmds, g_cmds):
-    return True, True, True
+def run_sweepTheta(args):
+    try:
+        test_phi_orientation = args['test-phi orientation']
+        assert (type(test_phi_orientation) == float) and (-180 <= test_phi_orientation <= 180)
+        probe_phi_orientation  = args['probe-phi orientation']
+        assert (type(probe_phi_orientation) == float) and (-180 <= probe_phi_orientation <= 180)
+        args['test-phi start'] = test_phi_orientation
+        args['test-phi end'] = test_phi_orientation
+        args['test-phi steps'] = 1
+        args['probe-phi start'] = probe_phi_orientation
+        args['probe-phi end'] = probe_phi_orientation
+        args['probe-phi steps'] = 1
+    except:
+        return ERROR_CODE__BAD_ARGS
+    error_code = run_sweepFreq(args)
+    return error_code
 
 
 # main
