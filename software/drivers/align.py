@@ -1,25 +1,25 @@
 # from motor_driver_interface_v2 import MotorDriver
-from drivers import MSP430_usb as usb
 
 # try:
 #     import MSP430_usb as usb
 # except ImportError:
 #     from util import experiments
 import keyboard
+from drivers import MSP430_usb as usb
 
 import os
 import time
 import numpy as np
 
 
-def flush_input():
-    try:
-        import sys, termios
-        termios.tcflush(sys.stdin, termios.TCIOFLUSH)
-    except ImportError:
-        import msvcrt
-        while msvcrt.kbhit():
-            msvcrt.getch()
+# def flush_input():
+#     try:
+#         import sys, termios
+#         termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+#     except ImportError:
+#         import msvcrt
+#         while msvcrt.kbhit():
+#             msvcrt.getch()
 
 
 def _printInstructions(status, increment, sensor_output, test_theta, test_theta_a, test_phi, test_phi_a, probe_phi,
@@ -269,7 +269,7 @@ def findAlignedPosition(MD_test, MD_probe):
 
 if __name__ == "__main__":
     devices = []
-    # print(usb.def_port_name)
+    print(usb.def_port_name)
     # ports = usb.find_ports(usb.def_port_name)
 
     # Open devices and add to devices
