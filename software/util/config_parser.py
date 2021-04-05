@@ -135,12 +135,13 @@ def gen_expt_cmds(flow):
             probe_phi_steps  = int(expt.get("stepsProbePhi"))
             assert probe_phi_steps > 0
             cmd['probe-phi steps'] = probe_phi_steps
-            alignment        = bool(expt.get("alignment"))
+            assert expt.get("alignment").upper() in ['TRUE', 'FALSE']
+            alignment        = True if expt.get("alignment").upper() == 'TRUE' else False
             cmd['alignment'] = alignment
-            if alignment == "True":
+            if alignment == True:
                 alignment_tolerance = float(expt.get("alignmentTolerance"))
                 assert alignment_tolerance >= 0
-                cmd['alignment_tolerance'] = alignment_tolerance
+                cmd['alignment tolerance'] = alignment_tolerance
             freq_start       = expt.get("startFrequency")
             if 'MHz' in freq_start:
                 freq_start = 1e-3 * float(freq_start[:-3])
@@ -157,7 +158,7 @@ def gen_expt_cmds(flow):
             else:
                 assert False
             cmd['stop frequency'] = freq_stop
-            freq_sweep_type  = expt.get("sweepType")
+            freq_sweep_type  = expt.get("sweepType").lower()
             assert freq_sweep_type in ['log', 'linear']
             cmd['frequency sweep type'] = freq_sweep_type
             data_type        = expt.get("vnaDataType").split(', ')

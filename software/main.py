@@ -8,7 +8,7 @@ from optparse import OptionParser
 from util import config_parser as parser
 from util import experiments as expt
 
-from util.error_codes import *
+from util import error_codes
 from util.run_find_aligned_position import calibrate
 import time
 
@@ -36,13 +36,16 @@ def printf(phase, flag, msg):
     if flag in ("Error", "Warning"):
         print(f"({phase}) {flag}: {msg}")
     else:
-        print(f"({phase}): {msg}")
+        print(f"({phase}):".ljust(11), f"{msg}")
 
 
 def config_run(option, opt, value, parser):
     """ Used to set the run_type variable from the command line arguments"""
     if parser.values.run_type == "f":
-        parser.values.run_type = opt[1]
+        if (opt == '-a') or (opt == '--alignOnly'):
+            parser.values.run_type = 'a'
+        elif (opt == '-c') or (opt == '--config'):
+            parser.values.run_type = 'f'
     else:
         parser.values.run_type = "e"
 
@@ -61,8 +64,8 @@ def process_cmd_line():
                       help="Configuration file used to control the system. Must be a JSON file.")
     parser.add_option("-a", "--alignOnly", action="callback", callback=config_run, dest="run_type",
                       help="Only run the alignment routine.")
-    parser.add_option("-s", "--skipAlign", action="callback", callback=config_run, dest="run_type",
-                      help="Skip the alignment routine.")
+    #parser.add_option("-s", "--skipAlign", action="callback", callback=config_run, dest="run_type",
+    #                  help="Skip the alignment routine.")
     parser.add_option("--calibrate", action="store_true", dest="calibrate", default=False,
                       help="Run the calibration interface.")
     # Parse command line
@@ -74,6 +77,14 @@ def process_cmd_line():
                                     "the alignment routine. See usage below: ")
         parser.print_help()
         return False
+        
+    num_modes = int(options.cfg!='') + int(options.run_type=='a') + int(options.calibrate)
+    if num_modes == 0:
+        printf(curr_phase, "Error", "No options specified. See usage below:")
+        parser.print_help()
+    if num_modes > 1:
+        printf(curr_phase, "Error", "Mutually-exclusive options specified. See usage below:")
+        parser.print_help()
     if options.calibrate:
         options.run_type = "c"
     return options
@@ -106,6 +117,35 @@ def process_config(config_name):
         printf(curr_phase, "Error", f"No configuration file was passed in, could not generate experiment commands.")
         return False
 
+def handle_error_code(error_code):
+    # Elena: write error-handling code below
+    if   error_code == error_codes.SUCCESS: # routine finished without issues
+        print('success error code')
+    elif error_code == error_codes.CONNECTION: # could not find any connected motor driver PCBs
+        print('connection error code')
+    elif error_code == error_codes.CONNECTION_PROBE: # could not find a probe motor driver PCB
+        print('probe connection error code')
+    elif error_code == error_codes.CONNECTION_TEST: # could not find a test motor driver PCB
+        print('test connection error code')
+    elif error_code == error_codes.DISTINCT_IDS: # detected two motor driver PCBs, but they were both configured as test or probe
+        print('distinct ids error code')
+    elif error_code == error_codes.VNA: # could not connect to VNA
+        print('vna error code')
+    elif error_code == error_codes.TEST_THETA_FAULT: # test-theta motor fault
+        print('test-theta fault error code')
+    elif error_code == error_codes.TEST_PHI_FAULT: # test-phi motor fault
+        print('test-phi fault error code')
+    elif error_code == error_codes.PROBE_PHI_FAULT: # probe-phi motor fault
+        print('probe-phi fault error code')
+    elif error_code == error_codes.ALIGNMENT: # alignment routine failed
+        print('alignment error code')
+    elif error_code == error_codes.BAD_ARGS: # routine was called with invalid arguments
+        print('bad args error code')
+    elif error_code == error_codes.MISC: # issue not listed above
+        print('misc error code')
+    else:
+        assert False
+
 
 def run_experiments(cmds):
     """ Runs the experiments in cmds."""
@@ -126,34 +166,8 @@ def run_experiments(cmds):
         else:
             printf(curr_phase, "Error", f"Could not run experiment of type '{expt_type}'")
             return False, expt_type
-        
-        # Elena: write error-handling code below
-        if   error_code == ERROR_CODE__SUCCESS:
-            pass
-        elif error_code == ERROR_CODE__CONNECTION:
-            pass
-        elif error_code == ERROR_CODE__CONNECTION_PROBE:
-            pass
-        elif error_code == ERROR_CODE__CONNECTION_TEST:
-            pass
-        elif error_code == ERROR_CODE__DISTINCT_IDS:
-            pass
-        elif error_code == ERROR_CODE__VNA:
-            pass
-        elif error_code == ERROR_CODE__TEST_THETA_FAULT:
-            pass
-        elif error_code == ERROR_CODE__TEST_PHI_FAULT:
-            pass
-        elif error_code == ERROR_CODE__PROBE_PHI_FAULT:
-            pass
-        elif error_code == ERROR_CODE__ALIGNMENT:
-            pass
-        elif error_code == ERROR_CODE__BAD_ARGS:
-            pass
-        elif error_code == ERROR_CODE__MISC:
-            pass
-        else:
-            assert False
+        handle_error_code(error_code)
+
     return True, True, True
 
 
@@ -171,7 +185,7 @@ if __name__ == '__main__':
 
     print_welcome_sign()
     # Setup Phase
-    printf(curr_phase, None, "Setting up system...")
+    #printf(curr_phase, None, "Setting up system...")
 
     # Process Command Line
     args = process_cmd_line()
@@ -180,36 +194,40 @@ if __name__ == '__main__':
     cfg = args.cfg
     run_type = args.run_type
     if run_type == "a":
-        printf(curr_phase, "Debug", "Running the alignment routine only.")
-    elif run_type == "s":
-        printf(curr_phase, "Debug", "Skipping the alignment routine.")
+        #printf(curr_phase, "Debug", "Running the alignment routine only.")
+        print('(Setup):   ', 'Running the alignment routine only.')
+    #elif run_type == "s":
+    #    printf(curr_phase, "Debug", "Skipping the alignment routine.")
     elif run_type == "c":
         printf(curr_phase, "Debug", "Starting the calibration interface.")
     cmds = False
     # Process Configuration File if running the entire system
-    if run_type in ("f", "s"):
+    if run_type in ("f"):#, "s"):
         cmds = process_config(cfg)
         if not cmds:
             exit(-1)
         # parser.print_cmds(cmds) # Print out the commands
 
     # Start execution/running phase
-    curr_phase = "Running"
-    if run_type in ("f", "s"):
+    #curr_phase = "Running"
+    if run_type in ("f"):#, "s"):
         # Start Running the experiments
         res = run_experiments(cmds)
         if res[0] is False:
             printf(curr_phase, "Error", f"Issue executing {res[1]} received {res[2]} instead")
     elif run_type == "c":
-        time.sleep(.25)
-        calibrate()
-        
+        time.sleep(1)
+        error_code = calibrate()
+        handle_error_code(error_code)
+    elif run_type == 'a':
+        error_code = expt.run_Align()
+        handle_error_code(error_code)
         
         
     # Shutdown Phase
-    curr_phase = "Shutdown"
-    print()
-    printf(curr_phase, None, "Closing down system...")
-    printf(curr_phase, None, "Successfully closed down system...")
+    #curr_phase = "Shutdown"
+    #print()
+    #printf(curr_phase, None, "Closing down system...")
+    #printf(curr_phase, None, "Successfully closed down system...")
 
     exit(1)

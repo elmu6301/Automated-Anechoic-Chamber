@@ -1,8 +1,9 @@
-from motor_driver_interface_v2 import MotorDriver
+from drivers.motor_driver_interface_v2 import MotorDriver
 import keyboard
 import os
 import time
 import numpy as np
+from util import error_codes
 
 def flush_input():
     try:
@@ -256,3 +257,5 @@ def findAlignedPosition(MD_test, MD_probe):
             printInstructions('Exited program.')
             flush_input()
             break
+    
+    return error_codes.SUCCESS

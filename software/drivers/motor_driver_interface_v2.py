@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 
+import sys
+import os
+sys.path.append(os.path.join(os.getcwd(), '..'))
+
 import serial
+import serial.tools.list_ports
 import time
-from error_codes import *
+from util import error_codes
 
 CMDDELIM = '\n'
 ARGDELIM = ':'
@@ -19,23 +24,23 @@ MOVE     = 'MOVE'
 FREQ     = 'FREQ'
 ORIENT   = 'ORIENTATION'
 
-def getMotorDriverComPorts(pid=0x3Df):
+def getMotorDriverComPorts(vid=0x2047, pid=0x3Df):
     ports = []
     for candidate in serial.tools.list_ports.comports():
-        if candidate.pid == pid:
+        if (candidate.vid==vid) and (candidate.pid == pid):
             ports.append(candidate)
     return ports
     
 def findSystemMotorDrivers():
-    ports = getMotorDriverPorts()
-    if len(ports) != 2:
-        return {'error code': ERROR_CODE__MISC}
+    ports = getMotorDriverComPorts()
+    if len(ports) == 0:
+        return {'error code': error_codes.CONNECTION}
     Test_MD  = None
     Probe_MD = None
     for port in ports:
         try:
             MD = MotorDriver(port.name)
-            identity = MotorDriver.getId()
+            identity = MD.getId()
             if identity == 'TEST':
                 Test_MD = MD
             elif identity == 'PROBE':
@@ -43,16 +48,24 @@ def findSystemMotorDrivers():
             else:
                 assert False
         except:
-            return {'error code': ERROR_CODE__CONNECTION}
-    if Test_MD == None:
+            pass
+    if (Test_MD == None) and (Probe_MD == None):
+        return {'error code': error_codes.CONNECTION}
+    elif Test_MD == None:
         del Probe_MD
-        return {'error code': ERROR_CODE__CONNECTION_TEST}
-    if Probe_MD == None:
+        if len(ports) == 2:
+            return {'error code': error_codes.DISTINCT_IDS}
+        else:
+            return {'error code': error_codes.CONNECTION_TEST}
+    elif Probe_MD == None:
         del Test_MD
-        return {'error code': ERROR_CODE__CONNECTION_PROBE}
+        if len(ports) == 2:
+            return {'error code': error_codes.DISTINCT_IDS}
+        else:
+            return {'error code': error_codes.CONNECTION_PROBE}
     return {'test motor driver':  Test_MD,
             'probe motor driver': Probe_MD,
-            'error code':         ERROR_CODE__SUCCESS}
+            'error code':         error_codes.SUCCESS}
 
 class MotorDriver:
     def __init__(self, port,
@@ -123,34 +136,44 @@ class MotorDriver:
         assert self._rxCmd() == cmd
         return int(rv)
     def turnMotor(self, motor, num_steps, direction, gradual=False):
-        assert motor in ['theta', 'phi']
-        assert type(num_steps) == int
-        assert num_steps == num_steps&0xFFFFFFFF
-        assert direction in ['cw', 'ccw']
-        assert type(gradual) == bool
+        try:
+            assert motor in ['theta', 'phi']
+            assert type(num_steps) == int
+            assert num_steps == num_steps&0xFFFFFFFF
+            assert direction in ['cw', 'ccw']
+            assert type(gradual) == bool
+        except:
+            return error_codes.BAD_ARGS
         args = [MOVE]
         args.append('PHI' if motor=='phi' else 'THETA')
         args.append('CW' if direction=='cw' else 'CC')
         args.append('GRADUAL' if gradual else 'JUMP')
         args.append('%d'%(num_steps))
         cmd = self._txCmd(args)
-        t0 = time.time()
         assert self._rxCmd() == ACK
-        assert self._rxCmd() == cmd
-        return time.time()-t0
+        rv = self._rxCmd()
+        if rv == cmd:
+            return error_codes.SUCCESS
+        else:
+            return error_codes.MISC
     def findEndSwitch(self, motor, direction, gradual=False):
-        assert motor in ['theta', 'phi']
-        assert direction in ['cw', 'ccw']
-        assert type(gradual) == bool
+        try:
+            assert motor in ['theta', 'phi']
+            assert direction in ['cw', 'ccw']
+            assert type(gradual) == bool
+        except:
+            return error_codes.BAD_ARGS
         args = [ALIGN]
         args.append('PHI' if motor=='phi' else 'THETA')
         args.append('CW' if direction=='cw' else 'CC')
         args.append('GRADUAL' if gradual else 'JUMP')
         cmd = self._txCmd(args)
-        t0 = time.time()
         assert self._rxCmd() == ACK
-        assert self._rxCmd() == cmd
-        return time.time()-t0
+        rv = self._rxCmd()
+        if rv == cmd:
+            return error_codes.SUCCESS
+        else:
+            return error_codes.MISC
     def getFreq(self, motor):
         assert motor in ['theta', 'phi']
         args = [FREQ]
@@ -204,16 +227,22 @@ class MotorDriver:
         assert self._rxCmd() == cmd
         return int(rv)
     def align(self, motor):
-        assert motor in ['theta', 'phi']
+        try:
+            assert motor in ['theta', 'phi']
+        except:
+            return error_codes.BAD_ARGS
         align_offset = self.getOrientation(motor, 'aligned')
         if align_offset == None:
             print('Must calibrate system')
-            assert False
+            return error_codes.MISC
         orientation = self.getOrientation(motor, 'current')
         if orientation != None:
             direction = 'cw' if orientation<0 else 'ccw'
         else:
             direction = 'cw'
-        self.findEndSwitch(motor, direction)
-        direction = 'ccw' if orientation<0 else 'cw'
-        self.turnMotor(motor, abs(align_offset), direction)
+        error_code = self.findEndSwitch(motor, direction)
+        if error_code != error_codes.SUCCESS:
+            return error_code
+        direction = 'ccw' if align_offset<0 else 'cw'
+        error_code = self.turnMotor(motor, abs(align_offset), direction)
+        return error_code

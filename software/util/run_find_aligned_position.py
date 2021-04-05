@@ -1,10 +1,10 @@
-from motor_driver_interface_v2 import findSystemMotorDrivers, MotorDriver
-from find_aligned_position import findAlignedPosition
-from error_codes import *
+from drivers.motor_driver_interface_v2 import findSystemMotorDrivers, MotorDriver
+from util.find_aligned_position import findAlignedPosition
+from util import error_codes
 
 def calibrate():
     rv = findSystemMotorDrivers()
-    if rv['error code'] != ERROR_CODE__SUCCESS:
+    if rv['error code'] != error_codes.SUCCESS:
         return rv['error code']
     Test_MD = rv['test motor driver']
     Probe_MD = rv['probe motor driver']
