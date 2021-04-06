@@ -217,6 +217,10 @@ def run_sweepFreq(args):
     Probe_MD = rv['probe motor driver']
     printf('\t\tDone.')
     
+    
+###############################################################
+    # Elena: connect to VNA here
+    
     # Connect to VNA
     printf('\tConnecting to VNA...')
     try:
@@ -228,6 +232,8 @@ def run_sweepFreq(args):
         #disconnect()
         #return error_codes.VNA
     printf('\t\tDone.')
+    
+################################################################
     
     current_phase = 'Running'
     # Run alignment routine
@@ -349,6 +355,11 @@ def run_sweepFreq(args):
                 printf('\t\tTest-theta orientation: %f degrees.'%(test_theta_orientation))
                 printf('\t\tTest-phi orientation: %f degrees.'%(test_phi_orientation))
                 printf('\t\tProbe-phi orientation: %f degrees.'%(probe_phi_orientation))
+                
+
+##################################################################################
+#   Elena: take/record data here; see variables representing current orientation above
+                
                 time.sleep(1)
                 logmag_data = None
                 if 'logmag' in data_type:
@@ -377,6 +388,10 @@ def run_sweepFreq(args):
                              'logmag data': logmag_data,
                              'phase data':  phase_data,
                              'sparam data': sparam_data})
+                             
+##################################################################################                             
+                             
+                
                 if idx__test_phi != test_phi_steps-1:
                     printf('\tMoving test-phi motor...')
                     t0 = time.time()
@@ -435,6 +450,16 @@ def run_sweepFreq(args):
     printf('Shutting down the system...')
     disconnect()
     printf('\tDone.')
+    
+##############################################################################
+# Elena: plot data here
+
+
+##############################################################################
+    
+    
+    
+    
     return error_codes.SUCCESS
 
 
