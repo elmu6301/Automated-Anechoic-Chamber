@@ -166,7 +166,7 @@ def run_sweepFreq(devices, vna, t_cmds, p_cmds, g_cmds):
 
     # Configure VNA start and stop frequency and number of points
     vna_cfg_cmds = g_cmds[0]
-    # vna.init_freq_sweep(vna_cfg_cmds['startF'], vna_cfg_cmds['stopF'])  # Set start and stop freq
+    vna.init_freq_sweep(vna_cfg_cmds['startF'], vna_cfg_cmds['stopF'])  # Set start and stop freq
     # TODO add call to set the number of points
 
     # Setup loop control variables
@@ -200,8 +200,12 @@ def run_sweepFreq(devices, vna, t_cmds, p_cmds, g_cmds):
 
         # Collect Data
         # print(f"Triggering measurement on the VNA\n")
-        # data = vna.sparam_data(0)
-        # data_out.append(data)
+        data = vna.sparam_data(0)
+
+        if not data:
+            return False, ...
+
+        data_out.append(data)
 
         # Update loop control variables
         ti += 2

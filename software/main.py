@@ -47,14 +47,6 @@ def config_run(option, opt, value, parser):
         parser.values.run_type = "e"
 
 
-def set_cfg_name(option, opt, value, parser):
-    """ Used to set the run_type variable from the command line arguments"""
-    if value == '' or value is None:
-        parser.values.cfg = ''
-    else:
-        parser.values.cfg = value
-
-
 def process_cmd_line():
     """ Processes the command line arguments and sets up the system control variables accordingly"""
 
@@ -69,15 +61,15 @@ def process_cmd_line():
     parser.prog = "direcMeasure"
 
     # Add options
-    parser.add_option("-c", "--config", type="string", action="callback", callback=set_cfg_name, dest="cfg",
+    parser.add_option("-c", "--config", type="string", action="store", dest="cfg", default='',
                       help="Configuration file used to control the system. Must be a JSON file.")
     parser.add_option("-a", "--alignOnly", action="callback", callback=config_run, dest="run_type",
                       help="Only run the alignment routine.")
     parser.add_option("-s", "--skipAlign", action="callback", callback=config_run, dest="run_type",
                       help="Skip the alignment routine.")
     parser.add_option("-p", "--sParams", type="string", action="store", dest="sParams", default="s1,s2",
-                      help="Determines the s parameters to collect (i.e. s1, s2, s3, s4). To enter multiple s "
-                           "parameters, enter as a comma separated list (ex: 's1,s2') . Default is s1,s2")
+                      help="Determines the s parameters to collect (S11, S12, S21, S22). To enter multiple s "
+                           "parameters, enter as a comma separated list (ex: 'S11, S12'). Default is S11, S12")
 
     # Check to make sure we have arguments
     if len(sys.argv) == 1:
@@ -86,8 +78,35 @@ def process_cmd_line():
         parser.print_help()
         return False
 
+    # Check to make sure a config file was entered with the -c
+    index = -1
+    try:
+        index = sys.argv.index("-c") + 1
+    except ValueError:
+        try:
+            index = sys.argv.index("--config") + 1
+        except ValueError:
+            index = -1
+    # insert default values if needed
+    if index >= len(sys.argv) or parser.has_option(sys.argv[index]):
+        sys.argv.insert(index, '')
+
+    # Check to make sure sparams were entered with the -p
+    index = -1
+    try:
+        index = sys.argv.index("-p") + 1
+    except ValueError:
+        try:
+            index = sys.argv.index("--sParams") + 1
+        except ValueError:
+            index = -1
+    # insert default values if needed
+    if index >= len(sys.argv) or parser.has_option(sys.argv[index]):
+        sys.argv.insert(index, "S11,S12")
+
     # Parse command line
     (options, args) = parser.parse_args()
+    # print(options)
 
     # Error Checking
     if options.run_type == "e":
@@ -95,13 +114,21 @@ def process_cmd_line():
                                     "the alignment routine. See usage for more information on command line options.")
         parser.print_help()
         return False
-    if not options.cfg.endswith(".json"):
+
+    if options.cfg != '' and not options.cfg.endswith(".json"):
         printf(curr_phase, "Error", f"The configuration file entered '{options.cfg}' is not a JSON file. "
                                     f" See the User Manual for more information on configuration files and "
                                     f"usage for more information on command line options.")
         parser.print_help()
         return False
-    options.sParams = options.sParams.split(",", options.sParams.count(","))
+    if options.cfg == '' and options.run_type != "a":
+        printf(curr_phase, "Error", f"No configuration file was entered. Cannot run full system. "
+                                    f" See the User Manual for more information on configuration files and "
+                                    f"usage for more information on command line options.")
+        parser.print_help()
+        return False
+
+    # options.sParams = options.sParams.split(",", options.sParams.count(","))
     return options
 
 
@@ -201,7 +228,7 @@ def process_config(config_name):
     """ Parses the configuration file and generates the appropriate commands. """
     if config_name != '':
         # Find Config
-        printf(curr_phase, None, f"Starting configuration file parsing process on {config_name}...")
+        printf(curr_phase, None, f"Starting configuration file parsing process on '{config_name}'...")
         full_cfg_name = parser.find_config(config_name)
         if not full_cfg_name:
             printf(curr_phase, "Error", f"Could not locate the file '{config_name}'. Ensure that '{config_name}'"
