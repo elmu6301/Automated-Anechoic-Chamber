@@ -1,27 +1,54 @@
 {
 	"flow": [
 		{
-			"expType": "sweepPhi",
-			"freq": 120, 
-			"samples": 5,
-			"startPhi": 0, 
-			"endPhi": 180,
-			"theta": 90
+			"expType": "sweepFreq",
+                        "startTestTheta": -90,
+                        "endTestTheta": 90,
+                        "stepsTestTheta": 30,
+                        "startTestPhi": 0,
+                        "stopTestPhi": 0,
+                        "stepsTestPhi": 30,
+                        "startProbePhi": 0,
+                        "stopProbePhi": 90,
+                        "stepsProbePhi": 2,
+                        "alignment": "True",
+                        "alignmentTolerance": 10,
+                        "startFrequency": "2000MHz",
+                        "stopFrequency": "20GHz",
+                        "sweepType": "log",
+                        "vnaDataType": "logmag, sparam"
 		},
 		{
 			"expType": "sweepTheta",
-			"freq": 120, 
-			"samples": 5,
-			"startTheta": 0, 
-			"endTheta": 180,
-			"phi": 90
+                        "startTestTheta": -90,
+                        "endTestTheta": 90,
+                        "stepsTestTheta": 30,
+                        "orientationTestPhi": 0,
+                        "startProbePhi": 0,
+                        "stopProbePhi": 90,
+                        "stepsProbePhi": 2,
+                        "alignment": "True",
+                        "alignmentTolerance": 10,
+                        "startFrequency": "2000MHz",
+                        "stopFrequency": "20GHz",
+                        "sweepType": "log",
+                        "vnaDataType": "logmag, sparam"
 		},
 		{
-			"expType": "sweepFreq",
-			"freq": [120, 140], 
-			"orientations":[
-				["0","0"], ["360","180"]
-			]
+                        "expType": "sweepPhi",
+                        "orientationTestTheta": 0,
+                        "startTestPhi": 0,
+                        "stopTestPhi": 0,
+                        "stepsTestPhi": 30,
+                        "startProbePhi": 0,
+                        "stopProbePhi": 90,
+                        "stepsProbePhi": 2,
+                        "alignment": "True",
+                        "alignmentTolerance": 10,
+                        "startFrequency": "2000MHz",
+                        "stopFrequency": "20GHz",
+                        "sweepType": "log",
+                        "vnaDataType": "logmag, sparam"
 		},
 		{
 			"expType": "sample_exp_single.json"
