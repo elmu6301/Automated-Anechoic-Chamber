@@ -1,0 +1,5 @@
+# FIXED
+
+USB_API/USB_MSC_API/UsbMscReq.obj: ../USB_API/USB_MSC_API/UsbMscReq.c
+
+../USB_API/USB_MSC_API/UsbMscReq.c: 

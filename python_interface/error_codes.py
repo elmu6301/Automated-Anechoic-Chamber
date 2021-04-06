@@ -1,0 +1,11 @@
+ERROR_CODE__SUCCESS          = 0  # Routine executed with no issues detected
+ERROR_CODE__CONNECTION       = 1  # Could not connect to any motor driver PCBs
+ERROR_CODE__CONNECTION_PROBE = 2  # Could not connect to a probe motor driver PCB
+ERROR_CODE__CONNECTION_TEST  = 3  # Could not connect to a test motor driver PCB
+ERROR_CODE__DISTINCT_IDS     = 4  # Connected to two motor driver PCBs, but both had the same ID
+ERROR_CODE__VNA              = 5  # Could not connect to the VNA
+ERROR_CODE__TEST_THETA_FAULT = 6  # Fault signal from test-theta motor
+ERROR_CODE__TEST_PHI_FAULT   = 7  # Fault signal from test-phi motor
+ERROR_CODE__PROBE_PHI_FAULT  = 8  # Fault signal from probe-phi motor
+ERROR_CODE__ALIGNMENT        = 9  # Alignment routine was not successful
+ERROR_CODE__MISC             = 10 # Error other than those specified above

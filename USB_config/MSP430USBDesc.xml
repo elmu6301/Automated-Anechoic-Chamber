@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<descTool>
+    <toolOptions>
+        <runGUI>1</runGUI>
+        <workspace>C:\Users\jgamm\Desktop\f2020\ecen4610\code_composer_workspace\C3_EchoToHost\USB_config</workspace>
+        <projectName>n/a</projectName>
+    </toolOptions>
+    <toolConfig>
+        <treeConfig>
+            <MSP mcuFam="0">
+                <mspConfig>
+                    <disableXtalOnSus>1</disableXtalOnSus>
+                    <XT2OscFreq>14</XT2OscFreq>
+                    <DMAChannel>1</DMAChannel>
+                    <bypassXT2>0</bypassXT2>
+                    <useSYSBIOS>0</useSYSBIOS>
+                    <driveVBUSfromExtSupp>0</driveVBUSfromExtSupp>
+                </mspConfig>
+                <USBDevice>
+                    <deviceProp>
+                        <vid>0x2047</vid>
+                        <pid>0x03DF</pid>
+                        <vndStr>DirecRF</vndStr>
+                        <prodStr>Automated Anechoic Chamber</prodStr>
+                        <devRelNum>0x0001</devRelNum>
+                        <useSerNum>1</useSerNum>
+                    </deviceProp>
+                    <config>
+                        <configParam>
+                            <selfPowered>1</selfPowered>
+                            <remWkupSup>0</remWkupSup>
+                            <maxPowDrain>200</maxPowDrain>
+                            <configStr>MSP USB</configStr>
+                        </configParam>
+                        <interfaces>
+                            <cdcInterface intString="Motor driver interface"/>
+                        </interfaces>
+                    </config>
+                </USBDevice>
+            </MSP>
+        </treeConfig>
+    </toolConfig>
+    <codeGeneration generate="0" generateINF="0"/>
+</descTool>
