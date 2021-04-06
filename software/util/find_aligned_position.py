@@ -76,10 +76,19 @@ def findAlignedPosition(MD_test, MD_probe):
     mcu_updated = False
     laser_state = False
     MD_test.writeLaser(False)
+    error_code = error_codes.SUCCESS
+    
+    MD_test.setFreq('theta', 32768)
+    MD_test.setFreq('phi', 65536)
+    MD_probe.setFreq('phi', 65536)
     
     def printInstructions(status):
         _printInstructions(status, increment, sensor_output, test_theta, test_theta_a, test_phi, test_phi_a, probe_phi, probe_phi_a, mcu_updated, laser_state, ambient_output, ambient_std)
     
+    def end():
+        printInstructions('Exited program.')
+        flush_input()
+        
     printInstructions('Ready for next command.')
     
     while True:
@@ -87,11 +96,20 @@ def findAlignedPosition(MD_test, MD_probe):
             mcu_updated = False
             if keyboard.is_pressed('space'): # Find end switch
                 printInstructions('Aligning test-theta with end switch CW...')
-                MD_test.findEndSwitch('theta', 'ccw')
+                error_code = MD_test.findEndSwitch('theta', 'ccw')
+                if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
+                        error_code = error_codes.TEST_THETA_FAULT
+                    break
                 test_theta = 0
             else:
                 printInstructions('Rotating test-theta CW...')
-                MD_test.turnMotor('theta', increment, 'ccw')
+                error_code = MD_test.turnMotor('theta', increment, 'ccw', gradual=True)
+                if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
+                        error_code = error_codes.TEST_THETA_FAULT
+                    end()
+                    break
                 if test_theta != None:
                     test_theta -= increment
             while keyboard.is_pressed('a'):
@@ -102,11 +120,21 @@ def findAlignedPosition(MD_test, MD_probe):
             mcu_updated = False
             if keyboard.is_pressed('space'): # Find end switch
                 printInstructions('Aligning test-theta with end switch CCW...')
-                MD_test.findEndSwitch('theta', 'cw')
+                error_code = MD_test.findEndSwitch('theta', 'cw')
+                if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
+                        error_code = error_codes.TEST_THETA_FAULT
+                    end()
+                    break
                 test_theta = 0
             else:
                 printInstructions('Rotating test-theta CCW...')
-                MD_test.turnMotor('theta', increment, 'cw')
+                error_code = MD_test.turnMotor('theta', increment, 'cw', gradual=True)
+                if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
+                        error_code = error_codes.TEST_THETA_FAULT
+                    end()
+                    break
                 if test_theta != None:
                     test_theta += increment
             while keyboard.is_pressed('d'):
@@ -117,11 +145,21 @@ def findAlignedPosition(MD_test, MD_probe):
             mcu_updated = False
             if keyboard.is_pressed('space'): # Find end switch
                 printInstructions('Aligning test-phi with end switch CCW...')
-                MD_test.findEndSwitch('phi', 'ccw')
+                error_code = MD_test.findEndSwitch('phi', 'ccw')
+                if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
+                        error_code = error_codes.TEST_PHI_FAULT
+                    end()
+                    break
                 test_phi = 0
             else:
                 printInstructions('Rotating test-phi CCW...')
-                MD_test.turnMotor('phi', increment, 'ccw')
+                error_code = MD_test.turnMotor('phi', increment, 'ccw')
+                if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
+                        error_code = error_codes.TEST_PHI_FAULT
+                    end()
+                    break
                 if test_phi != None:
                     test_phi -= increment
             while keyboard.is_pressed('w'):
@@ -132,11 +170,21 @@ def findAlignedPosition(MD_test, MD_probe):
             mcu_updated = False
             if keyboard.is_pressed('space'): # Find end switch
                 printInstructions('Aligning test-phi with end switch CW...')
-                MD_test.findEndSwitch('phi', 'cw')
+                error_code = MD_test.findEndSwitch('phi', 'cw')
+                if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
+                        error_code = error_codes.TEST_PHI_FAULT
+                    end()
+                    break
                 test_phi = 0
             else:
                 printInstructions('Rotating test-phi CW...')
-                MD_test.turnMotor('phi', increment, 'cw')
+                error_code = MD_test.turnMotor('phi', increment, 'cw')
+                if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
+                        error_code = error_codes.TEST_PHI_FAULT
+                    end()
+                    break
                 if test_phi != None:
                     test_phi += increment
             while keyboard.is_pressed('s'):
@@ -147,11 +195,21 @@ def findAlignedPosition(MD_test, MD_probe):
             mcu_updated = False
             if keyboard.is_pressed('space'): # Find end switch
                 printInstructions('Aligning probe-phi with end switch CCW...')
-                MD_probe.findEndSwitch('phi', 'ccw')
+                error_code = MD_probe.findEndSwitch('phi', 'ccw')
+                if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
+                        error_code = error_codes.PROBE_PHI_FAULT
+                    end()
+                    break
                 probe_phi = 0
             else:
                 printInstructions('Rotating probe-phi CCW...')
-                MD_probe.turnMotor('phi', increment, 'ccw')
+                error_code = MD_probe.turnMotor('phi', increment, 'ccw')
+                if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
+                        error_code = error_codes.PROBE_PHI_FAULT
+                    end()
+                    break
                 if probe_phi != None:
                     probe_phi -= increment
             while keyboard.is_pressed('q'):
@@ -162,11 +220,21 @@ def findAlignedPosition(MD_test, MD_probe):
             mcu_updated = False
             if keyboard.is_pressed('space'): # Find end switch
                 printInstructions('Aligning probe-phi with end switch CW...')
-                MD_probe.findEndSwitch('phi', 'cw')
+                error_code = MD_probe.findEndSwitch('phi', 'cw')
+                if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
+                        error_code = error_codes.PROBE_PHI_FAULT
+                    end()
+                    break
                 probe_phi = 0
             else:
                 printInstructions('Rotating probe-phi CW...')
-                MD_probe.turnMotor('phi', increment, 'cw')
+                error_code = MD_probe.turnMotor('phi', increment, 'cw')
+                if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
+                        error_code = error_codes.PROBE_PHI_FAULT
+                    end()
+                    break
                 if probe_phi != None:
                     probe_phi += increment
             while keyboard.is_pressed('e'):
@@ -225,9 +293,24 @@ def findAlignedPosition(MD_test, MD_probe):
                 print('\nError: system must be calibrated before alignment.')
             else:
                 printInstructions('Aligning system...')
-                MD_test.align('theta')
-                MD_test.align('phi')
-                MD_probe.align('phi')
+                error_code = MD_test.align('theta', gradual=True)
+                if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
+                        error_code = error_codes.TEST_THETA_FAULT
+                    end()
+                    break
+                error_code = MD_test.align('phi')
+                if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
+                        error_code = error_codes.TEST_PHI_FAULT
+                    end()
+                    break
+                error_code = MD_probe.align('phi')
+                if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
+                        error_code = error_codes.PROBE_PHI_FAULT
+                    end()
+                    break
             printInstructions('Ready for next command.')
         
         if keyboard.is_pressed('g'):
@@ -254,8 +337,7 @@ def findAlignedPosition(MD_test, MD_probe):
             printInstructions('Ready for next command.')
                 
         if keyboard.is_pressed('x'): # Exit function
-            printInstructions('Exited program.')
-            flush_input()
+            end()
             break
     
-    return error_codes.SUCCESS
+    return error_code

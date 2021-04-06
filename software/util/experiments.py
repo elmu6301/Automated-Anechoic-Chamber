@@ -9,6 +9,10 @@ from drivers.VNA_gpib import VNA_HP8719A
 from util import error_codes
 import time
 
+TT_SPR = 4494000
+TP_SPR = 9142000
+PP_SPR = 4494000
+
 def _printf(phase, flag, msg):
     """ Prints out messages to the command line by specifying flag and phase. """
     if flag in ("Error", "Warning"):
@@ -242,7 +246,7 @@ def run_sweepFreq(args):
         printf('\t\tStd. dev.: %f Volts.'%(3.3*np.std(ambient_values)/4096))
         printf('\tAligning test-theta motor...')
         t0 = time.time()
-        error_code = Test_MD.align('theta')
+        error_code = Test_MD.align('theta', gradual=True)
         if error_code != error_codes.SUCCESS:
             disconnect()
             return error_codes.TEST_THETA_FAULT
@@ -292,15 +296,15 @@ def run_sweepFreq(args):
     
     # Move motors to start location
     printf('Moving motors to starting orientations...')
-    test_theta_offset = int(4494000*np.abs(test_theta_start)/360)
+    test_theta_offset = int(TT_SPR*np.abs(test_theta_start)/360)
     test_theta_dir    = 'cw' if test_theta_start >= 0 else 'ccw'
-    test_phi_offset   = int(9142000*np.abs(test_phi_start)/360)
+    test_phi_offset   = int(TP_SPR*np.abs(test_phi_start)/360)
     test_phi_dir      = 'cw' if test_phi_start >= 0 else 'ccw'
-    probe_phi_offset  = int(9142000*np.abs(probe_phi_start)/360)
+    probe_phi_offset  = int(PP_SPR*np.abs(probe_phi_start)/360)
     probe_phi_dir     = 'cw' if probe_phi_start >= 0 else 'ccw'
     printf('\tMoving test-theta motor...')
     t0 = time.time()
-    error_code = Test_MD.turnMotor('theta', test_theta_offset, test_theta_dir)
+    error_code = Test_MD.turnMotor('theta', test_theta_offset, test_theta_dir, gradual=True)
     if error_code != error_codes.SUCCESS:
         disconnect()
         return error_codes.TEST_THETA_FAULT
@@ -326,11 +330,11 @@ def run_sweepFreq(args):
     # Take measurements at specified orientations
     printf('Running measurement phase...')
     Data = []
-    test_theta_increment = int(4494000*np.abs(test_theta_start-test_theta_end)/(360*test_theta_steps))
+    test_theta_increment = 0 if test_theta_steps==1 else int(TT_SPR*np.abs(test_theta_start-test_theta_end)/(360*(test_theta_steps-1)))
     test_theta_direction = 'cw' if test_theta_end-test_theta_start > 0 else 'ccw'
-    test_phi_increment   = int(9142000*np.abs(test_phi_start-test_phi_end)/(360*test_phi_steps))
+    test_phi_increment   = 0 if test_phi_steps==1 else int(TP_SPR*np.abs(test_phi_start-test_phi_end)/(360*(test_phi_steps-1)))
     test_phi_direction   = 'cw' if test_phi_end-test_phi_start > 0 else 'ccw'
-    probe_phi_increment  = int(4494000*np.abs(probe_phi_start-probe_phi_end)/(360*probe_phi_steps))
+    probe_phi_increment  = 0 if probe_phi_steps==1 else int(PP_SPR*np.abs(probe_phi_start-probe_phi_end)/(360*(probe_phi_steps-1)))
     probe_phi_direction  = 'cw' if probe_phi_end-probe_phi_start > 0 else 'ccw'
     measurement_number = 1
     total_measurements = test_theta_steps*probe_phi_steps*test_phi_steps
@@ -345,6 +349,7 @@ def run_sweepFreq(args):
                 printf('\t\tTest-theta orientation: %f degrees.'%(test_theta_orientation))
                 printf('\t\tTest-phi orientation: %f degrees.'%(test_phi_orientation))
                 printf('\t\tProbe-phi orientation: %f degrees.'%(probe_phi_orientation))
+                time.sleep(1)
                 logmag_data = None
                 if 'logmag' in data_type:
                     printf('\t\tTaking logmag measurement...')
@@ -390,36 +395,36 @@ def run_sweepFreq(args):
                     return error_codes.PROBE_PHI_FAULT
                 printf('\t\tDone.')
                 printf('\t\tTime taken: %f seconds.'%(time.time()-t0))
-                if np.abs(test_phi_start-test_phi_end) != 360:
-                    printf('\tMoving test-phi motor...')
-                    t0 = time.time()
-                    error_code = Test_MD.turnMotor('phi', test_phi_increment, 'ccw' if test_phi_direction == 'cw' else 'cw')
-                    if error_code != error_codes.SUCCESS:
-                        disconnect()
-                        return error_codes.TEST_PHI_FAULT
-                    printf('\t\tDone.')
-                    printf('\t\tTime taken: %f seconds.'%(time.time()-t0))
+            if np.abs(test_phi_start-test_phi_end) != 360:
+                printf('\tMoving test-phi motor...')
+                t0 = time.time()
+                error_code = Test_MD.turnMotor('phi', (test_phi_steps-1)*test_phi_increment, 'ccw' if test_phi_direction == 'cw' else 'cw')
+                if error_code != error_codes.SUCCESS:
+                    disconnect()
+                    return error_codes.TEST_PHI_FAULT
+                printf('\t\tDone.')
+                printf('\t\tTime taken: %f seconds.'%(time.time()-t0))
         if idx__test_theta != test_theta_steps-1:
             printf('\tMoving test-theta motor...')
             t0 = time.time()
-            error_code = Test_MD.turnMotor('theta', test_theta_increment, test_theta_direction)
+            error_code = Test_MD.turnMotor('theta', test_theta_increment, test_theta_direction, gradual=True)
             if error_code != error_codes.SUCCESS:
                 disconnect()
                 return error_codes.TEST_THETA_FAULT
             printf('\t\tDone.')
             printf('\t\tTime taken: %f seconds.'%(time.time()-t0))
-            if np.abs(probe_phi_start-probe_phi_end) != 360: 
-                printf('\tMoving probe-phi motor...')
-                t0 = time.time()
-                error_code = Probe_MD.turnMotor('phi', probe_phi_steps*probe_phi_increment, 'ccw' if probe_phi_direction == 'cw' else 'cw')
-                if error_code != error_codes.SUCCESS:
-                    disconnect()
-                    return error_codes.PROBE_PHI_FAULT
-                printf('\t\tDone.')
-                printf('\t\tTime taken: %f seconds.'%(time.time()-t0))
+        if np.abs(probe_phi_start-probe_phi_end) != 360: 
+            printf('\tMoving probe-phi motor...')
+            t0 = time.time()
+            error_code = Probe_MD.turnMotor('phi', (probe_phi_steps-1)*probe_phi_increment, 'ccw' if probe_phi_direction == 'cw' else 'cw')
+            if error_code != error_codes.SUCCESS:
+                disconnect()
+                return error_codes.PROBE_PHI_FAULT
+            printf('\t\tDone.')
+            printf('\t\tTime taken: %f seconds.'%(time.time()-t0))
     printf('\tMoving test-theta motor...')
     t0 = time.time()
-    error_code = Test_MD.turnMotor('theta', test_theta_steps*test_theta_increment, 'ccw' if test_theta_direction == 'cw' else 'cw')
+    error_code = Test_MD.turnMotor('theta', (test_theta_steps-1)*test_theta_increment, 'ccw' if test_theta_direction == 'cw' else 'cw', gradual=True)
     if error_code != error_codes.SUCCESS:
         disconnect()
         return error_codes.TEST_THETA_FAULT

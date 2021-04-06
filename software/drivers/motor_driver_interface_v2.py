@@ -226,7 +226,7 @@ class MotorDriver:
         rv = self._rxCmd()
         assert self._rxCmd() == cmd
         return int(rv)
-    def align(self, motor):
+    def align(self, motor, gradual=False):
         try:
             assert motor in ['theta', 'phi']
         except:
@@ -240,9 +240,9 @@ class MotorDriver:
             direction = 'cw' if orientation<0 else 'ccw'
         else:
             direction = 'cw'
-        error_code = self.findEndSwitch(motor, direction)
+        error_code = self.findEndSwitch(motor, direction, gradual=False)
         if error_code != error_codes.SUCCESS:
             return error_code
         direction = 'ccw' if align_offset<0 else 'cw'
-        error_code = self.turnMotor(motor, abs(align_offset), direction)
+        error_code = self.turnMotor(motor, abs(align_offset), direction, gradual=gradual)
         return error_code
