@@ -20,7 +20,7 @@ class VNA_HP8719A:
         # print("")
         try:
             instrument = rm.open_resource('GPIB0::%d::INSTR' % self.address)  # Open the VNA connection
-            print(f"Type of instrument: {type(instrument)}")
+            # print(f"Type of instrument: {type(instrument)}")
             instrument.timeout = 5000
         except:
             return False

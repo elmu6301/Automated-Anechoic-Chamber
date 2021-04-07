@@ -197,7 +197,7 @@ def run_experiments(cmds):
         # Run the appropriate function for the sub-experiment
         if expt_type == "sweepFreq":
             printf(curr_phase, "Debug", f"Running Type: {expt_type}")
-            print(sub_expt)
+            # print(sub_expt)
             error_code = expt.run_sweepFreq(sub_expt)
         elif expt_type == "sweepPhi":
             printf(curr_phase, "Debug", f"Running Type: {expt_type}")

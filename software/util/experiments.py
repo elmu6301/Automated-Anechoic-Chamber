@@ -128,6 +128,7 @@ def run_sweepFreq(args):
     def printf(msg):
         _printf(current_phase, None, msg)
 
+
     # Get necessary configuration settings
     printf('Parsing configuration settings...')
     try:
@@ -187,17 +188,17 @@ def run_sweepFreq(args):
         assert type(freq_stop) == float
         printf('\t\tStop frequency: %f GHz' % (freq_stop))
         freq_sweep_type = args['frequency sweep type']
-        assert freq_sweep_type in ['log', 'linear']
-        printf('\t\tSweep type: %s' % (freq_sweep_type))
-        freq_sweep_type = 1 if freq_sweep_type == 'log' else 0
-        data_type = args['VNA data type']
+        # assert freq_sweep_type in ['log', 'linear']
+        # printf('\t\tSweep type: %s' % (freq_sweep_type))
+        # freq_sweep_type = 1 if freq_sweep_type == 'log' else 0
+        # data_type = args['VNA data type']
 
-        if type(data_type) == str:
-            assert data_type in ['logmag', 'phase', 'sparam']
-            data_type = [data_type]
-        else:
-            assert (type(data_type) == list) and set(data_type).issubset(set(['logmag', 'phase', 'sparam']))
-        printf('\t\tTypes of data to collect: %s' % (', '.join(data_type)))
+        # if type(data_type) == str:
+        #     assert data_type in ['logmag', 'phase', 'sparam']
+        #     data_type = [data_type]
+        # else:
+        #     assert (type(data_type) == list) and set(data_type).issubset(set(['logmag', 'phase', 'sparam']))
+        # printf('\t\tTypes of data to collect: %s' % (', '.join(data_type)))
     except:
         # return error_codes.BAD_ARGS
         pass
@@ -235,13 +236,13 @@ def run_sweepFreq(args):
     # Connect to VNA
     printf('\tConnecting to VNA...')
     try:
-        VNA = VNA_HP8719A(None)  # unused parameter address
-        VNA.freq_sweep_type(freq_sweep_type)
-        VNA.init_freq_sweep(freq_start, freq_stop)
-    except:
-        pass
+        VNA = VNA_HP8719A(16)  # unused parameter address
+        if not VNA.instrument:
+            return error_codes.VNA
+    except Exception as e:
+        print(f"Exception: {e}")
         # disconnect()
-        # return error_codes.VNA
+        return error_codes.VNA
     printf('\t\tDone.')
 
     ################################################################
