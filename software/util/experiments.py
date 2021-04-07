@@ -137,6 +137,7 @@ def run_sweepFreq(args):
         printf('\t\tStart: %f degrees' % (test_theta_start))
         test_theta_end = args['test-theta end']
         assert (type(test_theta_end) == float) and (-180 <= test_theta_end <= 180)
+
         if test_theta_end == test_theta_start:
             test_theta_end += 360
         printf('\t\tEnd: %f degrees' % (test_theta_end))
@@ -149,6 +150,7 @@ def run_sweepFreq(args):
         printf('\t\tStart: %f degrees' % (test_phi_start))
         test_phi_end = args['test-phi end']
         assert (type(test_phi_end) == float) and (-180 <= test_phi_end <= 180)
+
         if test_phi_end == test_phi_start:
             test_phi_end += 360
         printf('\t\tEnd: %f degrees' % (test_phi_end))
@@ -161,6 +163,7 @@ def run_sweepFreq(args):
         printf('\t\tStart: %f degrees' % (probe_phi_start))
         probe_phi_end = args['probe-phi end']
         assert (type(probe_phi_end) == float) and (-180 <= probe_phi_end <= 180)
+
         if probe_phi_start == probe_phi_end:
             probe_phi_end += 360
         printf('\t\tEnd: %f degrees' % (probe_phi_end))
@@ -171,6 +174,7 @@ def run_sweepFreq(args):
         alignment = args['alignment']
         assert type(alignment) == bool
         printf('\t\tWill use: %s' % (alignment))
+
         if alignment == True:
             alignment_tolerance = args['alignment tolerance']
             assert (type(alignment_tolerance) == float) and (alignment_tolerance >= 0)
@@ -187,6 +191,7 @@ def run_sweepFreq(args):
         printf('\t\tSweep type: %s' % (freq_sweep_type))
         freq_sweep_type = 1 if freq_sweep_type == 'log' else 0
         data_type = args['VNA data type']
+
         if type(data_type) == str:
             assert data_type in ['logmag', 'phase', 'sparam']
             data_type = [data_type]

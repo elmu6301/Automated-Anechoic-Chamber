@@ -129,7 +129,8 @@ def process_config(config_name):
         full_cfg_name = parser.find_config(config_name)
         if not full_cfg_name:
             printf(curr_phase, "Error", f"Could not locate the file '{config_name}'. Ensure that '{config_name}'"
-                                        f" is located in the configuration file repository.")
+                                        f" is located in the configuration file repository:\n\t\t "
+                                        f"'{parser.get_root_path() + parser.config_base}'.")
             return False
         # Get flow and meas config from the configuration file
         flow, meas = parser.get_expt_flow_meas(full_cfg_name)
@@ -152,29 +153,37 @@ def process_config(config_name):
 def handle_error_code(error_code):
     # Elena: write error-handling code below
     if error_code == error_codes.SUCCESS:  # routine finished without issues
-        print('success error code')
+        printf(curr_phase, None, "Successfully ran routine without issues. ")
     elif error_code == error_codes.CONNECTION:  # could not find any connected motor driver PCBs
-        print('connection error code')
+        printf(curr_phase, "Error", "No USB devices connected. Ensure the test-side and probe-side devices"
+                                    " are connected and powered on. ")
     elif error_code == error_codes.CONNECTION_PROBE:  # could not find a probe motor driver PCB
-        print('probe connection error code')
+        printf(curr_phase, "Error", "Detected device on test-side. No probe-side USB devices connected."
+                                    " Ensure the probe-side device is connected and powered on. ")
     elif error_code == error_codes.CONNECTION_TEST:  # could not find a test motor driver PCB
-        print('test connection error code')
+        printf(curr_phase, "Error", "Detected device on test-side. No probe-side USB devices connected."
+                                    " Ensure the probe-side device is connected and powered on. ")
     elif error_code == error_codes.DISTINCT_IDS:  # detected two motor driver PCBs, but they were both configured as test or probe
-        print('distinct ids error code')
+        printf(curr_phase, "Error", "USB devices must be of different types. Ensure that the test-side device is set "
+                                    "to TX and that the probe-side device is set to RX.")
     elif error_code == error_codes.VNA:  # could not connect to VNA
-        print('vna error code')
+        printf(curr_phase, "Error", "No GPIB devices connected. Ensure the VNA is connected and powered on. ")
     elif error_code == error_codes.TEST_THETA_FAULT:  # test-theta motor fault
-        print('test-theta fault error code')
+        printf(curr_phase, "Error", "Motor driver fault detected on the test-side theta motor. Ensure"
+                                    " that the theta motor driver is properly connected to the test-side device.")
     elif error_code == error_codes.TEST_PHI_FAULT:  # test-phi motor fault
-        print('test-phi fault error code')
+        printf(curr_phase, "Error", "Motor driver fault detected on the test-side phi motor. Ensure"
+                                    " that the phi motor driver is properly connected to the test-side device.")
     elif error_code == error_codes.PROBE_PHI_FAULT:  # probe-phi motor fault
-        print('probe-phi fault error code')
+        printf(curr_phase, "Error", "Motor driver fault detected on the probe-side phi motor. Ensure"
+                                    " that the phi motor driver is properly connected to the probe-side device.")
     elif error_code == error_codes.ALIGNMENT:  # alignment routine failed
-        print('alignment error code')
+        printf(curr_phase, "Error", "Alignment error detected. System could not be aligned. Try running the calibration"
+                                    " routine to ensure proper alignment. ")
     elif error_code == error_codes.BAD_ARGS:  # routine was called with invalid arguments
-        print('bad args error code')
+        printf(curr_phase, "Error", "Unable to run routine as invalid arguments were entered.")
     elif error_code == error_codes.MISC:  # issue not listed above
-        print('misc error code')
+        printf(curr_phase, "Error", "An unknown error has occurred.")
     else:
         assert False
 
@@ -188,6 +197,7 @@ def run_experiments(cmds):
         # Run the appropriate function for the sub-experiment
         if expt_type == "sweepFreq":
             printf(curr_phase, "Debug", f"Running Type: {expt_type}")
+            print(sub_expt)
             error_code = expt.run_sweepFreq(sub_expt)
         elif expt_type == "sweepPhi":
             printf(curr_phase, "Debug", f"Running Type: {expt_type}")
@@ -241,7 +251,7 @@ if __name__ == '__main__':
         # parser.print_cmds(cmds) # Print out the commands
 
     # Start execution/running phase
-    # curr_phase = "Running"
+    curr_phase = "Running"
     if run_type in ("f"):  # , "s"):
         # Start Running the experiments
         res = run_experiments(cmds)

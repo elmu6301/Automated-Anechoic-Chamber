@@ -51,7 +51,7 @@ def find_config(file_name, file_path=None):
         if file_name in files:
             full_name = os.path.join(root, file_name)
             return full_name
-    print(f"Unable to find '{file_name}' in configuration file repository located '{config_repo_path}'")
+    # print(f"Unable to find '{file_name}' in configuration file repository located '{config_repo_path}'")
     # Walking down file searching in the root path
     for root, dir, files in os.walk(root_path):
         if file_name in files:
@@ -59,7 +59,7 @@ def find_config(file_name, file_path=None):
             return full_name
 
     # File was not found
-    print(f"Unable to find '{file_name}' in direcMeasure path located '{root_path}'")
+    # print(f"Unable to find '{file_name}' in direcMeasure path located '{root_path}'")
     return False
 
 
@@ -82,8 +82,18 @@ def get_expt_flow_meas(full_file_name):
             return False, False
         flow = data.get("flow")
         meas = data.get("meas")
-        # print(flow)
-        # print(meas)
+        plot = data.get("plot")
+        calib = data.get("calibrate")
+
+        # Error check measurement
+        if meas is None or not meas:
+            meas = {"deviceAddress": 16, "freqSweepMode": "lin"}
+        meas.setdefault("deviceAddress", 16)  # TODO update to generic value
+        meas.setdefault("freqSweepMode", "lin")  # TODO update to generic value
+        if meas["freqSweepMode"] not in ("lin", "log"):
+            return False, False
+
+
     return flow, meas
 
 
@@ -94,7 +104,7 @@ def gen_expt_cmds(flow):
             cmd = {}
             experiment_type  = expt.get("expType")
             if experiment_type.endswith(".json"):
-                inner_flow, inner_meas = get_expt_flow_meas(type)
+                inner_flow, inner_meas = get_expt_flow_meas(experiment_type)
                 inner_cmds = gen_expt_cmds(inner_flow)
                 if inner_cmds is not False:
                     for i_cmd in inner_cmds:
