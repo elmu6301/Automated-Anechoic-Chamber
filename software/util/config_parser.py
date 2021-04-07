@@ -76,12 +76,16 @@ def get_expt_flow_meas(full_file_name):
     meas = False
     # print(f"full_file_name {full_file_name}")
     with open(full_file_name, "r") as file:
-        data = json.load(file)
+        try:
+            data = json.load(file)
+        except json.decoder.JSONDecodeError:
+            return False, False
         flow = data.get("flow")
         meas = data.get("meas")
         # print(flow)
         # print(meas)
     return flow, meas
+
 
 def gen_expt_cmds(flow):
     cmds = []

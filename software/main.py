@@ -56,7 +56,8 @@ def process_cmd_line():
     parser = OptionParser()
     usage = "usage: ./direcMeasure --config<config_file>"
     parser.set_usage(usage)
-    parser.set_defaults(run_type="f")
+    parser.set_defaults(run_type="f", verbose=False)
+    parser.prog = "direcMeasure"
 
     # Add options
     parser.add_option("-c", "--config", type="string", action="store", dest="cfg", default='',
@@ -67,31 +68,62 @@ def process_cmd_line():
     #                  help="Skip the alignment routine.")
     parser.add_option("--calibrate", action="store_true", dest="calibrate", default=False,
                       help="Run the calibration interface.")
+
+    # Check to make sure a config file was entered with the -c
+    index = -1
+    for i in range(len(sys.argv)):
+        if sys.argv[i] == "-c" or sys.argv[i] == "--config":
+            index = i + 1
+    # insert default values if needed
+    if index >= len(sys.argv) or index > 0 and parser.has_option(sys.argv[index]):
+        sys.argv.insert(index, None)
+
     # Parse command line
     (options, args) = parser.parse_args()
 
     # Error Checking
     if options.run_type == "e":
         printf(curr_phase, "Error", "Cannot simultaneously run the alignment routine only and run the system with out "
-                                    "the alignment routine. See usage below: ")
+                                    "the alignment routine. See usage for more information on command line options.")
+        parser.print_help()
+        return False
+
+    # Config file checks
+    if options.cfg is None:
+        printf(curr_phase, "Error", f"Configuration file flag detected but no configuration was detected. See usage "
+                                    f"for more information on command line options. ")
         parser.print_help()
         return False
 
     num_modes = int(options.cfg != '') + int(options.run_type == 'a') + int(options.calibrate)
+
     if num_modes == 0:
-        printf(curr_phase, "Error", "No options specified. See usage below:")
+        printf(curr_phase, "Error", "Cannot configure system as no command lines arguments were inputted."
+                                    " See usage for more information on command line options. ")
         parser.print_help()
+        return False
     if num_modes > 1:
-        printf(curr_phase, "Error", "Mutually-exclusive options specified. See usage below:")
+        printf(curr_phase, "Error", "Mutually-exclusive options specified. Cannot simultaneously run the "
+                                    "calibration routine and the run the full run the system. See usage for more "
+                                    "information on command line options.")
         parser.print_help()
+        return False
     if options.calibrate:
         options.run_type = "c"
+
+    if options.cfg != '' and not options.cfg.endswith(".json"):
+        printf(curr_phase, "Error", f"The configuration file entered '{options.cfg}' is not a JSON file. "
+                                    f" See the User Manual for more information on configuration files and "
+                                    f"usage for more information on command line options.")
+        parser.print_help()
+        return False
+
     return options
 
 
 def process_config(config_name):
     """ Parses the configuration file and generates the appropriate commands. """
-    if config_name != '':
+    if config_name != '' and config_name is not None:
         # Find Config
         printf(curr_phase, None, f"Starting configuration file parsing process on {config_name}...")
         full_cfg_name = parser.find_config(config_name)
@@ -103,7 +135,7 @@ def process_config(config_name):
         flow, meas = parser.get_expt_flow_meas(full_cfg_name)
         if not flow:
             printf(curr_phase, "Error", f"Could not read in data from '{config_name}'. Ensure that '{config_name}' "
-                                        f"is the correct format. See the User Manual for Details.")
+                                        f"is the correct format. See the User Manual for details.")
             return False
         # Generate commands
         cmds = parser.gen_expt_cmds(flow)
@@ -194,8 +226,8 @@ if __name__ == '__main__':
     cfg = args.cfg
     run_type = args.run_type
     if run_type == "a":
-        # printf(curr_phase, "Debug", "Running the alignment routine only.")
-        print('(Setup):   ', 'Running the alignment routine only.')
+        printf(curr_phase, None, "Running the alignment routine only.")
+        #print('(Setup):   ', 'Running the alignment routine only.')
     # elif run_type == "s":
     #    printf(curr_phase, "Debug", "Skipping the alignment routine.")
     elif run_type == "c":
@@ -214,7 +246,7 @@ if __name__ == '__main__':
         # Start Running the experiments
         res = run_experiments(cmds)
         if res[0] is False:
-            printf(curr_phase, "Error", f"Issue executing {res[1]} received {res[2]} instead")
+            printf(curr_phase, "Error", f"Issue executing {res[1]} received {res[2]} instead.")
     elif run_type == "c":
         time.sleep(1)
         error_code = calibrate()
