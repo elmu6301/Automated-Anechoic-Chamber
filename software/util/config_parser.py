@@ -93,7 +93,6 @@ def get_expt_flow_meas(full_file_name):
         if meas["freqSweepMode"] not in ("lin", "log"):
             return False, False
 
-
     return flow, meas
 
 
@@ -149,13 +148,6 @@ def gen_expt_cmds(flow):
             probe_phi_steps  = int(expt.get("stepsProbePhi"))
             assert probe_phi_steps > 0
             cmd['probe-phi steps'] = probe_phi_steps
-            assert expt.get("alignment").upper() in ['TRUE', 'FALSE']
-            alignment        = True if expt.get("alignment").upper() == 'TRUE' else False
-            cmd['alignment'] = alignment
-            if alignment == True:
-                alignment_tolerance = float(expt.get("alignmentTolerance"))
-                assert alignment_tolerance >= 0
-                cmd['alignment tolerance'] = alignment_tolerance
             freq_start       = expt.get("startFrequency")
             if 'MHz' in freq_start:
                 freq_start = 1e-3 * float(freq_start[:-3])
@@ -171,13 +163,6 @@ def gen_expt_cmds(flow):
                 freq_stop = float(freq_stop[:-3])
             else:
                 assert False
-            cmd['stop frequency'] = freq_stop
-            freq_sweep_type  = expt.get("sweepType").lower()
-            assert freq_sweep_type in ['log', 'linear']
-            cmd['frequency sweep type'] = freq_sweep_type
-            data_type        = expt.get("vnaDataType").split(', ')
-            assert set(data_type).issubset(set(['logmag', 'phase', 'sparam']))
-            cmd['VNA data type'] = data_type
             cmds.append(cmd)
     except:
         return False

@@ -199,8 +199,8 @@ def run_sweepFreq(args):
             assert (type(data_type) == list) and set(data_type).issubset(set(['logmag', 'phase', 'sparam']))
         printf('\t\tTypes of data to collect: %s' % (', '.join(data_type)))
     except:
-        return error_codes.BAD_ARGS
-
+        # return error_codes.BAD_ARGS
+        pass
     def disconnect():
         try:
             del Test_MD

@@ -25,8 +25,8 @@
       "endProbePhi": 90,
       "stepsProbePhi": 2,
       "startFrequency": "2000MHz",
-      "stopFrequency": "20GHz",
-      "numPointsToSweep": 101
+      "stopFrequency": "20GHz"
+
     }
   ]
 }
