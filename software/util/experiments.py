@@ -3,7 +3,7 @@ import pydoc
 import os
 import json
 
-from drivers.motor_driver_interface_v2 import findSystemMotorDrivers, MotorDriver
+from drivers.motor_driver_interface import findSystemMotorDrivers, MotorDriver
 import numpy as np
 from drivers.VNA_gpib import VNA_HP8719A
 from util import error_codes

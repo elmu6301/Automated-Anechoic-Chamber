@@ -1,6 +1,7 @@
-from drivers.motor_driver_interface_v2 import findSystemMotorDrivers, MotorDriver
-from util.find_aligned_position import findAlignedPosition
+from drivers.motor_driver_interface import findSystemMotorDrivers, MotorDriver
+from util.align import findAlignedPosition
 from util import error_codes
+
 
 def calibrate():
     rv = findSystemMotorDrivers()

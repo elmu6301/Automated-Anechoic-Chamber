@@ -1,4 +1,4 @@
-from drivers.motor_driver_interface_v2 import MotorDriver
+from drivers.motor_driver_interface import MotorDriver
 import keyboard
 import os
 import time

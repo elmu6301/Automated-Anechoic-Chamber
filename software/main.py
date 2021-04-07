@@ -8,7 +8,7 @@ from util import config_parser as parser
 from util import experiments as expt
 
 from util import error_codes
-from util.run_find_aligned_position import calibrate
+from util.calibrate import calibrate
 import time
 
 # Global Variables
