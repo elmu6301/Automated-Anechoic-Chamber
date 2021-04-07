@@ -128,7 +128,6 @@ def run_sweepFreq(args):
     def printf(msg):
         _printf(current_phase, None, msg)
 
-
     # Get necessary configuration settings
     printf('Parsing configuration settings...')
     try:
@@ -230,8 +229,6 @@ def run_sweepFreq(args):
     Probe_MD = rv['probe motor driver']
     printf('\t\tDone.')
 
-    ###############################################################
-    # Elena: connect to VNA here
 
     # Connect to VNA
     printf('\tConnecting to VNA...')
@@ -244,8 +241,6 @@ def run_sweepFreq(args):
         # disconnect()
         return error_codes.VNA
     printf('\t\tDone.')
-
-    ################################################################
 
     current_phase = 'Running'
     # Run alignment routine
