@@ -161,8 +161,8 @@ def handle_error_code(error_code):
         printf(curr_phase, "Error", "Detected device on test-side. No probe-side USB devices connected."
                                     " Ensure the probe-side device is connected and powered on. ")
     elif error_code == error_codes.CONNECTION_TEST:  # could not find a test motor driver PCB
-        printf(curr_phase, "Error", "Detected device on test-side. No probe-side USB devices connected."
-                                    " Ensure the probe-side device is connected and powered on. ")
+        printf(curr_phase, "Error", "Detected device on probe-side. No test-side USB devices connected."
+                                    " Ensure the test-side device is connected and powered on. ")
     elif error_code == error_codes.DISTINCT_IDS:  # detected two motor driver PCBs, but they were both configured as test or probe
         printf(curr_phase, "Error", "USB devices must be of different types. Ensure that the test-side device is set "
                                     "to TX and that the probe-side device is set to RX.")

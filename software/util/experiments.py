@@ -175,7 +175,7 @@ def run_sweepFreq(args):
         assert type(alignment) == bool
         printf('\t\tWill use: %s' % (alignment))
 
-        if alignment == True:
+        if alignment == False: # TODO change back to true
             alignment_tolerance = args['alignment tolerance']
             assert (type(alignment_tolerance) == float) and (alignment_tolerance >= 0)
             printf('\t\tTolerance: %f standard deviations' % (alignment_tolerance))
@@ -244,6 +244,8 @@ def run_sweepFreq(args):
 
     current_phase = 'Running'
     # Run alignment routine
+    alignment = True
+    alignment_tolerance  = 10
     if alignment == True:
         printf('Running alignment phase...')
         printf('\tMeasuring ambient light level...')
@@ -307,6 +309,7 @@ def run_sweepFreq(args):
             return error_codes.ALIGNMENT
     else:
         printf('Skipping alignment phase.')
+    return error_codes.SUCCESS
 
     # Move motors to start location
     printf('Moving motors to starting orientations...')
@@ -374,6 +377,7 @@ def run_sweepFreq(args):
                 #   Elena: take/record data here; see variables representing current orientation above
 
                 time.sleep(1)
+
                 logmag_data = None
                 if 'logmag' in data_type:
                     printf('\t\tTaking logmag measurement...')

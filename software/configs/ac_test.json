@@ -1,22 +1,32 @@
 {
-	"flow": [
-		{
-			"expType": "sweepFreq",
-                        "startTestTheta": -15,
-                        "endTestTheta": 15,
-                        "stepsTestTheta": 3,
-                        "startTestPhi": 0,
-                        "endTestPhi": 0,
-                        "stepsTestPhi": 1,
-                        "startProbePhi": 0,
-                        "endProbePhi": 90,
-                        "stepsProbePhi": 2,
-                        "alignment": "True",
-                        "alignmentTolerance": 10,
-                        "startFrequency": "2000MHz",
-                        "stopFrequency": "20GHz",
-                        "sweepType": "log",
-                        "vnaDataType": "logmag, sparam"
-		}
-		]
+  "meas": {
+    "deviceAddres": 16,
+    "freqSweepType": "log",
+    "sParams": "S11, S21",
+    "vnaDataType": "logmag"
+  },
+  "calibrate": {
+    "alignment": "True",
+    "alignmentTolerance": 10
+  },
+  "plot": {
+    "datafilename": "out.txt"
+  },
+  "flow": [
+    {
+      "expType": "sweepFreq",
+      "startTestTheta": -15,
+      "endTestTheta": 15,
+      "stepsTestTheta": 3,
+      "startTestPhi": 0,
+      "endTestPhi": 0,
+      "stepsTestPhi": 1,
+      "startProbePhi": 0,
+      "endProbePhi": 90,
+      "stepsProbePhi": 2,
+      "startFrequency": "2000MHz",
+      "stopFrequency": "20GHz"
+
+    }
+  ]
 }

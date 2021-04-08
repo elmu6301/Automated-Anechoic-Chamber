@@ -183,7 +183,7 @@ class VNA_HP8719A:
 def main():
     print("Beginning execution of VNA commands")
     print("-----------------------------------")
-    hp8719a = VNA_HP8719A(16) # DO WE WANT TO RESET HERE EVERYTIME OR JUST CALL THE RESET FUNCTION IN MAIN?
+    hp8719a = VNA_HP8719A(16)  # DO WE WANT TO RESET HERE EVERYTIME OR JUST CALL THE RESET FUNCTION IN MAIN?
     if hp8719a.instrument:
         hp8719a.init_freq_sweep("2 GHz", "2.5 GHz")  # Set the desired frequency range
         data_out = hp8719a.sparam_data(1)             # Measure the data (dB and degree for all s-param)
