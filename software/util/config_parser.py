@@ -163,6 +163,7 @@ def gen_expt_cmds(flow):
                 freq_stop = float(freq_stop[:-3])
             else:
                 assert False
+            cmd['stop frequency'] = freq_stop
             cmds.append(cmd)
     except:
         return False

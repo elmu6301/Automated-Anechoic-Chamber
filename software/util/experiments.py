@@ -130,6 +130,7 @@ def run_sweepFreq(args):
 
     # Get necessary configuration settings
     printf('Parsing configuration settings...')
+    freq_stop, freq_start = 0, 0
     try:
         printf('\tTest-theta axis:')
         test_theta_start = args['test-theta start']
@@ -170,15 +171,15 @@ def run_sweepFreq(args):
         probe_phi_steps = args['probe-phi steps']
         assert (type(probe_phi_steps) == int) and (probe_phi_steps > 0)
         printf('\t\tSteps: %d' % (probe_phi_steps))
-        printf('\tAlignment:')
-        alignment = args['alignment']
-        assert type(alignment) == bool
-        printf('\t\tWill use: %s' % (alignment))
-
-        if alignment == False: # TODO change back to true
-            alignment_tolerance = args['alignment tolerance']
-            assert (type(alignment_tolerance) == float) and (alignment_tolerance >= 0)
-            printf('\t\tTolerance: %f standard deviations' % (alignment_tolerance))
+        # printf('\tAlignment:')
+        # alignment = args['alignment']
+        # assert type(alignment) == bool
+        # printf('\t\tWill use: %s' % (alignment))
+        #
+        # if alignment == True: # TODO change back to true
+        #     alignment_tolerance = args['alignment tolerance']
+        #     assert (type(alignment_tolerance) == float) and (alignment_tolerance >= 0)
+        #     printf('\t\tTolerance: %f standard deviations' % (alignment_tolerance))
         printf('\tVNA settings:')
         freq_start = args['start frequency']
         assert type(freq_start) == float
@@ -187,6 +188,7 @@ def run_sweepFreq(args):
         assert type(freq_stop) == float
         printf('\t\tStop frequency: %f GHz' % (freq_stop))
         freq_sweep_type = args['frequency sweep type']
+
         # assert freq_sweep_type in ['log', 'linear']
         # printf('\t\tSweep type: %s' % (freq_sweep_type))
         # freq_sweep_type = 1 if freq_sweep_type == 'log' else 0
@@ -232,19 +234,27 @@ def run_sweepFreq(args):
 
     # Connect to VNA
     printf('\tConnecting to VNA...')
+    VNA = ""
     try:
-        VNA = VNA_HP8719A(16)  # unused parameter address
+        VNA = VNA_HP8719A(sparam_list="S11, S12, S21, S22", address=16, freq_mode="lin")  # unused parameter address
         if not VNA.instrument:
             return error_codes.VNA
+        startF = "%f GHz" % (freq_start)
+        stopF = "%f GHz" % (freq_stop)
+        print(f"Start = {startF} and Stop = {stopF}")
+
+        VNA.init_freq_sweep(startF, stopF, 1601)
+
     except Exception as e:
         print(f"Exception: {e}")
         # disconnect()
         return error_codes.VNA
+    # return error_codes.SUCCESS
     printf('\t\tDone.')
 
     current_phase = 'Running'
     # Run alignment routine
-    alignment = True
+    alignment = False
     alignment_tolerance  = 10
     if alignment == True:
         printf('Running alignment phase...')
@@ -309,7 +319,7 @@ def run_sweepFreq(args):
             return error_codes.ALIGNMENT
     else:
         printf('Skipping alignment phase.')
-    return error_codes.SUCCESS
+    # return error_codes.SUCCESS
 
     # Move motors to start location
     printf('Moving motors to starting orientations...')
@@ -375,36 +385,36 @@ def run_sweepFreq(args):
 
                 ##################################################################################
                 #   Elena: take/record data here; see variables representing current orientation above
-
+                data_out, col_names = VNA.sparam_data()
                 time.sleep(1)
-
-                logmag_data = None
-                if 'logmag' in data_type:
-                    printf('\t\tTaking logmag measurement...')
-                    t0 = time.time()
-                    # logmag_data = VNA.logmag_data(freq_sweep_type)
-                    printf('\t\t\tDone.')
-                    printf('\t\t\tTime taken: %f seconds.' % (time.time() - t0))
-                phase_data = None
-                if 'phase' in data_type:
-                    printf('\t\tTaking phase measurement...')
-                    t0 = time.time()
-                    # phase_data = VNA.phase_data(freq_sweep_type)
-                    printf('\t\t\tDone.')
-                    printf('\t\t\tTime taken: %f seconds.' % (time.time() - t0))
-                sparam_data = None
-                if 'sparam' in data_type:
-                    printf('\t\tTaking s-parameter measurement...')
-                    t0 = time.time()
-                    # sparam_data = VNA.sparam_data(freq_sweep_type)
-                    printf('\t\t\tDone.')
-                    printf('\t\t\tTime taken: %f seconds.' % (time.time() - t0))
-                Data.append({'test-theta': test_theta_orientation,
-                             'test-phi': test_phi_orientation,
-                             'probe-phi': probe_phi_orientation,
-                             'logmag data': logmag_data,
-                             'phase data': phase_data,
-                             'sparam data': sparam_data})
+                # VNA
+                # logmag_data = None
+                # if 'logmag' in data_type:
+                #     printf('\t\tTaking logmag measurement...')
+                #     t0 = time.time()
+                #     # logmag_data = VNA.logmag_data(freq_sweep_type)
+                #     printf('\t\t\tDone.')
+                #     printf('\t\t\tTime taken: %f seconds.' % (time.time() - t0))
+                # phase_data = None
+                # if 'phase' in data_type:
+                #     printf('\t\tTaking phase measurement...')
+                #     t0 = time.time()
+                #     # phase_data = VNA.phase_data(freq_sweep_type)
+                #     printf('\t\t\tDone.')
+                #     printf('\t\t\tTime taken: %f seconds.' % (time.time() - t0))
+                # sparam_data = None
+                # if 'sparam' in data_type:
+                #     printf('\t\tTaking s-parameter measurement...')
+                #     t0 = time.time()
+                #     # sparam_data = VNA.sparam_data(freq_sweep_type)
+                #     printf('\t\t\tDone.')
+                #     printf('\t\t\tTime taken: %f seconds.' % (time.time() - t0))
+                # Data.append({'test-theta': test_theta_orientation,
+                #              'test-phi': test_phi_orientation,
+                #              'probe-phi': probe_phi_orientation,
+                #              'logmag data': logmag_data,
+                #              'phase data': phase_data,
+                #              'sparam data': sparam_data})
 
                 ##################################################################################
 
