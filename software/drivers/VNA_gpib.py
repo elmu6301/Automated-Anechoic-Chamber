@@ -1,6 +1,7 @@
 import pyvisa
 import matplotlib.pyplot as plt
 import numpy as np
+import time
 
 allowed_num_points = (3, 11, 21, 51, 101, 201, 401, 801, 1601)
 
@@ -18,7 +19,7 @@ class VNA_HP8719A:
         # print("")
         try:
             instrument = rm.open_resource('GPIB0::%d::INSTR' % self.address)  #Open the VNA connection
-            instrument.timeout = 10000
+            instrument.timeout = 30000
         except:
             return False
         # instrument.read_termination = '\n'      #Set the read termination character  (due to VNA's data output, this truncated the output data too early)
@@ -69,7 +70,7 @@ class VNA_HP8719A:
             user_start_freq[0] = float(user_start_freq[0]) * 10**6 #Convert MHz to Hz
         else:
             print("Units other than MHz or GHz were used")
-            return False, real_start_freq, real_stop_freq
+            return False, real_start_freq, real_stop_freq #Note returns as string not float
 
         user_stop_freq = stop_freq.split(" ")  # Split the units from the number for start freq
         if user_stop_freq[1] == "GHz":
@@ -78,12 +79,12 @@ class VNA_HP8719A:
             user_stop_freq[0] = float(user_stop_freq[0]) * 10 ** 6  # Convert MHz to Hz
         else:
             print("Units other than MHz or GHz were used")
-            return False, real_start_freq, real_stop_freq
+            return False, real_start_freq, real_stop_freq #Note returns as string not float
 
         if float(real_start_freq) - user_start_freq[0] != 0 or float(real_stop_freq) - user_stop_freq[0] != 0:
-            return False, real_start_freq, real_stop_freq
+            return False, real_start_freq, real_stop_freq #Note returns as string not float
         else:
-            return True, real_start_freq, real_stop_freq
+            return True, real_start_freq, real_stop_freq #Note returns as string not float
 
         #Do we care about setting CENTER or SPAN:FULL/SPAN:LINK ?
 
@@ -109,8 +110,13 @@ class VNA_HP8719A:
     #Collect logarithmic magnitude data for a frequency sweep
     def logmag_data(self):
         self.instrument.write("LOGM")  # Set display to log magnitude format
+        # time.sleep(5)
         try:
+            start_time = time.perf_counter_ns()
             data_db = self.instrument.query("OUTPFORM")  # Output format is a list of form (db, 0)
+            end_time = time.perf_counter_ns()
+            total_time = (end_time - start_time) / (10 ** 9)
+            print(f"Magnitude data time in s: {total_time}")
         except Exception as e:
             print(e)
             return False
@@ -119,8 +125,13 @@ class VNA_HP8719A:
     #Collect phase data for a frequency sweep
     def phase_data(self):
         self.instrument.write("PHAS")  # Set display to phase format
+        # time.sleep(5)
         try:
+            start_time = time.perf_counter_ns()
             data_degree = self.instrument.query("OUTPFORM")  # Output format is a list of form (degrees, 0)
+            end_time = time.perf_counter_ns()
+            total_time = (end_time - start_time)/(10 ** 9)
+            print(f"Phase data time in s: {total_time}")
         except Exception as e:
             print(e)
             return False
@@ -131,8 +142,14 @@ class VNA_HP8719A:
         # Collect data for selected s-parameter
         print("Collecting " + sparam + " data...")
         self.instrument.write(sparam)
+        # time.sleep(5)
         db = self.logmag_data()
+        # if not db:
+        #     print("Error on logmag data collection exiting now ")
+        #     return [], []
+        # time.sleep(20)
         degree = self.phase_data()
+        # time.sleep(20)
 
         if db is False or degree is False:
             print("Ran into an error during data collection")
@@ -156,6 +173,7 @@ class VNA_HP8719A:
 
             if not len(s11_db) or not len(s11_deg):
                 # self.instrument.write("NOOP")
+                self.reset()
                 return False, False
             else:
                 data_all.append(s11_db)
@@ -168,6 +186,7 @@ class VNA_HP8719A:
 
             if not len(s12_db) or not len(s12_deg):
                 # self.instrument.write("NOOP")
+                self.reset()
                 return False, False
             else:
                 data_all.append(s12_db)
@@ -180,6 +199,7 @@ class VNA_HP8719A:
 
             if not len(s21_db) or not len(s21_deg):
                 # self.instrument.write("NOOP")
+                self.reset()
                 return False, False
             else:
                 data_all.append(s21_db)
@@ -192,6 +212,7 @@ class VNA_HP8719A:
 
             if not len(s22_db) or not len(s22_deg):
                 # self.instrument.write("NOOP")
+                self.reset()
                 return False, False
             else:
                 data_all.append(s22_db)
@@ -204,6 +225,7 @@ class VNA_HP8719A:
 
         if freq is False:
             # self.instrument.write("NOOP")
+            self.reset()
             return False, False
         else:
             freq_only = self.data_formatting(freq, True)  # Format the data (convert the raw VNA output to a numpy array)
@@ -269,7 +291,7 @@ def main():
     # hp8719a = VNA_HP8719A("S21", freq_mode="log")
     if hp8719a.instrument:
         # print(hp8719a.init_freq_sweep("1000 MHz", "3000 MHz", 1601))  #Set the desired frequency range (tests changing start/stop freq)
-        print(hp8719a.init_freq_sweep("1 GHz", "1 GHz", 1601))
+        print(hp8719a.init_freq_sweep("1 GHz", "2 GHz", 1601))
         data_out, col_names = hp8719a.sparam_data()             #Measure the data (dB and degree for all s-param)
         # print(data_out)
         print(col_names)
@@ -291,8 +313,20 @@ def main():
             #Should i try reset instead of NOP?
     #All errors seem to be timeout errors so far (which seem to occur inconsistenly)
 
+
+    #THINGS TO TRY:
+    #In main, put try catch around commands to see if that'll catch exceptions
+    #Ask what to default to lin vs log freq sweep? _. lin
+    #Maybe add check if it's in lin mode if it fails the log mode check
+    #Test more string sparam inputs
+
+
+    #IF SPAN IS NOT 2 OCTAVES BUT LOG MODE SELECTED, DON'T RUN MY CODE (check that span is > 2, not >=)
+    #Add __dil__ function to disconnect?
+
     # hp8719a.reset()
     # hp8719a.marker("2 GHz") #Can use to verify values at a freq
 
 if __name__ == "__main__":
-    main()
+    for i in range(0,3):
+        main()
