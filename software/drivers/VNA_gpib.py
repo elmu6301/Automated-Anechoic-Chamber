@@ -3,7 +3,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
-allowed_num_points = (3, 11, 21, 51, 101, 201, 401, 801, 1601)
+
+DEF_FREQ_MODE = "lin"
+DEF_DEV_ADDR = 16
+DEF_S_PARAMS = "S11, S12"
+
+ALLOWED_NUM_POINTS = (3, 11, 21, 51, 101, 201, 401, 801, 1601)
+ALLOWED_FREQ_MODES = (DEF_FREQ_MODE, "log")
 
 class VNA_HP8719A:
     def __init__(self, sparam_list, address=16, freq_mode="lin"):
@@ -283,6 +289,7 @@ class VNA_HP8719A:
     def marker(self, freq_val):
         self.instrument.write("MARK1 " + freq_val) #Can set up to 4 marks
         print(self.instrument.query("OUTPMARK")) #(dB or degree, ?, freq)
+
 
 def main():
     print("Beginning execution of VNA commands")

@@ -1,13 +1,12 @@
 {
   "meas": {
-    "deviceAddres": 16,
-    "freqSweepType": "log",
-    "sParams": "S11, S21",
-    "vnaDataType": "logmag"
+    "deviceAddress": 16,
+    "freqSweepMode": "log",
+    "sParams": "S11, S21"
   },
   "calibrate": {
-    "alignment": "True",
-    "alignmentTolerance": 10
+    "align": "True",
+    "alignTolerance": 10
   },
   "plot": {
     "datafilename": "out.txt"

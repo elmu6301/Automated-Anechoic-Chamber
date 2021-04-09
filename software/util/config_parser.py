@@ -3,11 +3,14 @@ import pydoc
 import os
 import json
 
+from drivers import VNA_gpib as vna
 try:
     import experiments
 except ImportError:
     from util import experiments
 #
+DEF_ALIGN = True
+DEF_ALIGN_TOLERANCE = 10
 
 '''
 config_parser.py
@@ -64,7 +67,7 @@ def find_config(file_name, file_path=None):
 
 
 # Opens the file and returns the contents of flow
-def get_expt_flow_meas(full_file_name):
+def get_config(full_file_name):
     if full_file_name == '':
         return False
     if full_file_name.rfind(root_base) == -1:
@@ -74,26 +77,50 @@ def get_expt_flow_meas(full_file_name):
     #
     flow = False
     meas = False
+    plot = False
+    calib = False
     # print(f"full_file_name {full_file_name}")
     with open(full_file_name, "r") as file:
         try:
             data = json.load(file)
         except json.decoder.JSONDecodeError:
-            return False, False
+            print("error here")
+            return flow, meas, calib, plot
         flow = data.get("flow")
         meas = data.get("meas")
         plot = data.get("plot")
         calib = data.get("calibrate")
 
-        # Error check measurement
-        if meas is None or not meas:
-            meas = {"deviceAddress": 16, "freqSweepMode": "lin"}
-        meas.setdefault("deviceAddress", 16)  # TODO update to generic value
-        meas.setdefault("freqSweepMode", "lin")  # TODO update to generic value
-        if meas["freqSweepMode"] not in ("lin", "log"):
-            return False, False
+        print(calib)
 
-    return flow, meas
+        # Provide defaults for meas if not provided
+        if meas is None or not meas:
+            meas = {"deviceAddress": vna.DEF_DEV_ADDR,
+                    "freqSweepMode": vna.DEF_FREQ_MODE,
+                    "sParams": vna.DEF_S_PARAMS
+                    }
+        meas.setdefault("deviceAddress", vna.DEF_DEV_ADDR)
+        meas.setdefault("freqSweepMode", vna.DEF_FREQ_MODE)
+        meas.setdefault("sParams", vna.DEF_S_PARAMS)
+        # Check for valid modes
+        if meas["freqSweepMode"] not in vna.ALLOWED_FREQ_MODES:
+            meas = False
+
+        # Provide defaults for calib if not provided
+        if calib is None or not calib:
+            calib = {"align": DEF_ALIGN,
+                     "alignTolerance": DEF_ALIGN_TOLERANCE
+                     }
+        calib.setdefault("align", DEF_ALIGN)
+        calib.setdefault("alignTolerance", DEF_ALIGN_TOLERANCE)
+
+        # Check for valid tolerances
+        if type(calib["alignTolerance"]) != int or calib["alignTolerance"] <= 0:
+            calib = False
+
+        # TODO add checks for plotting once items are figured out
+
+    return flow, meas, calib, plot
 
 
 def gen_expt_cmds(flow):
@@ -171,18 +198,13 @@ def gen_expt_cmds(flow):
 
 
 def print_cmds(cmds):
-    for cmd_set in cmds:
-        print(f"\nExperiment Type: {cmd_set['type']}")
-        t_cmds = cmd_set['test']
-        p_cmds = cmd_set['probe']
-        g_cmds = cmd_set['gpib']
-        for t in t_cmds:
-            print(f"\t TEST: {t}")
-        for p in p_cmds:
-            print(f"\tPROBE: {p}")
-        for g in g_cmds:
-            print(f"\t GPIB: {g}")
-
+    # print(f"flow:")
+    # for c in cmds[0]:
+    #     d = json.dumps(c, indent=4)
+    #     print(f"{d}")
+    # print(f"\nmeas:\n{json.dumps(cmds[1], indent=4)}")
+    print(f"\ncalibrate:\n{json.dumps(cmds[2], indent=4)}")
+    # print(f"\nplot:\n{json.dumps(cmds[3], indent=4)}")
 
 # main
 def main():

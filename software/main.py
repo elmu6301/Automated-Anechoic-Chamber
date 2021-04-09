@@ -133,11 +133,29 @@ def process_config(config_name):
                                         f"'{parser.get_root_path() + parser.config_base}'.")
             return False
         # Get flow and meas config from the configuration file
-        flow, meas = parser.get_expt_flow_meas(full_cfg_name)
+        flow, meas, calib, plot = parser.get_config(full_cfg_name)
+        errors = 0
         if not flow:
-            printf(curr_phase, "Error", f"Could not read in data from '{config_name}'. Ensure that '{config_name}' "
-                                        f"is the correct format. See the User Manual for details.")
+            printf(curr_phase, "Error", f"Could not read in data from '{config_name}'. Ensure that the 'flow' section"
+                                        f" in '{config_name}' is correctly formatted. See the User Manual for details.")
+            errors += 1
+        if not meas:
+            printf(curr_phase, "Error", f"Could not read in data from '{config_name}'. Ensure that the 'meas' section"
+                                        f" in '{config_name}' is correctly formatted. See the User Manual for details.")
+            errors += 1
+        if not calib:
+            printf(curr_phase, "Error", f"Could not read in data from '{config_name}'. Ensure that the 'calibrate' "
+                                        f"section in '{config_name}' is correctly formatted. "
+                                        f"See the User Manual for details.")
+            errors += 1
+        if not plot:
+            printf(curr_phase, "Error", f"Could not read in data from '{config_name}'. Ensure that the 'plot' section"
+                                        f" in '{config_name}' is correctly formatted. See the User Manual for details.")
+            errors += 1
+        if errors != 0:
             return False
+        return [flow, meas, calib, plot]
+
         # Generate commands
         cmds = parser.gen_expt_cmds(flow)
         if not cmds:
@@ -151,7 +169,6 @@ def process_config(config_name):
 
 
 def handle_error_code(error_code):
-    # Elena: write error-handling code below
     if error_code == error_codes.SUCCESS:  # routine finished without issues
         printf(curr_phase, None, "Successfully ran routine without issues. ")
     elif error_code == error_codes.CONNECTION:  # could not find any connected motor driver PCBs
@@ -213,15 +230,6 @@ def run_experiments(cmds):
     return True, True, True
 
 
-def run_alignment_routine(devices):
-    """ Runs the alignment routine. """
-    print()
-    printf(curr_phase, None, "Starting alignment process...")
-    # TODO - add calls to alignment functions here
-    printf(curr_phase, None, "Successfully completed alignment process...")
-    return True
-
-
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
@@ -237,7 +245,6 @@ if __name__ == '__main__':
     run_type = args.run_type
     if run_type == "a":
         printf(curr_phase, None, "Running the alignment routine only.")
-        #print('(Setup):   ', 'Running the alignment routine only.')
     # elif run_type == "s":
     #    printf(curr_phase, "Debug", "Skipping the alignment routine.")
     elif run_type == "c":
@@ -248,8 +255,8 @@ if __name__ == '__main__':
         cmds = process_config(cfg)
         if not cmds:
             exit(-1)
-        # parser.print_cmds(cmds) # Print out the commands
-
+        parser.print_cmds(cmds) # Print out the commands
+    exit(-1)
     # Start execution/running phase
     curr_phase = "Running"
     if run_type in ("f"):  # , "s"):
