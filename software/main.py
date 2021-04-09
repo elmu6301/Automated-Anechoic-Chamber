@@ -154,7 +154,6 @@ def process_config(config_name):
             errors += 1
         if errors != 0:
             return False
-        return [flow, meas, calib, plot]
 
         # Generate commands
         cmds = parser.gen_expt_cmds(flow)
@@ -162,7 +161,7 @@ def process_config(config_name):
             printf(curr_phase, "Error", f"Could not generate experiment commands from '{config_name}'.")
             return False
         printf(curr_phase, None, f"Successfully generated experiment commands from '{config_name}'.")
-        return cmds
+        return {"cmds": cmds, "meas": meas, "calib": calib, "plot": plot}
     else:
         printf(curr_phase, "Error", f"No configuration file was passed in, could not generate experiment commands.")
         return False
@@ -249,21 +248,20 @@ if __name__ == '__main__':
     #    printf(curr_phase, "Debug", "Skipping the alignment routine.")
     elif run_type == "c":
         printf(curr_phase, "Debug", "Starting the calibration interface.")
-    cmds = False
+    sys_cmds = False
     # Process Configuration File if running the entire system
     if run_type in ("f"):  # , "s"):
-        cmds = process_config(cfg)
-        if not cmds:
+        sys_cmds = process_config(cfg)
+        if not sys_cmds:
             exit(-1)
-        parser.print_cmds(cmds) # Print out the commands
-    exit(-1)
+        parser.print_cmds(sys_cmds) # Print out the commands
     # Start execution/running phase
     curr_phase = "Running"
     if run_type in ("f"):  # , "s"):
         # Start Running the experiments
-        res = run_experiments(cmds)
-        if res[0] is False:
-            printf(curr_phase, "Error", f"Issue executing {res[1]} received {res[2]} instead.")
+        res = run_experiments(sys_cmds['cmds'])
+        # if res[0] is False:
+        #     printf(curr_phase, "Error", f"Issue executing {res[1]} received {res[2]} instead.")
     elif run_type == "c":
         time.sleep(1)
         error_code = calibrate()

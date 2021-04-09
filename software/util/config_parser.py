@@ -91,8 +91,6 @@ def get_config(full_file_name):
         plot = data.get("plot")
         calib = data.get("calibrate")
 
-        print(calib)
-
         # Provide defaults for meas if not provided
         if meas is None or not meas:
             meas = {"deviceAddress": vna.DEF_DEV_ADDR,
@@ -119,6 +117,10 @@ def get_config(full_file_name):
             calib = False
 
         # TODO add checks for plotting once items are figured out
+        # if plot is None or not calib:
+        #     plot = {"align": DEF_ALIGN,
+        #              "alignTolerance": DEF_ALIGN_TOLERANCE
+        #              }
 
     return flow, meas, calib, plot
 
@@ -198,13 +200,13 @@ def gen_expt_cmds(flow):
 
 
 def print_cmds(cmds):
-    # print(f"flow:")
-    # for c in cmds[0]:
-    #     d = json.dumps(c, indent=4)
-    #     print(f"{d}")
-    # print(f"\nmeas:\n{json.dumps(cmds[1], indent=4)}")
-    print(f"\ncalibrate:\n{json.dumps(cmds[2], indent=4)}")
-    # print(f"\nplot:\n{json.dumps(cmds[3], indent=4)}")
+    print(f"cmds:")
+    for c in cmds['cmds']:
+        d = json.dumps(c, indent=4)
+        print(f"{d}")
+    print(f"\nmeas:\n{json.dumps(cmds['meas'], indent=4)}")
+    print(f"\ncalibrate:\n{json.dumps(cmds['calib'], indent=4)}")
+    print(f"\nplot:\n{json.dumps(cmds['plot'], indent=4)}")
 
 # main
 def main():
