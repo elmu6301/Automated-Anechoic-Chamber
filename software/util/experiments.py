@@ -5,7 +5,7 @@ import json
 
 from drivers.motor_driver_interface import findSystemMotorDrivers, MotorDriver
 import numpy as np
-from drivers.VNA_gpib import VNA_HP8719A
+from drivers.VNA_gpib import *
 from util import error_codes
 import time
 
@@ -184,27 +184,25 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
 
 
         printf('\tVNA settings:')
+        vna_address = vna_args['deviceAddress']
+        assert (type(vna_address) == int)
+        printf('\t\tDevice Address is: %s' % (vna_address))
+
+        freq_sweep_type = vna_args['freqSweepMode']
+        assert freq_sweep_type in ALLOWED_FREQ_MODES
+        printf('\t\tSweep type: %s' % (freq_sweep_type))
+        sParams = vna_args['sParams']
+        printf('\t\tTypes of data to collect: %s' % sParams)
+
         freq_start = cmd_args['start frequency']
         assert type(freq_start) == float
         printf('\t\tStart frequency: %f GHz' % (freq_start))
         freq_stop = cmd_args['stop frequency']
         assert type(freq_stop) == float
         printf('\t\tStop frequency: %f GHz' % (freq_stop))
-        freq_sweep_type = cmd_args['frequency sweep type']
 
-        # assert freq_sweep_type in ['log', 'linear']
-        # printf('\t\tSweep type: %s' % (freq_sweep_type))
-        # freq_sweep_type = 1 if freq_sweep_type == 'log' else 0
-        # data_type = cmd_args['VNA data type']
-
-        # if type(data_type) == str:
-        #     assert data_type in ['logmag', 'phase', 'sparam']
-        #     data_type = [data_type]
-        # else:
-        #     assert (type(data_type) == list) and set(data_type).issubset(set(['logmag', 'phase', 'sparam']))
-        # printf('\t\tTypes of data to collect: %s' % (', '.join(data_type)))
     except:
-        # return error_codes.BAD_ARGS
+        return error_codes.BAD_ARGS
         pass
     def disconnect():
         try:
@@ -220,39 +218,37 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         except:
             pass
 
-    # Connect to motor driver PCBs
-    printf('Setting up the system...')
-    printf('\tDetecting motor drivers...')
-    rv = findSystemMotorDrivers()
-    if rv['error code'] != error_codes.SUCCESS:
-        return rv['error code']
-    printf('\t\tDone.')
-    printf('\tConnecting to test-side device...')
-    Test_MD = rv['test motor driver']
-    printf('\t\tDone.')
-    printf('\tConnecting to probe-side device...')
-    Probe_MD = rv['probe motor driver']
-    printf('\t\tDone.')
+    # TODO UNCOMMENT
+    # # Connect to motor driver PCBs
+    # printf('Setting up the system...')
+    # printf('\tDetecting motor drivers...')
+    # rv = findSystemMotorDrivers()
+    # if rv['error code'] != error_codes.SUCCESS:
+    #     return rv['error code']
+    # printf('\t\tDone.')
+    # printf('\tConnecting to test-side device...')
+    # Test_MD = rv['test motor driver']
+    # printf('\t\tDone.')
+    # printf('\tConnecting to probe-side device...')
+    # Probe_MD = rv['probe motor driver']
+    # printf('\t\tDone.')
 
 
     # Connect to VNA
     printf('\tConnecting to VNA...')
     VNA = ""
     try:
-        VNA = VNA_HP8719A(sparam_list="S11, S12, S21, S22", address=16, freq_mode="lin")  # unused parameter address
+        # Connect to VNA and configure it
+        VNA = VNA_HP8719A(sparam_list=sParams, address=vna_address, freq_mode=freq_sweep_type)
         if not VNA.instrument:
             return error_codes.VNA
-        startF = "%f GHz" % (freq_start)
-        stopF = "%f GHz" % (freq_stop)
-        print(f"Start = {startF} and Stop = {stopF}")
-
+        # Configure start and stop frequency
         VNA.init_freq_sweep(startF, stopF, 1601)
 
     except Exception as e:
         print(f"Exception: {e}")
         # disconnect()
         return error_codes.VNA
-    # return error_codes.SUCCESS
     printf('\t\tDone.')
 
     current_phase = 'Running'
@@ -322,7 +318,6 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
             return error_codes.ALIGNMENT
     else:
         printf('Skipping alignment phase.')
-    # return error_codes.SUCCESS
 
     # Move motors to start location
     printf('Moving motors to starting orientations...')
