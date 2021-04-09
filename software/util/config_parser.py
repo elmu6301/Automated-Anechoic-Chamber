@@ -111,10 +111,19 @@ def get_config(full_file_name):
                      }
         calib.setdefault("align", DEF_ALIGN)
         calib.setdefault("alignTolerance", DEF_ALIGN_TOLERANCE)
-
-        # Check for valid tolerances
-        if type(calib["alignTolerance"]) != int or calib["alignTolerance"] <= 0:
+        # Assign align to a boolean
+        if calib['align'] in ("True", "true"):
+            calib['align'] = True
+        elif calib['align'] in ("False", "false"):
+            calib['align'] = False
+        else:
             calib = False
+        # Check for valid tolerances
+        if type(calib["alignTolerance"]) != float and type(calib["alignTolerance"]) != int\
+                or calib["alignTolerance"] <= 0:
+            calib = False
+        else:
+            calib["alignTolerance"] = float(calib["alignTolerance"])
 
         # TODO add checks for plotting once items are figured out
         # if plot is None or not calib:

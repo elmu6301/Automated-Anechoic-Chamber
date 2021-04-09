@@ -204,7 +204,7 @@ def handle_error_code(error_code):
         assert False
 
 
-def run_experiments(cmds):
+def run_experiments(cmds, meas, calib, plot):
     """ Runs the experiments in cmds."""
     for sub_expt in cmds:
         # Split cmds into usable pieces
@@ -214,7 +214,7 @@ def run_experiments(cmds):
         if expt_type == "sweepFreq":
             printf(curr_phase, "Debug", f"Running Type: {expt_type}")
             # print(sub_expt)
-            error_code = expt.run_sweepFreq(sub_expt)
+            error_code = expt.run_sweepFreq(sub_expt, meas, calib, plot)
         elif expt_type == "sweepPhi":
             printf(curr_phase, "Debug", f"Running Type: {expt_type}")
             error_code = expt.run_sweepPhi(sub_expt)
@@ -259,7 +259,7 @@ if __name__ == '__main__':
     curr_phase = "Running"
     if run_type in ("f"):  # , "s"):
         # Start Running the experiments
-        res = run_experiments(sys_cmds['cmds'])
+        res = run_experiments(sys_cmds['cmds'], sys_cmds['meas'], sys_cmds['calib'], sys_cmds['plot'])
         # if res[0] is False:
         #     printf(curr_phase, "Error", f"Issue executing {res[1]} received {res[2]} instead.")
     elif run_type == "c":

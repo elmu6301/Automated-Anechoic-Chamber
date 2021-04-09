@@ -122,7 +122,7 @@ This file contains functions generate commands and run various experiments.
 '''
 
 
-def run_sweepFreq(args):
+def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
     current_phase = 'Setup'
 
     def printf(msg):
@@ -133,66 +133,69 @@ def run_sweepFreq(args):
     freq_stop, freq_start = 0, 0
     try:
         printf('\tTest-theta axis:')
-        test_theta_start = args['test-theta start']
+        test_theta_start = cmd_args['test-theta start']
         assert (type(test_theta_start) == float) and (-180 <= test_theta_start <= 180)
         printf('\t\tStart: %f degrees' % (test_theta_start))
-        test_theta_end = args['test-theta end']
+        test_theta_end = cmd_args['test-theta end']
         assert (type(test_theta_end) == float) and (-180 <= test_theta_end <= 180)
 
         if test_theta_end == test_theta_start:
             test_theta_end += 360
         printf('\t\tEnd: %f degrees' % (test_theta_end))
-        test_theta_steps = args['test-theta steps']
+        test_theta_steps = cmd_args['test-theta steps']
         assert (type(test_theta_steps) == int) and (test_theta_steps > 0)
         printf('\t\tSteps: %d' % (test_theta_steps))
         printf('\tTest-phi axis:')
-        test_phi_start = args['test-phi start']
+        test_phi_start = cmd_args['test-phi start']
         assert (type(test_phi_start) == float) and (-180 <= test_phi_start <= 180)
         printf('\t\tStart: %f degrees' % (test_phi_start))
-        test_phi_end = args['test-phi end']
+        test_phi_end = cmd_args['test-phi end']
         assert (type(test_phi_end) == float) and (-180 <= test_phi_end <= 180)
 
         if test_phi_end == test_phi_start:
             test_phi_end += 360
         printf('\t\tEnd: %f degrees' % (test_phi_end))
-        test_phi_steps = args['test-phi steps']
+        test_phi_steps = cmd_args['test-phi steps']
         assert (type(test_phi_steps) == int) and (test_phi_steps > 0)
         printf('\t\tSteps: %d' % (test_phi_steps))
         printf('\tProbe-phi axis:')
-        probe_phi_start = args['probe-phi start']
+        probe_phi_start = cmd_args['probe-phi start']
         assert (type(probe_phi_start) == float) and (-180 <= probe_phi_start <= 180)
         printf('\t\tStart: %f degrees' % (probe_phi_start))
-        probe_phi_end = args['probe-phi end']
+        probe_phi_end = cmd_args['probe-phi end']
         assert (type(probe_phi_end) == float) and (-180 <= probe_phi_end <= 180)
 
         if probe_phi_start == probe_phi_end:
             probe_phi_end += 360
         printf('\t\tEnd: %f degrees' % (probe_phi_end))
-        probe_phi_steps = args['probe-phi steps']
+        probe_phi_steps = cmd_args['probe-phi steps']
         assert (type(probe_phi_steps) == int) and (probe_phi_steps > 0)
         printf('\t\tSteps: %d' % (probe_phi_steps))
-        # printf('\tAlignment:')
-        # alignment = args['alignment']
-        # assert type(alignment) == bool
-        # printf('\t\tWill use: %s' % (alignment))
-        #
-        # if alignment == True: # TODO change back to true
-        #     alignment_tolerance = args['alignment tolerance']
-        #     assert (type(alignment_tolerance) == float) and (alignment_tolerance >= 0)
-        #     printf('\t\tTolerance: %f standard deviations' % (alignment_tolerance))
+
+        printf('\tAlignment:')
+        alignment = calib_args['align']
+        assert type(alignment) == bool
+        printf('\t\tWill use: %s' % (alignment))
+
+        if alignment == True:
+            alignment_tolerance = calib_args['alignTolerance']
+            assert (type(alignment_tolerance) == float) and (alignment_tolerance >= 0)
+            printf('\t\tTolerance: %f standard deviations' % (alignment_tolerance))
+
+
         printf('\tVNA settings:')
-        freq_start = args['start frequency']
+        freq_start = cmd_args['start frequency']
         assert type(freq_start) == float
         printf('\t\tStart frequency: %f GHz' % (freq_start))
-        freq_stop = args['stop frequency']
+        freq_stop = cmd_args['stop frequency']
         assert type(freq_stop) == float
         printf('\t\tStop frequency: %f GHz' % (freq_stop))
-        freq_sweep_type = args['frequency sweep type']
+        freq_sweep_type = cmd_args['frequency sweep type']
 
         # assert freq_sweep_type in ['log', 'linear']
         # printf('\t\tSweep type: %s' % (freq_sweep_type))
         # freq_sweep_type = 1 if freq_sweep_type == 'log' else 0
-        # data_type = args['VNA data type']
+        # data_type = cmd_args['VNA data type']
 
         # if type(data_type) == str:
         #     assert data_type in ['logmag', 'phase', 'sparam']
@@ -255,7 +258,7 @@ def run_sweepFreq(args):
     current_phase = 'Running'
     # Run alignment routine
     alignment = False
-    alignment_tolerance  = 10
+    alignment_tolerance = 10
     if alignment == True:
         printf('Running alignment phase...')
         printf('\tMeasuring ambient light level...')
@@ -385,8 +388,9 @@ def run_sweepFreq(args):
 
                 ##################################################################################
                 #   Elena: take/record data here; see variables representing current orientation above
-                data_out, col_names = VNA.sparam_data()
+
                 time.sleep(1)
+                data_out, col_names = VNA.sparam_data()
                 # VNA
                 # logmag_data = None
                 # if 'logmag' in data_type:
@@ -527,15 +531,6 @@ def run_sweepTheta(args):
 # main
 def main():
     print("Experiments!!!")
-    # cmds = gen_sweepPhi_cmds(360,180,-10,10,1.4)
-    # cmds = gen_sweepTheta_cmds(360, 180, -10, 10, 1.4)
-    # cmds = gen_sweepFreq_cmds(100,100,[[100,100],[0,0], [100,100]], [100])
-    # print(f"Final orientation: {cmds[1]},{cmds[2]}")
-    # print(cmds[0])
-    # for cmd in cmds.get("test"):
-    #     print(cmd)
-    # test = usb.MSP430("COM1", "Eval Board", open=True)
-
 
 if __name__ == "__main__":
     main()
