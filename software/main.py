@@ -254,7 +254,8 @@ if __name__ == '__main__':
         sys_cmds = process_config(cfg)
         if not sys_cmds:
             exit(-1)
-        parser.print_cmds(sys_cmds) # Print out the commands
+        # parser.print_cmds(sys_cmds) # Print out the commands
+        # exit(1)
     # Start execution/running phase
     curr_phase = "Running"
     if run_type in ("f"):  # , "s"):

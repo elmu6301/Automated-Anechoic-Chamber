@@ -300,7 +300,15 @@ def main():
         # print(hp8719a.init_freq_sweep("1000 MHz", "3000 MHz", 1601))  #Set the desired frequency range (tests changing start/stop freq)
         print(hp8719a.init_freq_sweep("1 GHz", "2 GHz", 1601))
         data_out, col_names = hp8719a.sparam_data()             #Measure the data (dB and degree for all s-param)
-        # print(data_out)
+        data_out.append("test theta")
+        data_out.append("test phi")
+        data_out.append("probe phi")
+
+        col_names.append("test theta")
+        col_names.append("test phi")
+        col_names.append("probe phi")
+
+        print(data_out)
         print(col_names)
         # hp8719a.file_save("antenna_s_params3.csv", data_out, col_names) #Store the data
         # hp8719a.plot("antenna_s_params3.csv")                #Plot the data
@@ -335,5 +343,5 @@ def main():
     # hp8719a.marker("2 GHz") #Can use to verify values at a freq
 
 if __name__ == "__main__":
-    for i in range(0,3):
-        main()
+    # for i in range(0,3):
+    main()

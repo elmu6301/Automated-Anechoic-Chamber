@@ -5,7 +5,7 @@
     "sParams": "S11, S21"
   },
   "calibrate": {
-    "align": "True",
+    "align": "False",
     "alignTolerance": 10
   },
   "plot": {
@@ -24,8 +24,8 @@
       "endProbePhi": 90,
       "stepsProbePhi": 2,
       "startFrequency": "2000MHz",
-      "stopFrequency": "20GHz"
-
+      "stopFrequency": "20GHz",
+      "numPoints": 101
     }
   ]
 }

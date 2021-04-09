@@ -202,6 +202,11 @@ def gen_expt_cmds(flow):
             else:
                 assert False
             cmd['stop frequency'] = freq_stop
+
+            num_points = expt.get("numPoints")
+            assert num_points in vna.ALLOWED_NUM_POINTS
+            cmd['number of points'] = num_points
+
             cmds.append(cmd)
     except:
         return False
