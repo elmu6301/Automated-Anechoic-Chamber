@@ -204,6 +204,7 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         assert type(freq_stop) == float
         printf('\t\tStop frequency: %f GHz' % (freq_stop))
 
+        # CREATE THE CSV
 
     except:
         return error_codes.BAD_ARGS
@@ -392,6 +393,8 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
                 # Take data
                 data_out = []
                 col_names = []
+                # Note don't need to use column names just append to data_out and cast as np array
+
                 data_out, col_names = VNA.sparam_data()
                 # Append orientation info to data
                 # data_out.append(test_theta_orientation)
@@ -402,6 +405,7 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
                 # col_names.append("probe phi")
                 # print(col_names)
                 # print(data_out)
+                # Append to CSV
 
                 ##################################################################################
 

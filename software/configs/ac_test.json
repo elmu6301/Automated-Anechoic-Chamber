@@ -9,7 +9,12 @@
     "alignTolerance": 10
   },
   "plot": {
-    "datafilename": "out.txt"
+    "dataFileName": "test",
+    "plotType": "FILL IN",
+    "plotFreq": "3d",
+    "plotTestPhi": 100,
+    "plotTestTheta": 100,
+    "plotProbePhi": 100
   },
   "flow": [
     {

@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
+# from util import csv_functions as csv
+import csv_functions as csv
 
 DEF_FREQ_MODE = "lin"
 DEF_DEV_ADDR = 16
@@ -294,22 +296,33 @@ class VNA_HP8719A:
 def main():
     print("Beginning execution of VNA commands")
     print("-----------------------------------")
-    hp8719a = VNA_HP8719A("S11, S12, S21, S22")
+    num_param_points = 21
+    # hp8719a = VNA_HP8719A("S11, S12, S21, S22")
+
+    hp8719a = VNA_HP8719A("S21")
     # hp8719a = VNA_HP8719A("S21", freq_mode="log")
+    # csv.createCSV("data_file", [], [])
     if hp8719a.instrument:
         # print(hp8719a.init_freq_sweep("1000 MHz", "3000 MHz", 1601))  #Set the desired frequency range (tests changing start/stop freq)
-        print(hp8719a.init_freq_sweep("1 GHz", "2 GHz", 1601))
+        print(hp8719a.init_freq_sweep("1 GHz", "2 GHz", num_param_points))
         data_out, col_names = hp8719a.sparam_data()             #Measure the data (dB and degree for all s-param)
-        data_out.append("test theta")
-        data_out.append("test phi")
-        data_out.append("probe phi")
+        # data_out.append("test theta")
+        # data_out.append("test phi")
+        # data_out.append("probe phi")
+        col_names = ['Frequency', 'Theta', 'Phi', 'Probe Phi', "S21"]
+        theta_val = 0
+        phi_val = 0
+        probe_phi_val = 0
 
-        col_names.append("test theta")
-        col_names.append("test phi")
-        col_names.append("probe phi")
+        data = np.array(frequency_arr, np.full((1, num_param_points), theta_val), np.full((1, num_param_points), phi_val), np.full((1, num_param_points), probe_phi_val),data_out[0])
+        # col_names.append("test theta")
+        # col_names.append("test phi")
+        # col_names.append("probe phi")
 
-        print(data_out)
-        print(col_names)
+        # np.array([db_only, degree_only], dtype=object)
+        csv.createCSV(filename="data_file", data=data, col_names=col_names)
+        # print(data_out)
+        # print(col_names)
         # hp8719a.file_save("antenna_s_params3.csv", data_out, col_names) #Store the data
         # hp8719a.plot("antenna_s_params3.csv")                #Plot the data
 

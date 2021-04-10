@@ -9,9 +9,9 @@ def createCSV(filename,data,col_names):
     assert type(filename) == str
     assert type(data) == np.ndarray
     assert type(col_names) == list
-    assert 'Theta' in col_names
-    assert 'Phi' in col_names
-    assert 'Frequeny' in col_names
+    # assert 'Theta' in col_names
+    # assert 'Phi' in col_names
+    # assert 'Frequeny' in col_names
 
     col_name_str = ''
     for i in range(0,len(col_names)):
@@ -22,6 +22,7 @@ def createCSV(filename,data,col_names):
 
     np.savetxt(filename,data,delimiter=',',header=col_name_str,comments='')
 
+
 def appendToCSV(filename,data):
     assert type(filename) == str
     assert type(data) == np.ndarray
@@ -29,6 +30,7 @@ def appendToCSV(filename,data):
     f = open(filename,'ab')
     np.savetxt(f,data,delimiter=',')
     f.close()
+
 
 def unitTestCSV():
     antenna_name = 'horn.csv'
@@ -38,6 +40,7 @@ def unitTestCSV():
 
     more_data = np.array([[10,11,12],[13,14,15]])
     appendToCSV(antenna_name,more_data)
+
 
 def getSparamData3D(csv_filename,sparam,frequency):
     assert type(csv_filename) == str
