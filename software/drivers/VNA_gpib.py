@@ -241,7 +241,7 @@ class VNA_HP8719A:
         self.instrument.write("NOOP")  # No operation + sets operation bit to complete (puts VNA back in listen mode so can use front panel)
 
         #Return a dictionary containing the collected data
-        return np.array(data_all), col_names
+        return data_all, col_names
 
     #Remove extra columns of 0's from VNA data
     def data_formatting(self, data, freq):
