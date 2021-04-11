@@ -19,14 +19,14 @@ def createCSV(filename,data,col_names):
             col_name_str += col_names[i]
         else:
             col_name_str += (col_names[i] + ', ')
-
-    np.savetxt(filename,data,delimiter=',',header=col_name_str,comments='')
+    data = data.T
+    np.savetxt(filename, data, delimiter=',',header=col_name_str,comments='')
 
 
 def appendToCSV(filename,data):
     assert type(filename) == str
     assert type(data) == np.ndarray
-
+    data = data.T
     f = open(filename,'ab')
     np.savetxt(f,data,delimiter=',')
     f.close()

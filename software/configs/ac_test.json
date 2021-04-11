@@ -2,7 +2,7 @@
   "meas": {
     "deviceAddress": 16,
     "freqSweepMode": "log",
-    "sParams": "S11, S21"
+    "sParams": "S21"
   },
   "calibrate": {
     "align": "False",

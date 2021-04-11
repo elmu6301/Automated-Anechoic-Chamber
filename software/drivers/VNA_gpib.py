@@ -4,11 +4,9 @@ import numpy as np
 import time
 
 # from util import csv_functions as csv
-import csv_functions as csv
-
 DEF_FREQ_MODE = "lin"
 DEF_DEV_ADDR = 16
-DEF_S_PARAMS = "S11, S12"
+DEF_S_PARAMS = "S21"
 
 ALLOWED_NUM_POINTS = (3, 11, 21, 51, 101, 201, 401, 801, 1601)
 ALLOWED_FREQ_MODES = (DEF_FREQ_MODE, "log")
@@ -237,8 +235,10 @@ class VNA_HP8719A:
             return False, False
         else:
             freq_only = self.data_formatting(freq, True)  # Format the data (convert the raw VNA output to a numpy array)
-            data_all.append(freq_only)
-            col_names.append("Freq (Hz)")
+            # data_all.append(freq_only)
+            # col_names.append("Freq (Hz)")
+            data_all.insert(0, freq_only)
+            col_names.insert(0, "Freq (Hz)")
 
         self.instrument.write("NOOP")  # No operation + sets operation bit to complete (puts VNA back in listen mode so can use front panel)
 
@@ -294,37 +294,36 @@ class VNA_HP8719A:
 
 
 def main():
+    import csv_functions as csv
     print("Beginning execution of VNA commands")
     print("-----------------------------------")
-    num_param_points = 21
-    # hp8719a = VNA_HP8719A("S11, S12, S21, S22")
+    num_param_points = 3
+    current_theta_val = 1
+    current_phi_val = 2
+    current_probe_phi_val = 3
+    sparams_all = ['S11 (db)', 'S11 (deg)', 'S12 (db)', 'S12 (deg)', 'S21 (db)', 'S21 (deg)', 'S22 (db)', 'S22 (deg)']
+    sparams_taken = []
 
-    hp8719a = VNA_HP8719A("S21")
-    # hp8719a = VNA_HP8719A("S21", freq_mode="log")
-    # csv.createCSV("data_file", [], [])
+    col_names = ['Freq (Hz)', 'Test Phi (deg)', 'Test Theta (deg)', 'Probe Phi (deg)', 'S21 (db)', 'S21 (deg)']
+    # VNA creation
+    hp8719a = VNA_HP8719A("S21", freq_mode="lin")
     if hp8719a.instrument:
-        # print(hp8719a.init_freq_sweep("1000 MHz", "3000 MHz", 1601))  #Set the desired frequency range (tests changing start/stop freq)
-        print(hp8719a.init_freq_sweep("1 GHz", "2 GHz", num_param_points))
-        data_out, col_names = hp8719a.sparam_data()             #Measure the data (dB and degree for all s-param)
-        # data_out.append("test theta")
-        # data_out.append("test phi")
-        # data_out.append("probe phi")
-        col_names = ['Frequency', 'Theta', 'Phi', 'Probe Phi', "S21"]
-        theta_val = 0
-        phi_val = 0
-        probe_phi_val = 0
+        # Collect data
+        hp8719a.init_freq_sweep("1000 MHz", "3 GHz", num_param_points)
+        data_out, test = hp8719a.sparam_data()
 
-        data = np.array(frequency_arr, np.full((1, num_param_points), theta_val), np.full((1, num_param_points), phi_val), np.full((1, num_param_points), probe_phi_val),data_out[0])
-        # col_names.append("test theta")
-        # col_names.append("test phi")
-        # col_names.append("probe phi")
+        # insert data into array
+        t_t = [current_theta_val] * num_param_points
+        t_p = [current_phi_val] * num_param_points
+        p_p = [current_probe_phi_val] * num_param_points
+        data_out.insert(1, t_t)
+        data_out.insert(2, t_p)
+        data_out.insert(3, p_p)
 
-        # np.array([db_only, degree_only], dtype=object)
-        csv.createCSV(filename="data_file", data=data, col_names=col_names)
-        # print(data_out)
-        # print(col_names)
-        # hp8719a.file_save("antenna_s_params3.csv", data_out, col_names) #Store the data
-        # hp8719a.plot("antenna_s_params3.csv")                #Plot the data
+        data_to_save = np.array(data_out, dtype=object)
+        csv.createCSV("outFile.csv", data_to_save, col_names)
+        csv.appendToCSV("outFile.csv", data_to_save)
+
 
 
     #Notes 4/3:

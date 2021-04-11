@@ -193,6 +193,7 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         printf('\t\tSweep type: %s' % (freq_sweep_type))
         sParams = vna_args['sParams']
         printf('\t\tTypes of data to collect: %s' % sParams)
+
         num_points = cmd_args['number of points']
         assert type(num_points) == int and num_points in ALLOWED_NUM_POINTS
         printf('\t\tNumber of points to sweep: %f GHz' % (freq_stop))
@@ -205,6 +206,10 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         printf('\t\tStop frequency: %f GHz' % (freq_stop))
 
         # CREATE THE CSV
+        # generate the appropriate column names
+        col_names = gen_col_names(sParams)
+
+
 
     except:
         return error_codes.BAD_ARGS
@@ -222,6 +227,8 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
             del VNA  # need to implement __del__ to close pyvisa connection
         except:
             pass
+    # UNCOMMENT FOR TESTING UI stuff
+    return error_codes.SUCCESS
 
     # Connect to motor driver PCBs
     printf('Setting up the system...')
@@ -396,13 +403,12 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
                 # Note don't need to use column names just append to data_out and cast as np array
 
                 data_out, col_names = VNA.sparam_data()
-                # Append orientation info to data
-                # data_out.append(test_theta_orientation)
-                # col_names.append("test theta")
-                # data_out.append(test_phi_orientation)
-                # col_names.append("test phi")
-                # data_out.append(probe_phi_orientation)
-                # col_names.append("probe phi")
+                # Append orientation info to data # TODO verify this
+                data_out.insert(1, np.full((1, num_param_points), current_theta_val))
+                data_out.insert(2, np.full((1, num_param_points), current_phi_val))
+                data_out.insert(3, np.full((1, num_param_points), current_probe_phi_val))
+                appendCSV(filename, data_out)
+
                 # print(col_names)
                 # print(data_out)
                 # Append to CSV
@@ -515,9 +521,27 @@ def run_sweepTheta(args):
     return error_code
 
 
+def gen_col_names(sparam_list):
+    col_names = ['Freq (Hz)', 'Test Phi (deg)', 'Test Theta (deg)', 'Probe Phi (deg)']
+    if "S11" in sparam_list:
+        col_names.append('S11 (db)')
+        col_names.append('S11 (deg)')
+    if "S12" in sparam_list:
+        col_names.append('S12 (db)')
+        col_names.append('S12 (deg)')
+    if "S21" in sparam_list:
+        col_names.append('S21 (db)')
+        col_names.append('S21 (deg)')
+    if "S22" in sparam_list:
+        col_names.append('S22 (db)')
+        col_names.append('S22 (deg)')
+    return col_names
+
 # main
 def main():
     print("Experiments!!!")
+    sparams_list = "S21, S11"
+    gen_col_names(sparams_list)
 
 if __name__ == "__main__":
     main()
