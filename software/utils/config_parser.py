@@ -4,11 +4,13 @@ import os
 import json
 
 from drivers import VNA_gpib as vna
-try:
-    import experiments
-except ImportError:
-    from util import experiments
-#
+# try:
+#     import experiments
+# except ImportError:
+from utils import experiments
+from utils import util
+
+
 DEF_ALIGN = True
 DEF_ALIGN_TOLERANCE = 10
 
@@ -17,20 +19,11 @@ config_parser.py
 This file contains functions to find, open, and generate flows and commands.
 '''
 
-root_base = "software"
 config_base = "\\configs"
 allowed_expt = ("sweepPhi", "sweepTheta", "sweepFreq")
 
 
-# Gets the path to the repository
-def get_root_path():
-    path = os.getcwd()
-    if path.rfind(root_base) == -1:
-        return False
-    while not path.endswith(root_base):
-        os.chdir("..")
-        path = os.getcwd()
-    return path
+
 
 
 # Attempts to locate the file and returns the full file path if possible
@@ -46,7 +39,7 @@ def find_config(file_name, file_path=None):
         return False
 
     # Get the root path
-    root_path = get_root_path()
+    root_path = util.get_root_path()
     config_repo_path = root_path + config_base
 
     # Walking down file searching in the config repository
@@ -70,7 +63,7 @@ def find_config(file_name, file_path=None):
 def get_config(full_file_name):
     if full_file_name == '':
         return False
-    if full_file_name.rfind(root_base) == -1:
+    if full_file_name.rfind(util.root_base) == -1:
         # Get file name with file path
         full_file_name = find_config(full_file_name)
 
@@ -126,10 +119,14 @@ def get_config(full_file_name):
             calib["alignTolerance"] = float(calib["alignTolerance"])
 
         # TODO add checks for plotting once items are figured out
-        # if plot is None or not calib:
-        #     plot = {"align": DEF_ALIGN,
-        #              "alignTolerance": DEF_ALIGN_TOLERANCE
-        #              }
+        if plot is None or not plot:
+            plot = {"dataFileName": "test",
+                    "plotType": "FILL IN",
+                    "plotFreq": "3d",
+                    "plotTestPhi": 100,
+                    "plotTestTheta": 100,
+                    "plotProbePhi": 100
+                    }
 
     return flow, meas, calib, plot
 
@@ -221,16 +218,3 @@ def print_cmds(cmds):
     print(f"\nmeas:\n{json.dumps(cmds['meas'], indent=4)}")
     print(f"\ncalibrate:\n{json.dumps(cmds['calib'], indent=4)}")
     print(f"\nplot:\n{json.dumps(cmds['plot'], indent=4)}")
-
-# main
-def main():
-    print("\nRunning the config parser")
-    file_name = "sample_exp.json"
-    flow = get_expt_flow(file_name)
-    cmds = gen_expt_cmds(flow)
-    # print(f"\nGenerated the following commands: \n{cmds}")
-
-    print_cmds(cmds)
-
-if __name__ == "__main__":
-    main()

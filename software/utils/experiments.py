@@ -4,9 +4,11 @@ import os
 import json
 
 from drivers.motor_driver_interface import findSystemMotorDrivers, MotorDriver
+
 import numpy as np
 from drivers.VNA_gpib import *
-from util import error_codes
+from utils import error_codes
+from utils import util
 import time
 
 TT_SPR = 4494000
@@ -207,7 +209,7 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
 
         # CREATE THE CSV
         # generate the appropriate column names
-        col_names = gen_col_names(sParams)
+        col_names = util.gen_col_names(sParams)
 
 
 
@@ -521,27 +523,10 @@ def run_sweepTheta(args):
     return error_code
 
 
-def gen_col_names(sparam_list):
-    col_names = ['Freq (Hz)', 'Test Phi (deg)', 'Test Theta (deg)', 'Probe Phi (deg)']
-    if "S11" in sparam_list:
-        col_names.append('S11 (db)')
-        col_names.append('S11 (deg)')
-    if "S12" in sparam_list:
-        col_names.append('S12 (db)')
-        col_names.append('S12 (deg)')
-    if "S21" in sparam_list:
-        col_names.append('S21 (db)')
-        col_names.append('S21 (deg)')
-    if "S22" in sparam_list:
-        col_names.append('S22 (db)')
-        col_names.append('S22 (deg)')
-    return col_names
-
 # main
 def main():
     print("Experiments!!!")
-    sparams_list = "S21, S11"
-    gen_col_names(sparams_list)
+
 
 if __name__ == "__main__":
     main()

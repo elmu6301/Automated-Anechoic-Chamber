@@ -7,7 +7,7 @@ sys.path.append(os.path.join(os.getcwd(), '..'))
 import serial
 import serial.tools.list_ports
 import time
-from util import error_codes
+from utils import error_codes
 
 CMDDELIM = '\n'
 ARGDELIM = ':'

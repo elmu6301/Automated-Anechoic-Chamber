@@ -3,7 +3,7 @@ import keyboard
 import os
 import time
 import numpy as np
-from util import error_codes
+from utils import error_codes
 
 def flush_input():
     try:

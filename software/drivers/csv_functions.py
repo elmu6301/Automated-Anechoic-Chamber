@@ -1,6 +1,8 @@
 import numpy as np
 import pdb
 
+DEF_FILE_NAME = "data.txt"
+
 parameter_col_name_conversions_db = {'S11':'dB(S11)','S12':'dB(S12)','S21':'dB(S21)','S22':'dB(S22)'}
 parameter_col_name_conversions_deg = {'S11':'Degrees(S11)','S12':'Degrees(S12)','S21':'Degrees(S21)','S22':'Degrees(S22)'}
 
