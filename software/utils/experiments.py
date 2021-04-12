@@ -400,16 +400,14 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
                 col_names = []
                 # Note don't need to use column names just append to data_out and cast as np array
 
-                data_out, col_names = VNA.sparam_data()
+                data_out, temp = VNA.sparam_data()
                 # Append orientation info to data # TODO verify this
-                data_out.insert(1, np.full((1, num_param_points), current_theta_val))
-                data_out.insert(2, np.full((1, num_param_points), current_phi_val))
-                data_out.insert(3, np.full((1, num_param_points), current_probe_phi_val))
-                appendCSV(filename, data_out)
-
-                # print(col_names)
-                # print(data_out)
-                # Append to CSV
+                data_out.insert(1, [current_theta_val] * num_param_points)
+                data_out.insert(2, [current_phi_val] * num_param_points)
+                data_out.insert(3, [current_probe_phi_val] * num_param_points)
+                data_to_save = np.array(data_out, dtype=object)
+                # Write to CSV file
+                csv.appendToCSV(filename, data_to_save)
 
                 ##################################################################################
 
