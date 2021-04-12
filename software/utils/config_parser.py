@@ -125,15 +125,32 @@ def get_config(full_file_name):
                     "plotProbePhi": 100
                     }
         # Check for valid file names
-        if plot["dataFileName"].rfind(".") !=-1:
+        if plot["dataFileName"].rfind(".") != -1:
             plot["dataFileName"] = plot["dataFileName"][0:plot["dataFileName"].rfind(".")]
+        #plot["dataFileName"] = util.append_date_time_str(plot["dataFileName"])
+        # Verify a good plot type
         if plot["plotType"] not in ALLOWED_PLOT_TYPES:
             plot = False
-        elif plot["plotType"] == "freq":
-            plot.setdefault("plotTestPhi", DEF_TEST_PHI)
-            plot.setdefault("plotTestTheta", DEF_TEST_THETA)
-            plot.setdefault("plotProbePhi", DEF_PROBE_PHI)
+        # elif plot["plotType"] == "freq":
+        if 'MHz' in plot["plotFreq"]:
+            freq_stop = 1e-3 * float(plot["plotFreq"][:-3])
+        elif 'GHz' in plot["plotFreq"]:
+            plot["plotFreq"] = float(plot["plotFreq"][:-3])
+        else:
+            assert False
 
+        plot.setdefault("plotTestPhi", DEF_TEST_PHI)
+        plot.setdefault("plotTestTheta", DEF_TEST_THETA)
+        plot.setdefault("plotProbePhi", DEF_PROBE_PHI)
+
+        # Convert orientations to floats
+        plot["plotTestPhi"] = float(plot["plotTestPhi"])
+        plot["plotTestTheta"] = float(plot["plotTestTheta"])
+        plot["plotProbePhi"] = float(plot["plotProbePhi"])
+
+        # Currently plot regardless
+        plot.setdefault("runPlotter", True)
+        print(plot)
     return flow, meas, calib, plot
 
 

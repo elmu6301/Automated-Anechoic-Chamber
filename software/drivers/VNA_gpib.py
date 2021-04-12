@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
-# from util import csv_functions as csv
 DEF_FREQ_MODE = "lin"
 DEF_DEV_ADDR = 16
 DEF_S_PARAMS = "S21"
@@ -295,7 +294,7 @@ class VNA_HP8719A:
 
 
 def main():
-    from plotting import csv_functions as csv
+    import drivers.csv_functions as csv
     print("Beginning execution of VNA commands")
     print("-----------------------------------")
     num_param_points = 3
@@ -320,10 +319,20 @@ def main():
         data_out.insert(1, t_t)
         data_out.insert(2, t_p)
         data_out.insert(3, p_p)
-
+        freq = data_out[0][0]
+        print(freq)
         data_to_save = np.array(data_out, dtype=object)
-        csv.createCSV("outFile.csv", data_to_save, col_names)
-        csv.appendToCSV("outFile.csv", data_to_save)
+        data = np.array([[-1]] * len(col_names))
+        # data = data.T
+        csv.createCSV("outFile", col_names, data)
+        csv.appendToCSV("outFile", data_to_save)
+        return freq
+
+def plot_main(freq):
+    import drivers.plotting as plots
+    data_file = "C:\\Users\\elena\\Documents\\College\\Automated-Anechoic-Chamber\\software\\data\\outFile.csv"
+    plot_file = "C:\\Users\\elena\\Documents\\College\\Automated-Anechoic-Chamber\\software\\data\\outPlot.jpg"
+    plots.plot3DRadPattern(data_file, plot_file, 'S21', freq)
 
 
 
@@ -357,4 +366,5 @@ def main():
 
 if __name__ == "__main__":
     # for i in range(0,3):
-    main()
+    freq = main()
+    plot_main(freq)

@@ -47,7 +47,7 @@ def append_date_time_str(file_name):
         if file_name.endswith(".csv"):
             file_name = file_name[0:file_name.rfind(".csv")]
         curr_time = datetime.now()
-        date_time = curr_time.strftime("_%H_%M_%m_%d_%Y.csv")
+        date_time = curr_time.strftime("_%H_%M_%m_%d_%Y")
         file_name += date_time
         return file_name
     else:

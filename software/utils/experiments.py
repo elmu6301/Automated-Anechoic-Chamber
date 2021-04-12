@@ -199,14 +199,28 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         assert type(freq_stop) == float
         printf('\t\tStop frequency: %f GHz' % (freq_stop))
 
+        printf('\tPlot settings:')
+        base_file_name = plot_args['dataFileName']
+        assert type(base_file_name) == str
+        printf('\t\tRaw Data File: %s' % (base_file_name +".csv"))
+
+        plot_type = plot_args['plotType']
+        printf('\t\tPlot Type: %s' % (plot_type))
+        plot_freq = plot_args['plotTestPhi']
+        plot_t_theta = plot_args['plotTestTheta']
+        assert (type(plot_t_theta) == float) and (-180 <= plot_t_theta <= 180)
+        plot_t_phi = plot_args['plotTestPhi']
+        assert (type(plot_t_phi) == float) and (-180 <= plot_t_phi <= 180)
+        plot_p_phi = plot_args['plotProbePhi']
+        assert (type(plot_p_phi) == float) and (-180 <= plot_p_phi <= 180)
+
+
         # CREATE THE CSV
         # generate the appropriate column names
         col_names = util.gen_col_names(sParams)
 
-        # data = np.array([0] * len(col_names))
-        name = util.append_date_time_str("")
-        print(name)
-        # csv.createCSV("outFile.csv", col_names, data)
+        data = np.array([[-1]] * len(col_names)) # trash data
+        csv.createCSV(base_file_name, col_names, data)
 
 
     except:
