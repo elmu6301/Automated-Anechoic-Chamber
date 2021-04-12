@@ -329,7 +329,7 @@ def main():
         return freq
 
 def plot_main(freq):
-    import drivers.plotting as plots
+    import plotting as plots
     data_file = "C:\\Users\\elena\\Documents\\College\\Automated-Anechoic-Chamber\\software\\data\\outFile.csv"
     plot_file = "C:\\Users\\elena\\Documents\\College\\Automated-Anechoic-Chamber\\software\\data\\outPlot.jpg"
     plots.plot3DRadPattern(data_file, plot_file, 'S21', freq)
@@ -366,5 +366,6 @@ def plot_main(freq):
 
 if __name__ == "__main__":
     # for i in range(0,3):
-    freq = main()
+    # freq = main()
+    freq = 1.000000000000000000e+09
     plot_main(freq)
