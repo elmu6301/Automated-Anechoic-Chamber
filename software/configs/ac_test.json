@@ -9,9 +9,9 @@
     "alignTolerance": 10
   },
   "plot": {
-    "dataFileName": "test",
-    "plotType": "FILL IN",
-    "plotFreq": "3d",
+    "dataFileName": "test.txt",
+    "plotType": "3d",
+    "plotFreq": "3 GHz",
     "plotTestPhi": 100,
     "plotTestTheta": 100,
     "plotProbePhi": 100

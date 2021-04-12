@@ -13,8 +13,11 @@ For all functions in this file we assume theta is the major axis and phi is the 
 import numpy as np
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as axes3d
-import csv_functions as csv_f
+from plotting import csv_functions as csv_f
 import pdb
+
+
+
 
 def plot3DRadPattern(csv_filename,plot_filename,param,frequency):
     #Based on example code: https://stackoverflow.com/questions/36816537/spherical-coordinates-plot-in-matplotlib

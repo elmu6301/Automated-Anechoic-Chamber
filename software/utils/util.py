@@ -1,5 +1,5 @@
 import os
-import time
+from datetime import datetime
 
 
 root_base = "software"
@@ -40,3 +40,15 @@ def get_root_path():
         os.chdir("..")
         path = os.getcwd()
     return path
+
+
+def append_date_time_str(file_name):
+    if file_name != '':
+        if file_name.endswith(".csv"):
+            file_name = file_name[0:file_name.rfind(".csv")]
+        curr_time = datetime.now()
+        date_time = curr_time.strftime("_%H_%M_%m_%d_%Y.csv")
+        file_name += date_time
+        return file_name
+    else:
+        return False

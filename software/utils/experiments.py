@@ -4,31 +4,29 @@ import os
 import json
 
 from drivers.motor_driver_interface import findSystemMotorDrivers, MotorDriver
-
-import numpy as np
 from drivers.VNA_gpib import *
+from plotting import csv_functions as csv
 from utils import error_codes
 from utils import util
+
 import time
+import numpy as np
 
 TT_SPR = 4494000
 TP_SPR = 9142000
 PP_SPR = 4494000
 
-
-def _printf(phase, flag, msg):
-    """ Prints out messages to the command line by specifying flag and phase. """
-    if flag in ("Error", "Warning"):
-        print(f"({phase}) {flag}: {msg}")
-    else:
-        print(f"({phase}):".ljust(11), f"{msg}")
+'''
+experiments.py
+This file contains functions generate commands and run various experiments.
+'''
 
 
 def run_Align():
     current_phase = 'Setup'
 
     def printf(msg):
-        _printf(current_phase, None, msg)
+        util.printf(current_phase, None, msg)
 
     printf('Setting up the system...')
     printf('\tDetecting motor drivers...')
@@ -118,17 +116,11 @@ def run_Align():
     return error_codes.SUCCESS
 
 
-'''
-experiments.py
-This file contains functions generate commands and run various experiments.
-'''
-
-
 def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
     current_phase = 'Setup'
 
     def printf(msg):
-        _printf(current_phase, None, msg)
+        util.printf(current_phase, None, msg)
 
     # Get necessary configuration settings
     printf('Parsing configuration settings...')
@@ -211,6 +203,10 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         # generate the appropriate column names
         col_names = util.gen_col_names(sParams)
 
+        # data = np.array([0] * len(col_names))
+        name = util.append_date_time_str("")
+        print(name)
+        # csv.createCSV("outFile.csv", col_names, data)
 
 
     except:

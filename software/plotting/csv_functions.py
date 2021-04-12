@@ -1,4 +1,5 @@
 import numpy as np
+from utils import util
 import pdb
 
 DEF_FILE_NAME = "data.txt"
@@ -7,23 +8,25 @@ parameter_col_name_conversions_db = {'S11':'dB(S11)','S12':'dB(S12)','S21':'dB(S
 parameter_col_name_conversions_deg = {'S11':'Degrees(S11)','S12':'Degrees(S12)','S21':'Degrees(S21)','S22':'Degrees(S22)'}
 
 
-def createCSV(filename,data,col_names):
+def createCSV(filename,col_names, data):
     assert type(filename) == str
     assert type(data) == np.ndarray
     assert type(col_names) == list
-    # assert 'Theta' in col_names
-    # assert 'Phi' in col_names
-    # assert 'Frequeny' in col_names
+
+    # Navigate to the correct directory
+    root = util.get_root_path() + "\\data\\"
+    file_name = root + filename
 
     col_name_str = ''
-    for i in range(0,len(col_names)):
+    for i in range(0, len(col_names)):
         if i == len(col_names) - 1:
             col_name_str += col_names[i]
         else:
             col_name_str += (col_names[i] + ', ')
     data = data.T
-    np.savetxt(filename, data, delimiter=',',header=col_name_str,comments='')
+    np.savetxt(file_name, data, delimiter=',', header=col_name_str, comments='')
 
+    #     return False
 
 def appendToCSV(filename,data):
     assert type(filename) == str

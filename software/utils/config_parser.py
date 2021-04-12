@@ -4,15 +4,15 @@ import os
 import json
 
 from drivers import VNA_gpib as vna
-# try:
-#     import experiments
-# except ImportError:
-from utils import experiments
 from utils import util
 
 
 DEF_ALIGN = True
 DEF_ALIGN_TOLERANCE = 10
+DEF_TEST_PHI = 0
+DEF_TEST_THETA = 0
+DEF_PROBE_PHI = 0
+ALLOWED_PLOT_TYPES = ("3D", "3d", "freq")
 
 '''
 config_parser.py
@@ -21,9 +21,6 @@ This file contains functions to find, open, and generate flows and commands.
 
 config_base = "\\configs"
 allowed_expt = ("sweepPhi", "sweepTheta", "sweepFreq")
-
-
-
 
 
 # Attempts to locate the file and returns the full file path if possible
@@ -120,13 +117,22 @@ def get_config(full_file_name):
 
         # TODO add checks for plotting once items are figured out
         if plot is None or not plot:
-            plot = {"dataFileName": "test",
+            plot = {"dataFileName": "data_out",
                     "plotType": "FILL IN",
                     "plotFreq": "3d",
                     "plotTestPhi": 100,
                     "plotTestTheta": 100,
                     "plotProbePhi": 100
                     }
+        # Check for valid file names
+        if plot["dataFileName"].rfind(".") !=-1:
+            plot["dataFileName"] = plot["dataFileName"][0:plot["dataFileName"].rfind(".")]
+        if plot["plotType"] not in ALLOWED_PLOT_TYPES:
+            plot = False
+        elif plot["plotType"] == "freq":
+            plot.setdefault("plotTestPhi", DEF_TEST_PHI)
+            plot.setdefault("plotTestTheta", DEF_TEST_THETA)
+            plot.setdefault("plotProbePhi", DEF_PROBE_PHI)
 
     return flow, meas, calib, plot
 
@@ -138,7 +144,7 @@ def gen_expt_cmds(flow):
             cmd = {}
             experiment_type  = expt.get("expType")
             if experiment_type.endswith(".json"):
-                inner_flow, inner_meas = get_expt_flow_meas(experiment_type)
+                inner_flow, inner_meas = get_config(experiment_type)
                 inner_cmds = gen_expt_cmds(inner_flow)
                 if inner_cmds is not False:
                     for i_cmd in inner_cmds:

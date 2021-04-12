@@ -11,6 +11,7 @@ DEF_S_PARAMS = "S21"
 ALLOWED_NUM_POINTS = (3, 11, 21, 51, 101, 201, 401, 801, 1601)
 ALLOWED_FREQ_MODES = (DEF_FREQ_MODE, "log")
 
+
 class VNA_HP8719A:
     def __init__(self, sparam_list, address=16, freq_mode="lin"):
         self.address = address
@@ -294,7 +295,7 @@ class VNA_HP8719A:
 
 
 def main():
-    import csv_functions as csv
+    from plotting import csv_functions as csv
     print("Beginning execution of VNA commands")
     print("-----------------------------------")
     num_param_points = 3

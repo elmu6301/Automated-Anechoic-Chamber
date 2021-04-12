@@ -165,30 +165,30 @@ def handle_error_code(error_code):
         util.printf(curr_phase, None, "Successfully ran routine without issues. ")
     elif error_code == error_codes.CONNECTION:  # could not find any connected motor driver PCBs
         util.printf(curr_phase, "Error", "No USB devices connected. Ensure the test-side and probe-side devices"
-                                    " are connected and powered on. ")
+                                         " are connected and powered on. ")
     elif error_code == error_codes.CONNECTION_PROBE:  # could not find a probe motor driver PCB
         util.printf(curr_phase, "Error", "Detected device on test-side. No probe-side USB devices connected."
-                                    " Ensure the probe-side device is connected and powered on. ")
+                                         " Ensure the probe-side device is connected and powered on. ")
     elif error_code == error_codes.CONNECTION_TEST:  # could not find a test motor driver PCB
         util.printf(curr_phase, "Error", "Detected device on probe-side. No test-side USB devices connected."
-                                    " Ensure the test-side device is connected and powered on. ")
+                                         " Ensure the test-side device is connected and powered on. ")
     elif error_code == error_codes.DISTINCT_IDS:  # detected two motor driver PCBs, but they were both configured as test or probe
-        util.printf(curr_phase, "Error", "USB devices must be of different types. Ensure that the test-side device is set "
-                                    "to TX and that the probe-side device is set to RX.")
+        util.printf(curr_phase, "Error", "USB devices must be of different types. Ensure that the test-side device is"
+                                         " set to TX and that the probe-side device is set to RX.")
     elif error_code == error_codes.VNA:  # could not connect to VNA
         util.printf(curr_phase, "Error", "No GPIB devices connected. Ensure the VNA is connected and powered on. ")
     elif error_code == error_codes.TEST_THETA_FAULT:  # test-theta motor fault
         util.printf(curr_phase, "Error", "Motor driver fault detected on the test-side theta motor. Ensure"
-                                    " that the theta motor driver is properly connected to the test-side device.")
+                                         " that the theta motor driver is properly connected to the test-side device.")
     elif error_code == error_codes.TEST_PHI_FAULT:  # test-phi motor fault
         util.printf(curr_phase, "Error", "Motor driver fault detected on the test-side phi motor. Ensure"
-                                    " that the phi motor driver is properly connected to the test-side device.")
+                                         " that the phi motor driver is properly connected to the test-side device.")
     elif error_code == error_codes.PROBE_PHI_FAULT:  # probe-phi motor fault
         util.printf(curr_phase, "Error", "Motor driver fault detected on the probe-side phi motor. Ensure"
-                                    " that the phi motor driver is properly connected to the probe-side device.")
+                                         " that the phi motor driver is properly connected to the probe-side device.")
     elif error_code == error_codes.ALIGNMENT:  # alignment routine failed
-        util.printf(curr_phase, "Error", "Alignment error detected. System could not be aligned. Try running the calibration"
-                                    " routine to ensure proper alignment. ")
+        util.printf(curr_phase, "Error", "Alignment error detected. System could not be aligned. Try running the"
+                                         " calibration routine to ensure proper alignment. ")
     elif error_code == error_codes.BAD_ARGS:  # routine was called with invalid arguments
         util.printf(curr_phase, "Error", "Unable to run routine as invalid arguments were entered.")
     elif error_code == error_codes.MISC:  # issue not listed above
