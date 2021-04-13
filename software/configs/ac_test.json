@@ -1,11 +1,11 @@
 {
   "meas": {
     "deviceAddress": 16,
-    "freqSweepMode": "log",
+    "freqSweepMode": "lin",
     "sParams": "S21"
   },
   "calibrate": {
-    "align": "False",
+    "align": "True",
     "alignTolerance": 10
   },
   "plot": {
@@ -30,7 +30,7 @@
       "stepsProbePhi": 2,
       "startFrequency": "2000MHz",
       "stopFrequency": "20GHz",
-      "numPoints": 101
+      "numPoints": 3
     }
   ]
 }

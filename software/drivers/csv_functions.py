@@ -1,5 +1,5 @@
 import numpy as np
-from utils import util
+# from utils import util
 import pdb
 
 DEF_FILE_NAME = "data.txt"
@@ -14,9 +14,9 @@ def createCSV(filename,col_names, data):
     assert type(col_names) == list
 
     # Navigate to the correct directory
-    root = util.get_root_path() + "\\data\\"
-    file_name = root + filename
-
+    # root = util.get_root_path() + "\\data\\"
+    # file_name = root + filename
+    file_name = filename
     # Append file name
     if filename.rfind(".csv") == -1:
         file_name += ".csv"
@@ -38,8 +38,9 @@ def appendToCSV(filename,data):
     assert type(data) == np.ndarray
     data = data.T
     # Navigate to the correct directory
-    root = util.get_root_path() + "\\data\\"
-    file_name = root + filename
+    # root = util.get_root_path() + "\\data\\"
+    # file_name = root + filename
+    file_name = filename
 
     # Append file name
     if filename.rfind(".csv") == -1:

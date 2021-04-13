@@ -21,7 +21,7 @@ def createCSV(filename, col_names, data):
     # Append file name
     if filename.rfind(".csv") == -1:
         file_name += ".csv"
-        print(f"file_name = {file_name}")
+        # print(f"file_name = {file_name}")
 
     col_name_str = ''
     for i in range(0, len(col_names)):
@@ -46,7 +46,7 @@ def appendToCSV(filename, data):
     # Append file name
     if filename.rfind(".csv") == -1:
         file_name += ".csv"
-        print(f"file_name = {file_name}")
+        # print(f"file_name = {file_name}")
 
     f = open(file_name, 'ab')
     np.savetxt(f, data, delimiter=',')

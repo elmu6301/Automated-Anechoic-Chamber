@@ -294,22 +294,23 @@ class VNA_HP8719A:
 
 
 def main():
-    import drivers.csv_functions as csv
+    import csv_functions as csv
     print("Beginning execution of VNA commands")
     print("-----------------------------------")
-    num_param_points = 3
+    num_param_points = 801
     current_theta_val = 1
     current_phi_val = 2
     current_probe_phi_val = 3
     sparams_all = ['S11 (db)', 'S11 (deg)', 'S12 (db)', 'S12 (deg)', 'S21 (db)', 'S21 (deg)', 'S22 (db)', 'S22 (deg)']
     sparams_taken = []
 
-    col_names = ['Freq (Hz)', 'Test Phi (deg)', 'Test Theta (deg)', 'Probe Phi (deg)', 'S21 (db)', 'S21 (deg)']
+    col_names = ['Freq (Hz)', 'Test Phi (deg)', 'Test Theta (deg)', 'Probe Phi (deg)', 'S11 (db)', 'S11 (deg)',
+                 'S12 (db)', 'S12 (deg)', 'S21 (db)', 'S21 (deg)', 'S22 (db)', 'S22 (deg)']
     # VNA creation
-    hp8719a = VNA_HP8719A("S21", freq_mode="lin")
+    hp8719a = VNA_HP8719A("S11, S12, S21, S22", 16,  freq_mode="lin")
     if hp8719a.instrument:
         # Collect data
-        hp8719a.init_freq_sweep("1000 MHz", "3 GHz", num_param_points)
+        hp8719a.init_freq_sweep("100 MHz", "10 GHz", num_param_points)
         data_out, test = hp8719a.sparam_data()
 
         # insert data into array
@@ -327,6 +328,8 @@ def main():
         csv.createCSV("outFile", col_names, data)
         csv.appendToCSV("outFile", data_to_save)
         return freq
+    else:
+        print("Error device not connected")
 
 def plot_main(freq):
     import plotting as plots
@@ -366,6 +369,6 @@ def plot_main(freq):
 
 if __name__ == "__main__":
     # for i in range(0,3):
-    # freq = main()
-    freq = 1.000000000000000000e+09
-    plot_main(freq)
+    freq = main()
+    # freq = 1.000000000000000000e+09
+    # plot_main(freq)

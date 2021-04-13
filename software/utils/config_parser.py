@@ -150,7 +150,7 @@ def get_config(full_file_name):
 
         # Currently plot regardless
         plot.setdefault("runPlotter", True)
-        print(plot)
+        # print(plot)
     return flow, meas, calib, plot
 
 

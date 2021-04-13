@@ -69,7 +69,7 @@ def findSystemMotorDrivers():
 
 class MotorDriver:
     def __init__(self, port,
-                 debug=False,
+                 debug=True,#False,
                  baudrate=9600,
                  bytesize=serial.EIGHTBITS,
                  parity=serial.PARITY_NONE,
@@ -97,8 +97,8 @@ class MotorDriver:
             while self.ser.in_waiting == 0:
                 pass
             msg.append(self.ser.read().decode('ASCII'))
-        if self.debug:
-            print(msg)
+            if self.debug:
+                print(msg)
         msg = ''.join(msg)
         return msg[:-1]
     def getId(self):

@@ -240,7 +240,7 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         except:
             pass
     # UNCOMMENT FOR TESTING UI stuff
-    return error_codes.SUCCESS
+    #return error_codes.SUCCESS
 
     # Connect to motor driver PCBs
     printf('Setting up the system...')
@@ -254,8 +254,12 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
     printf('\t\tDone.')
     printf('\tConnecting to probe-side device...')
     Probe_MD = rv['probe motor driver']
-    printf('\t\tDone.')
 
+    Test_MD.setFreq('theta', 32768)
+    Test_MD.setFreq('phi', 65536)
+    Probe_MD.setFreq('phi', 65536)
+
+    printf('\t\tDone.')
 
     # Connect to VNA
     printf('\tConnecting to VNA...')

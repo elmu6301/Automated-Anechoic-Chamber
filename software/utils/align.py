@@ -77,7 +77,7 @@ def findAlignedPosition(MD_test, MD_probe):
     laser_state = False
     MD_test.writeLaser(False)
     error_code = error_codes.SUCCESS
-    
+
     MD_test.setFreq('theta', 32768)
     MD_test.setFreq('phi', 65536)
     MD_probe.setFreq('phi', 65536)
