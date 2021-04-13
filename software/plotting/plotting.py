@@ -156,6 +156,7 @@ def plot2DSparamTheta(csv_filename,plot_filename,parameter,phi,frequency):
 
     print("Plotting data stored in: " + filename)
 
-# plot3DRadPattern('horn_gregor.csv','horn_rad_pattern_4.jpg','S21',4.00)
+if __name__ == "__main__":
+    plot3DRadPattern('..\\data\\test.csv','..\\data\\test.jpg','S21',1.351000000000000000e+10)
 #plotThetaCut('horn_gregor.csv','ThetaCut.jpg','S21',4.5,0.0)
 #plotPhiCut('horn_gregor.csv','PhiCut.jpg','S21',4.4,90.0)

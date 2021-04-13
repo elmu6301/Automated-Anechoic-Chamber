@@ -227,12 +227,13 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         # CREATE THE CSV
         # generate the appropriate column names
         col_names = util.gen_col_names(sParams)
-
+        # print(csv_file_name)
         data = np.array([[-1]] * len(col_names)) # trash data
-        csv.createCSV(base_file_name, col_names, data)
+        csv.createCSV(csv_file_name, col_names, data)
 
 
-    except:
+    except Exception as e:
+        print(f"Exception: {e}")
         return error_codes.BAD_ARGS
         pass
     def disconnect():
@@ -284,11 +285,11 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
 
         res, real_startF, real_stopF = VNA.init_freq_sweep(startF, stopF, num_points)
 
-        if not res:
-            printf(f"\tTried running VNA with start frequency of "
-                   f"{real_startF} GHz and stop frequency of {real_stopF} GHz ")
-            return error_codes.VNA
-        printf(f"\tRunning VNA with start frequency of {real_startF} GHz and stop frequency of {real_stopF} GHz ")
+        # if not res:
+        #     printf(f"\tTried running VNA with start frequency of "
+        #            f"{real_startF} GHz and stop frequency of {real_stopF} GHz ")
+        #     return error_codes.VNA
+        # printf(f"\tRunning VNA with start frequency of {real_startF} GHz and stop frequency of {real_stopF} GHz ")
 
 
     except Exception as e:
@@ -436,12 +437,12 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
 
                 data_out, temp = VNA.sparam_data()
                 # Append orientation info to data # TODO verify this
-                data_out.insert(1, [current_theta_val] * num_param_points)
-                data_out.insert(2, [current_phi_val] * num_param_points)
-                data_out.insert(3, [current_probe_phi_val] * num_param_points)
+                data_out.insert(1, [test_theta_orientation] * num_points)
+                data_out.insert(2, [test_phi_orientation] * num_points)
+                data_out.insert(3, [probe_phi_orientation] * num_points)
                 data_to_save = np.array(data_out, dtype=object)
                 # Write to CSV file
-                csv.appendToCSV(filename, data_to_save)
+                csv.appendToCSV(csv_file_name, data_to_save)
 
                 ##################################################################################
 
@@ -512,11 +513,11 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
 
     ##############################################################################
     if plot_type == "3d":
-        plots.plot3DRadPattern(csv_file_name,plot_file_name,sParam,plot_freq)
+        plots.plot3DRadPattern(csv_file_name,plot_file_name,sParams,plot_freq)
     elif plot_type == "cutPhi":
-        plots.plotPhiCut(csv_file_name,plot_file_name,sParam,plot_freq,plot_t_phi)
+        plots.plotPhiCut(csv_file_name,plot_file_name,sParams,plot_freq,plot_t_phi)
     elif plot_type == "cutTheta":
-        plots.plotThetaCut(csv_file_name, plot_file_name, sParam, plot_freq, plot_t_theta)
+        plots.plotThetaCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_theta)
     else:
         return error_codes.BAD_ARGS
 

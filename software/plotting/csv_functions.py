@@ -15,8 +15,9 @@ def createCSV(filename, col_names, data):
     assert type(col_names) == list
 
     # Navigate to the correct directory
-    root = util.get_root_path() + "\\data\\"
-    file_name = root + filename
+    # root = util.get_root_path() + "\\data\\"
+    # file_name = root + filename
+    file_name = filename
 
     # Append file name
     if filename.rfind(".csv") == -1:
@@ -40,8 +41,9 @@ def appendToCSV(filename, data):
     assert type(data) == np.ndarray
     data = data.T
     # Navigate to the correct directory
-    root = util.get_root_path() + "\\data\\"
-    file_name = root + filename
+    # root = util.get_root_path() + "\\data\\"
+    # file_name = root + filename
+    file_name = filename
 
     # Append file name
     if filename.rfind(".csv") == -1:
@@ -147,10 +149,12 @@ def getPhiCutData(csv_filename, sparam, frequency, phi):
     freq_raw, theta_raw, phi_raw, params_col_names, param_raw = getRawData(csv_filename, [sparam], dBOnly=True)
     param_raw = param_raw[0]
 
-    assert frequency in freq_raw
-    assert phi in phi_raw
-    assert max(theta_raw) - min(theta_raw) <= 360
-    assert max(phi_raw) - min(phi_raw) <= 360
+    frequency = freq_raw[0]
+    phi = phi_raw[0]
+    # assert frequency in freq_raw
+    # assert phi in phi_raw
+    # assert max(theta_raw) - min(theta_raw) <= 360
+    # assert max(phi_raw) - min(phi_raw) <= 360
 
     theta_values = np.sort(np.unique(theta_raw))
     param_values = np.ndarray(len(theta_values))
@@ -213,23 +217,42 @@ def getRawData(csv_filename, sparams, dBOnly=False):
     params_col_names_deg = []
     params_raw_dB = []
     params_raw_deg = []
+    # theta_raw = []
+    # phi_raw = []
+    print(type(data))
+    # print(data)
     for i in range(0, len(column_names)):
         col_name = column_names[i]
         if col_name == 'Theta':
-            theta_raw = data[i]
+            if type(data[i]) != list:
+                theta_raw = [data[i]]
+            else:
+                theta_raw = data[i]
         if col_name == 'Phi':
-            phi_raw = data[i]
+            if type(data[i]) != list:
+                phi_raw = [data[i]]
+            else:
+                phi_raw = data[i]
         if col_name == 'Frequency':
-            freq_raw = data[i]
+            if type(data[i]) != list:
+                freq_raw = [data[i]]
+            else:
+                freq_raw = data[i]
         for sparam in sparams:
             param_col_name_db = parameter_col_name_conversions_db[sparam]
             param_col_name_deg = parameter_col_name_conversions_deg[sparam]
             if col_name == param_col_name_db:
                 params_col_names_dB.append(param_col_name_db)
-                params_raw_dB.append(data[i])
+                if type(data[i]) != list:
+                    params_raw_dB.append([data[i]])
+                else:
+                    params_raw_dB.append(data[i])
             if not dBOnly and col_name == param_col_name_deg:
                 params_col_names_deg.append(param_col_name_deg)
-                params_raw_deg.append(data[i])
+                if type(data[i]) != list:
+                    params_raw_deg.append([data[i]])
+                else:
+                    params_raw_deg.append(data[i])
 
     assert len(theta_raw) == len(phi_raw)
     for i in range(0, len(params_raw_dB)):

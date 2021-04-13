@@ -5,30 +5,30 @@
     "sParams": "S21"
   },
   "calibrate": {
-    "align": "True",
+    "align": "False",
     "alignTolerance": 10
   },
   "plot": {
     "dataFileName": "test.txt",
-    "plotType": "3d",
-    "plotFreq": "3 GHz",
-    "plotTestPhi": 100,
+    "plotType": "cutPhi",
+    "plotFreq": "6.85 GHz",
+    "plotTestPhi": 0,
     "plotTestTheta": 100,
-    "plotProbePhi": 100
+    "plotProbePhi": 0
   },
   "flow": [
     {
       "expType": "sweepFreq",
-      "startTestTheta": -15,
-      "endTestTheta": 15,
-      "stepsTestTheta": 3,
+      "startTestTheta": 0,
+      "endTestTheta": 0,
+      "stepsTestTheta": 20,
       "startTestPhi": 0,
       "endTestPhi": 0,
       "stepsTestPhi": 1,
       "startProbePhi": 0,
-      "endProbePhi": 90,
-      "stepsProbePhi": 2,
-      "startFrequency": "2000MHz",
+      "endProbePhi": 0,
+      "stepsProbePhi": 1,
+      "startFrequency": "200MHz",
       "stopFrequency": "20GHz",
       "numPoints": 3
     }

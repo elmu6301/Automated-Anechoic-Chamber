@@ -3,12 +3,22 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
+from utils import util
+
 DEF_FREQ_MODE = "lin"
 DEF_DEV_ADDR = 16
 DEF_S_PARAMS = "S21"
 
 ALLOWED_NUM_POINTS = (3, 11, 21, 51, 101, 201, 401, 801, 1601)
 ALLOWED_FREQ_MODES = (DEF_FREQ_MODE, "log")
+
+
+def printMsg(curr_phase,msg):
+    util.printf(curr_phase, None, msg)
+
+
+def printError(curr_phase,msg):
+    util.printf(curr_phase, "Error", msg)
 
 
 class VNA_HP8719A:
@@ -19,6 +29,7 @@ class VNA_HP8719A:
         self.instrument = self.connect_VNA()
 
     def connect_VNA(self):
+        curr_phase = 'Setup'
         rm = pyvisa.ResourceManager()  # Download https://www.keysight.com/main/software.jspx?id=2175637&pageMode=CV&cc=US&lc=eng
         # print("All connected GPIB devices: ")
         # print(rm.list_resources()) #this prints all connected devices (not needed in code but should run once to get device name)
@@ -31,15 +42,15 @@ class VNA_HP8719A:
         # instrument.read_termination = '\n'      #Set the read termination character  (due to VNA's data output, this truncated the output data too early)
         # instrument.write_termination = '\n'     #Set the write termination character
         identify = instrument.query("*IDN?")      #Query the instrument to ensure it is connected
-        print("Selected GPIB device: " + identify)
+        printMsg(curr_phase, "Selected GPIB device: " + identify)
         if "HEWLETT PACKARD,8719A" in identify:     #If the instrument is correctly found
             instrument.write("*RST")                #Reset to default setup
             instrument.write("FORM4")               # Set input/output data format to ASCII
             return instrument
         else:
-            print("Error: An instrument other than the VNA HP8719A has been connected. Please connect the correct instrument or run alternative code.")
+            printError(curr_phase, "Error: An instrument other than the VNA HP8719A has been connected."
+                                  " Please connect the correct instrument or run alternative code.")
             return False
-        return False
 
             #To Do: manual triggereing
             #Do we want more features such as setting channel 2?
@@ -52,7 +63,8 @@ class VNA_HP8719A:
     #Set start and stop freq. Note: Must pass in frequency units as "X GHz" or "X MHz"
     #Also sets number of points and lin vs log freq sweep type
     def init_freq_sweep(self, start_freq, stop_freq, num_pts):
-        print("Setting frequency range from " + start_freq + " to " + stop_freq + " with " + str(num_pts) + " points")
+        curr_phase = 'Running'
+        printMsg(curr_phase,"Setting frequency range from " + start_freq + " to " + stop_freq + " with " + str(num_pts) + " points")
         self.instrument.write("STAR " + start_freq)
         self.instrument.write("STOP " + stop_freq)
         self.instrument.write("POIN " + str(num_pts)) #Will round up to be one of the following values: 3, 11, 21, 51, 101, 201, 401, 801, 1601
@@ -66,7 +78,7 @@ class VNA_HP8719A:
 
         #Check if the span is too small for log freq sweep (automatically defaults to lin sweep in that case)
         if self.freq_mode == "log" and int(self.instrument.query("LOGFREQ?")) == 0:
-            print("You need > 2 octaves in span to run a logarithmic frequency sweep")
+            printError(curr_phase,"You need > 2 octaves in span to run a logarithmic frequency sweep")
             return False, real_start_freq, real_stop_freq
 
         user_start_freq = start_freq.split(" ") #Split the units from the number for start freq
@@ -75,7 +87,7 @@ class VNA_HP8719A:
         elif user_start_freq[1] == "MHz":
             user_start_freq[0] = float(user_start_freq[0]) * 10**6 #Convert MHz to Hz
         else:
-            print("Units other than MHz or GHz were used")
+            printError(curr_phase,"Units other than MHz or GHz were used")
             return False, real_start_freq, real_stop_freq #Note returns as string not float
 
         user_stop_freq = stop_freq.split(" ")  # Split the units from the number for start freq
@@ -84,7 +96,7 @@ class VNA_HP8719A:
         elif user_stop_freq[1] == "MHz":
             user_stop_freq[0] = float(user_stop_freq[0]) * 10 ** 6  # Convert MHz to Hz
         else:
-            print("Units other than MHz or GHz were used")
+            printError(curr_phase,"Units other than MHz or GHz were used")
             return False, real_start_freq, real_stop_freq #Note returns as string not float
 
         if float(real_start_freq) - user_start_freq[0] != 0 or float(real_stop_freq) - user_stop_freq[0] != 0:
@@ -96,12 +108,13 @@ class VNA_HP8719A:
 
     #Select the ype of frequency sweep (linear or logarithmic)
     def freq_sweep_type(self):
+        curr_phase = "Running"
         if self.freq_mode == "log":
             self.instrument.write("LOGFREQ")  # Select logarithmic frequency sweep - NOTE: requires at least 2 octave span
         elif self.freq_mode == "lin":
             self.instrument.write("LINFREQ")  # Select linear frequency sweep
         else:
-            print("Entered a non-valid frequency sweep type")
+            printError(curr_phase,"Entered a non-valid frequency sweep type")
             return False
 
     #Collect frequency value at each data point
@@ -122,7 +135,7 @@ class VNA_HP8719A:
             data_db = self.instrument.query("OUTPFORM")  # Output format is a list of form (db, 0)
             end_time = time.perf_counter_ns()
             total_time = (end_time - start_time) / (10 ** 9)
-            print(f"Magnitude data time in s: {total_time}")
+            # print(f"Magnitude data time in s: {total_time}")
         except Exception as e:
             print(e)
             return False
@@ -137,7 +150,7 @@ class VNA_HP8719A:
             data_degree = self.instrument.query("OUTPFORM")  # Output format is a list of form (degrees, 0)
             end_time = time.perf_counter_ns()
             total_time = (end_time - start_time)/(10 ** 9)
-            print(f"Phase data time in s: {total_time}")
+            # print(f"Phase data time in s: {total_time}")
         except Exception as e:
             print(e)
             return False
@@ -146,7 +159,8 @@ class VNA_HP8719A:
     #Collect data for the specified sparam
     def sparam_select(self, sparam):
         # Collect data for selected s-parameter
-        print("Collecting " + sparam + " data...")
+        curr_phase = "Running"
+        printMsg(curr_phase,"Collecting " + sparam + " data...")
         self.instrument.write(sparam)
         # time.sleep(5)
         db = self.logmag_data()
@@ -158,7 +172,7 @@ class VNA_HP8719A:
         # time.sleep(20)
 
         if db is False or degree is False:
-            print("Ran into an error during data collection")
+            printError(curr_phase,"Ran into an error during data collection")
             return [], []
         else:
             #Format the data (convert the raw VNA output to a numpy array):

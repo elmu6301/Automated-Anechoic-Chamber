@@ -24,7 +24,7 @@ def gen_col_names(sparam_list):
         col_names.append('Degrees(S12)')
     if "S21" in sparam_list:
         col_names.append('dB(S21)')
-        col_names.append('Degrees(S12)')
+        col_names.append('Degrees(S21)')
     if "S22" in sparam_list:
         col_names.append('dB(S22)')
         col_names.append('Degrees(S22)')

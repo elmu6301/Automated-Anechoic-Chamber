@@ -127,7 +127,8 @@ def get_config(full_file_name):
         # Check for valid file names
         if plot["dataFileName"].rfind(".") != -1:
             plot["dataFileName"] = plot["dataFileName"][0:plot["dataFileName"].rfind(".")]
-        #plot["dataFileName"] = util.append_date_time_str(plot["dataFileName"])
+        plot["dataFileName"] = util.get_root_path() + "\\data\\" + plot["dataFileName"]
+        plot["dataFileName"] = util.append_date_time_str(plot["dataFileName"])
         # Verify a good plot type
         if plot["plotType"] not in ALLOWED_PLOT_TYPES:
             plot = False

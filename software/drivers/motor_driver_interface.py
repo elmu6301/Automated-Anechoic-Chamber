@@ -69,7 +69,7 @@ def findSystemMotorDrivers():
 
 class MotorDriver:
     def __init__(self, port,
-                 debug=True,#False,
+                 debug=False,
                  baudrate=9600,
                  bytesize=serial.EIGHTBITS,
                  parity=serial.PARITY_NONE,
