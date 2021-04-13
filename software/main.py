@@ -10,6 +10,8 @@ from utils import util
 
 from utils import error_codes
 from utils.calibrate import calibrate
+
+from plotting import plotting as plots
 import time
 
 # Global Variables
@@ -57,23 +59,39 @@ def process_cmd_line():
                       help="Configuration file used to control the system. Must be a JSON file.")
     parser.add_option("-a", "--alignOnly", action="callback", callback=config_run, dest="run_type",
                       help="Only run the alignment routine.")
-    # parser.add_option("-s", "--skipAlign", action="callback", callback=config_run, dest="run_type",
-    #                  help="Skip the alignment routine.")
     parser.add_option("--calibrate", action="store_true", dest="calibrate", default=False,
                       help="Run the calibration interface.")
+    parser.add_option("--plot", action="store_true", dest="plot", default=False,
+                      help="Run the calibration interface.")
+    parser.add_option("--dataFile", type="string", action="store", dest="data_file", default='',
+                      help="Plot option. Input data file to plot")
+    parser.add_option("--plotType", type="string", action="store", dest="plot_type", default='',
+                      help="Plot option. Input data file to plot")
+    parser.add_option("--freq", type="float", action="store", dest="plot_freq", default=0.0,
+                      help="Plot option. Frequency to plot at. Must be in GHz")
+    parser.add_option("--phi", type="float", action="store", dest="plot_phi", default=0.0,
+                      help="Plot option. Test phi angle to plot at. Must be in degrees "
+                           "and between -180 and 180 degrees.")
+    parser.add_option("--theta", type="float", action="store", dest="plot_theta", default=0.0,
+                      help="Plot option. Test theta angle to plot at. Must be in degrees "
+                           "and between -180 and 180 degrees.")
+    parser.add_option("--probPhi", type="float", action="store", dest="plot_p_phi", default=0.0,
+                      help="Plot option. Probe phi angle to plot at. Must be in degrees "
+                           "and between -180 and 180 degrees.")
+    parser.add_option("--sParams", type="string", action="store", dest="sParams", default=0.0,
+                      help="Plot option. S parameters to plot.")
 
     # Check to make sure a config file was entered with the -c
     index = -1
     for i in range(len(sys.argv)):
         if sys.argv[i] == "-c" or sys.argv[i] == "--config":
             index = i + 1
-    # insert default values if needed
+
     if index >= len(sys.argv) or index > 0 and parser.has_option(sys.argv[index]):
         sys.argv.insert(index, None)
 
     # Parse command line
     (options, args) = parser.parse_args()
-
     # Error Checking
     if options.run_type == "e":
         util.printf(curr_phase, "Error", "Cannot simultaneously run the alignment routine only and run the system with out "
@@ -88,7 +106,7 @@ def process_cmd_line():
         parser.print_help()
         return False
 
-    num_modes = int(options.cfg != '') + int(options.run_type == 'a') + int(options.calibrate)
+    num_modes = int(options.cfg != '') + int(options.run_type == 'a') + int(options.calibrate) + int(options.plot)
 
     if num_modes == 0:
         util.printf(curr_phase, "Error", "Cannot configure system as no command lines arguments were inputted."
@@ -104,10 +122,19 @@ def process_cmd_line():
     if options.calibrate:
         options.run_type = "c"
 
+    if options.plot:
+        options.run_type = "p"
+
     if options.cfg != '' and not options.cfg.endswith(".json"):
         util.printf(curr_phase, "Error", f"The configuration file entered '{options.cfg}' is not a JSON file. "
                                     f" See the User Manual for more information on configuration files and "
                                     f"usage for more information on command line options.")
+        parser.print_help()
+        return False
+
+    if options.cfg != '' and not options.cfg.endswith(".json") and options.plot:
+        util.printf(curr_phase, "Error", f"The input data file entered '{options.plotFile}' is not a csv file. "
+                                    f" See usage for more information on command line options.")
         parser.print_help()
         return False
 
@@ -222,6 +249,35 @@ def run_experiments(cmds, meas, calib, plot):
     return True, True, True
 
 
+def plot_data_file(data_file, plot_type, sParams, plot_freq, plot_t_phi, plot_t_theta, plot_p_phi):
+    # Find data file
+    if data_file != '':
+        path = util.get_root_path() + "\\data\\"
+        csv_file_name = path + data_file
+        try:
+            f = open(csv_file_name)
+            f.close()
+        except:
+            util.printf(curr_phase, "Error", f"Could not locate the file '{data_file}'. Ensure that '{data_file}'"
+                                             f" is located in the raw data file repository:\n\t\t'{path}'.")
+            return False
+
+        plot_file_name = csv_file_name[0:len(csv_file_name)-4] + ".jpg"
+        util.printf(curr_phase, None, f"Plotting '{data_file}' now")
+        if plot_type == "3d":
+            plots.plot3DRadPattern(csv_file_name, plot_file_name, sParams, plot_freq)
+        elif plot_type == "cutPhi":
+            plots.plotPhiCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_phi)
+        elif plot_type == "cutTheta":
+            plots.plotThetaCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_theta)
+        else:
+            return False
+        # util.printf(curr_phase, None, f"Found {csv_file_name}...")
+        return True
+    return False
+
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
@@ -235,6 +291,13 @@ if __name__ == '__main__':
         exit(-1)
     cfg = args.cfg
     run_type = args.run_type
+    if run_type == "p":
+
+        print(f"Plotting {args.data_file}")
+        plot_data_file(args.data_file, args.plot_type, args.sParams, args.plot_freq, args.plot_phi, args.plot_theta,
+                       args.plot_p_phi)
+        exit(1)
+
     if run_type == "a":
         util.printf(curr_phase, None, "Running the alignment routine only.")
     # elif run_type == "s":
