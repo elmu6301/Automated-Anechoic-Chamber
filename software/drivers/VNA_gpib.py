@@ -294,7 +294,7 @@ class VNA_HP8719A:
 
 
 def main():
-    import csv_functions as csv
+    import csv_functions as csv_f
     print("Beginning execution of VNA commands")
     print("-----------------------------------")
     num_param_points = 801
@@ -325,8 +325,8 @@ def main():
         data_to_save = np.array(data_out, dtype=object)
         data = np.array([[-1]] * len(col_names))
         # data = data.T
-        csv.createCSV("outFile", col_names, data)
-        csv.appendToCSV("outFile", data_to_save)
+        csv_f.createCSV("outFile", col_names, data)
+        csv_f.appendToCSV("outFile", data_to_save)
         return freq
     else:
         print("Error device not connected")

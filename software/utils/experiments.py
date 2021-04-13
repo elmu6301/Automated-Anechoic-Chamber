@@ -6,8 +6,10 @@ import json
 from drivers.motor_driver_interface import findSystemMotorDrivers, MotorDriver
 from drivers.VNA_gpib import *
 from plotting import csv_functions as csv
+from plotting import plotting as plots
 from utils import error_codes
 from utils import util
+
 
 import time
 import numpy as np
@@ -202,12 +204,15 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         printf('\tPlot settings:')
         base_file_name = plot_args['dataFileName']
         assert type(base_file_name) == str
-        printf('\t\tRaw Data File: %s' % (base_file_name +".csv"))
+        csv_file_name = base_file_name +".csv"
+        plot_file_name = base_file_name +".jpg"
+        printf('\t\tRaw Data File: %s' % (csv_file_name))
+        printf('\t\tPlot File: %s' % (plot_file_name))
 
         plot_type = plot_args['plotType']
         printf('\t\tPlot Type: %s' % (plot_type))
         plot_freq = plot_args['plotTestPhi']
-        printf('\t\tFrequency to Plot: %s GHz' % (plot_freq ))
+        printf('\t\tFrequency to Plot: %s Hz' % (plot_freq ))
 
         plot_t_theta = plot_args['plotTestTheta']
         assert (type(plot_t_theta) == float) and (-180 <= plot_t_theta <= 180)
@@ -244,7 +249,7 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         except:
             pass
     # UNCOMMENT FOR TESTING UI stuff
-    return error_codes.SUCCESS
+    # return error_codes.SUCCESS
 
     # Connect to motor driver PCBs
     printf('Setting up the system...')
@@ -506,6 +511,14 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
     # Elena: plot data here
 
     ##############################################################################
+    if plot_type == "3d":
+        plots.plot3DRadPattern(csv_file_name,plot_file_name,sParam,plot_freq)
+    elif plot_type == "cutPhi":
+        plots.plotPhiCut(csv_file_name,plot_file_name,sParam,plot_freq,plot_t_phi)
+    elif plot_type == "cutTheta":
+        plots.plotThetaCut(csv_file_name, plot_file_name, sParam, plot_freq, plot_t_theta)
+    else:
+        return error_codes.BAD_ARGS
 
     return error_codes.SUCCESS
 

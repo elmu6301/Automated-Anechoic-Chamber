@@ -15,19 +15,19 @@ def printf(phase, flag, msg):
 
 def gen_col_names(sparam_list):
     """ Generates the appropriate column names for the CSV file. """
-    col_names = ['Freq (Hz)', 'Test Phi (deg)', 'Test Theta (deg)', 'Probe Phi (deg)']
+    col_names = ['Frequency', 'Theta', 'Phi', 'Probe Phi']
     if "S11" in sparam_list:
-        col_names.append('S11 (db)')
-        col_names.append('S11 (deg)')
+        col_names.append('dB(S11)')
+        col_names.append('Degrees(S11)')
     if "S12" in sparam_list:
-        col_names.append('S12 (db)')
-        col_names.append('S12 (deg)')
+        col_names.append('dB(S12')
+        col_names.append('Degrees(S12)')
     if "S21" in sparam_list:
-        col_names.append('S21 (db)')
-        col_names.append('S21 (deg)')
+        col_names.append('dB(S21)')
+        col_names.append('Degrees(S12)')
     if "S22" in sparam_list:
-        col_names.append('S22 (db)')
-        col_names.append('S22 (deg)')
+        col_names.append('dB(S22)')
+        col_names.append('Degrees(S22)')
     return col_names
 
 

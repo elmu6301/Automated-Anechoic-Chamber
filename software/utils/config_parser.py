@@ -12,7 +12,7 @@ DEF_ALIGN_TOLERANCE = 10
 DEF_TEST_PHI = 0
 DEF_TEST_THETA = 0
 DEF_PROBE_PHI = 0
-ALLOWED_PLOT_TYPES = ("3D", "3d", "freq")
+ALLOWED_PLOT_TYPES = ("3d", "cutPhi", "cutTheta")
 
 '''
 config_parser.py
