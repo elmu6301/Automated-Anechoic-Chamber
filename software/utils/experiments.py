@@ -207,13 +207,17 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         plot_type = plot_args['plotType']
         printf('\t\tPlot Type: %s' % (plot_type))
         plot_freq = plot_args['plotTestPhi']
+        printf('\t\tFrequency to Plot: %s GHz' % (plot_freq ))
+
         plot_t_theta = plot_args['plotTestTheta']
         assert (type(plot_t_theta) == float) and (-180 <= plot_t_theta <= 180)
+        printf('\t\tTest theta Angle to Plot: %s deg' % (plot_t_theta))
         plot_t_phi = plot_args['plotTestPhi']
         assert (type(plot_t_phi) == float) and (-180 <= plot_t_phi <= 180)
+        printf('\t\tTest phi Angle to Plot: %s deg' % (plot_t_phi))
         plot_p_phi = plot_args['plotProbePhi']
         assert (type(plot_p_phi) == float) and (-180 <= plot_p_phi <= 180)
-
+        printf('\t\tProbe phi Angle to Plot: %s deg' % (plot_p_phi))
 
         # CREATE THE CSV
         # generate the appropriate column names
@@ -240,7 +244,7 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         except:
             pass
     # UNCOMMENT FOR TESTING UI stuff
-    #return error_codes.SUCCESS
+    return error_codes.SUCCESS
 
     # Connect to motor driver PCBs
     printf('Setting up the system...')
@@ -273,7 +277,14 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         startF = "%f GHz" % freq_start
         stopF = "%f GHz" % freq_stop
 
-        VNA.init_freq_sweep(startF, stopF, num_points)
+        res, real_startF, real_stopF = VNA.init_freq_sweep(startF, stopF, num_points)
+
+        if not res:
+            printf(f"\tTried running VNA with start frequency of "
+                   f"{real_startF} GHz and stop frequency of {real_stopF} GHz ")
+            return error_codes.VNA
+        printf(f"\tRunning VNA with start frequency of {real_startF} GHz and stop frequency of {real_stopF} GHz ")
+
 
     except Exception as e:
         print(f"Exception: {e}")
