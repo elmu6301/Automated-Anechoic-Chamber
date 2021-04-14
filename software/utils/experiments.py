@@ -228,14 +228,14 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         # generate the appropriate column names
         col_names = util.gen_col_names(sParams)
         # print(csv_file_name)
-        data = np.array([[-1]] * len(col_names)) # trash data
+        data = np.array([])  # np.array([[-1]] * len(col_names)) # trash data
         csv.createCSV(csv_file_name, col_names, data)
 
 
     except Exception as e:
         print(f"Exception: {e}")
         return error_codes.BAD_ARGS
-        pass
+        # pass
     def disconnect():
         try:
             del Test_MD
@@ -250,7 +250,8 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         except:
             pass
     # UNCOMMENT FOR TESTING UI stuff
-    # return error_codes.SUCCESS
+
+    return error_codes.SUCCESS
 
     # Connect to motor driver PCBs
     printf('Setting up the system...')

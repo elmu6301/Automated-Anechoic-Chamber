@@ -17,8 +17,6 @@ from plotting import csv_functions as csv_f
 import pdb
 
 
-
-
 def plot3DRadPattern(csv_filename,plot_filename,param,frequency):
     #Based on example code: https://stackoverflow.com/questions/36816537/spherical-coordinates-plot-in-matplotlib
     
@@ -45,6 +43,7 @@ def plot3DRadPattern(csv_filename,plot_filename,param,frequency):
     fig.colorbar(plot, shrink=0.5, aspect=5)
     plt.savefig(plot_filename)
     plt.show()
+
 
 def plotThetaCut(csv_filename,plot_filename,param,frequency,theta):
     #Polar plot of selected sparam magnitude at a selected value of theta (and theta + 180 if in data file)
@@ -156,7 +155,7 @@ def plot2DSparamTheta(csv_filename,plot_filename,parameter,phi,frequency):
 
     print("Plotting data stored in: " + filename)
 
-if __name__ == "__main__":
-    plot3DRadPattern('..\\data\\test.csv','..\\data\\test.jpg','S21',1.351000000000000000e+10)
-#plotThetaCut('horn_gregor.csv','ThetaCut.jpg','S21',4.5,0.0)
-#plotPhiCut('horn_gregor.csv','PhiCut.jpg','S21',4.4,90.0)
+# if __name__ == "__main__":
+#     plot3DRadPattern('..\\data\\test.csv','..\\data\\test.jpg','S21',1.351000000000000000e+10)
+# #plotThetaCut('horn_gregor.csv','ThetaCut.jpg','S21',4.5,0.0)
+# #plotPhiCut('horn_gregor.csv','PhiCut.jpg','S21',4.4,90.0)

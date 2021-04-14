@@ -48,37 +48,37 @@ def process_cmd_line():
     """ Processes the command line arguments and sets up the system control variables accordingly"""
 
     # Set up parser
-    parser = OptionParser()
+    opt_parser = OptionParser()
     usage = "usage: ./direcMeasure --config<config_file>"
-    parser.set_usage(usage)
-    parser.set_defaults(run_type="f", verbose=False)
-    parser.prog = "direcMeasure"
+    opt_parser.set_usage(usage)
+    opt_parser.set_defaults(run_type="f", verbose=False)
+    opt_parser.prog = "direcMeasure"
 
     # Add options
-    parser.add_option("-c", "--config", type="string", action="store", dest="cfg", default='',
+    opt_parser.add_option("-c", "--config", type="string", action="store", dest="cfg", default='',
                       help="Configuration file used to control the system. Must be a JSON file.")
-    parser.add_option("-a", "--alignOnly", action="callback", callback=config_run, dest="run_type",
+    opt_parser.add_option("-a", "--alignOnly", action="callback", callback=config_run, dest="run_type",
                       help="Only run the alignment routine.")
-    parser.add_option("--calibrate", action="store_true", dest="calibrate", default=False,
+    opt_parser.add_option("--calibrate", action="store_true", dest="calibrate", default=False,
                       help="Run the calibration interface.")
-    parser.add_option("--plot", action="store_true", dest="plot", default=False,
+    opt_parser.add_option("--plot", action="store_true", dest="plot", default=False,
                       help="Run the calibration interface.")
-    parser.add_option("--dataFile", type="string", action="store", dest="data_file", default='',
+    opt_parser.add_option("--dataFile", type="string", action="store", dest="data_file", default='',
                       help="Plot option. Input data file to plot")
-    parser.add_option("--plotType", type="string", action="store", dest="plot_type", default='',
+    opt_parser.add_option("--plotType", type="string", action="store", dest="plot_type", default='',
                       help="Plot option. Input data file to plot")
-    parser.add_option("--freq", type="float", action="store", dest="plot_freq", default=0.0,
+    opt_parser.add_option("--freq", type="float", action="store", dest="plot_freq", default=0.0,
                       help="Plot option. Frequency to plot at. Must be in GHz")
-    parser.add_option("--phi", type="float", action="store", dest="plot_phi", default=0.0,
+    opt_parser.add_option("--phi", type="float", action="store", dest="plot_phi", default=0.0,
                       help="Plot option. Test phi angle to plot at. Must be in degrees "
                            "and between -180 and 180 degrees.")
-    parser.add_option("--theta", type="float", action="store", dest="plot_theta", default=0.0,
+    opt_parser.add_option("--theta", type="float", action="store", dest="plot_theta", default=0.0,
                       help="Plot option. Test theta angle to plot at. Must be in degrees "
                            "and between -180 and 180 degrees.")
-    parser.add_option("--probPhi", type="float", action="store", dest="plot_p_phi", default=0.0,
+    opt_parser.add_option("--probPhi", type="float", action="store", dest="plot_p_phi", default=0.0,
                       help="Plot option. Probe phi angle to plot at. Must be in degrees "
                            "and between -180 and 180 degrees.")
-    parser.add_option("--sParams", type="string", action="store", dest="sParams", default=0.0,
+    opt_parser.add_option("--sParams", type="string", action="store", dest="sParams", default="S21",
                       help="Plot option. S parameters to plot.")
 
     # Check to make sure a config file was entered with the -c
@@ -87,23 +87,24 @@ def process_cmd_line():
         if sys.argv[i] == "-c" or sys.argv[i] == "--config":
             index = i + 1
 
-    if index >= len(sys.argv) or index > 0 and parser.has_option(sys.argv[index]):
+    if index >= len(sys.argv) or index > 0 and opt_parser.has_option(sys.argv[index]):
         sys.argv.insert(index, None)
 
     # Parse command line
-    (options, args) = parser.parse_args()
+    (options, args) = opt_parser.parse_args()
+    # print(options)
     # Error Checking
     if options.run_type == "e":
         util.printf(curr_phase, "Error", "Cannot simultaneously run the alignment routine only and run the system with out "
                                     "the alignment routine. See usage for more information on command line options.")
-        parser.print_help()
+        opt_parser.print_help()
         return False
 
     # Config file checks
     if options.cfg is None:
         util.printf(curr_phase, "Error", f"Configuration file flag detected but no configuration was detected. See usage "
                                     f"for more information on command line options. ")
-        parser.print_help()
+        opt_parser.print_help()
         return False
 
     num_modes = int(options.cfg != '') + int(options.run_type == 'a') + int(options.calibrate) + int(options.plot)
@@ -111,13 +112,13 @@ def process_cmd_line():
     if num_modes == 0:
         util.printf(curr_phase, "Error", "Cannot configure system as no command lines arguments were inputted."
                                     " See usage for more information on command line options. ")
-        parser.print_help()
+        opt_parser.print_help()
         return False
     if num_modes > 1:
         util.printf(curr_phase, "Error", "Mutually-exclusive options specified. Cannot simultaneously run the "
                                     "calibration routine and the run the full run the system. See usage for more "
                                     "information on command line options.")
-        parser.print_help()
+        opt_parser.print_help()
         return False
     if options.calibrate:
         options.run_type = "c"
@@ -129,13 +130,32 @@ def process_cmd_line():
         util.printf(curr_phase, "Error", f"The configuration file entered '{options.cfg}' is not a JSON file. "
                                     f" See the User Manual for more information on configuration files and "
                                     f"usage for more information on command line options.")
-        parser.print_help()
+        opt_parser.print_help()
         return False
 
-    if options.cfg != '' and not options.cfg.endswith(".json") and options.plot:
-        util.printf(curr_phase, "Error", f"The input data file entered '{options.plotFile}' is not a csv file. "
-                                    f" See usage for more information on command line options.")
-        parser.print_help()
+    if options.plot and (options.data_file == ''):
+        util.printf(curr_phase, "Error", f"Plotting requested but no input data file was entered."
+                                         f" See usage for more information on command line options.")
+        opt_parser.print_help()
+        return False
+
+    if options.plot and (options.data_file == '' or not options.data_file.endswith(".csv")):
+        util.printf(curr_phase, "Error", f"The input data file entered '{options.data_file}' is not a csv file. "
+                                         f" See usage for more information on command line options.")
+        opt_parser.print_help()
+        return False
+
+    if options.plot and options.plot_type == '':
+        util.printf(curr_phase, "Error", f"Plotting requested but no plot type was specified. "
+                                         f" See usage for more information on command line options.")
+        opt_parser.print_help()
+        return False
+
+    if options.plot and options.plot_type not in parser.ALLOWED_PLOT_TYPES:
+        util.printf(curr_phase, "Error", f"Plotting requested but invalid plot type {options.plot_type} was specified. "
+                                         f"Plot type must one of the following {parser.ALLOWED_PLOT_TYPES}"
+                                         f" See usage for more information on command line options.")
+        opt_parser.print_help()
         return False
 
     return options
@@ -263,7 +283,7 @@ def plot_data_file(data_file, plot_type, sParams, plot_freq, plot_t_phi, plot_t_
             return False
 
         plot_file_name = csv_file_name[0:len(csv_file_name)-4] + ".jpg"
-        util.printf(curr_phase, None, f"Plotting '{data_file}' now")
+        util.printf(curr_phase, None, f"Plotting '{data_file}' now to {plot_file_name}")
         if plot_type == "3d":
             plots.plot3DRadPattern(csv_file_name, plot_file_name, sParams, plot_freq)
         elif plot_type == "cutPhi":
