@@ -58,11 +58,10 @@ class MSP430:
                 self.MSP430.read()
             # print(f"Connected to {self.port}")
             # identify if the port is test or probe
-            loc = self.write_to_device(dev_identifier)
+            res, loc = self.write_to_device(dev_identifier)
             if loc == "TEST" or loc == "PROBE":
                 self.devLoc = loc
             else:
-                print(f"Could not identify device location: {loc}")
                 return False
             # Wait for Done Response
             while self.MSP430.in_waiting == 0:
@@ -73,7 +72,7 @@ class MSP430:
 
             # print(f"Device identified as: {loc}")
         except Exception as e:
-            print(f"Could not connect to {self.port} because {e}")
+            # print(f"Could not connect to {self.port} because {e}")
             return False
         return True
 
@@ -102,16 +101,15 @@ class MSP430:
                 try:
                     self.MSP430.write(usb_data)
                 except Exception as e:
-                    print(f"Error: Could not write to the MSP340 because {e}")
-                    return False
+                    # print(f"Error: Could not write to the MSP340 because {e}")
+                    return False, f"Could not write to the MSP340 because {e}"
                 # Wait for ACK or NACK
                 while self.MSP430.in_waiting == 0:
                     pass
                 cmd_received = self.MSP430.readline().decode()
                 if cmd_received != "a\n":
-                    print(
-                        f"Error: Device did not acknowledge command, received {cmd_received[0:len(cmd_received) - 1]}")
-                    return False
+                    e = f"Device did not acknowledge command, received {cmd_received[0:len(cmd_received) - 1]}"
+                    return False, e
 
                 # Wait for Done Response
                 while self.MSP430.in_waiting == 0:
@@ -119,9 +117,11 @@ class MSP430:
                 done_resp = self.MSP430.readline().decode()
                 if done_resp.endswith("\n"):
                     done_resp = done_resp[0:len(done_resp) - 1]
-                return done_resp
-            return False
-        return False
+                if done_resp != data:
+                    return False, done_resp
+                return True, done_resp
+            return False, "Could not write to device because invalid data was entered."
+        return False, "Could not write to device because invalid data was entered."
 
 
 def sort_devices_by(msp430):
@@ -161,9 +161,9 @@ def main():
         msp430s.append(msp430)
 
     for msp430 in msp430s:
-        res = msp430.write_to_device("LED ON")
+        res, msg = msp430.write_to_device("LED ON")
         time.sleep(2)
-        res = msp430.write_to_device("LED OFF")
+        res, msg = msp430.write_to_device("LED OFF")
         msp430.disconnect_from_port()
 
 

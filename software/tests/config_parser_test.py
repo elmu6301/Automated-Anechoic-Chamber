@@ -1,5 +1,5 @@
 import pytest
-from util import config_parser as cfg
+from utils import config_parser as cfg
 import time
 import random
 
