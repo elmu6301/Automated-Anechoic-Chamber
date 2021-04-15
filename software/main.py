@@ -285,11 +285,20 @@ def plot_data_file(data_file, plot_type, sParams, plot_freq, plot_t_phi, plot_t_
         plot_file_name = csv_file_name[0:len(csv_file_name)-4] + ".jpg"
         util.printf(curr_phase, None, f"Plotting '{data_file}' now to {plot_file_name}")
         if plot_type == "3d":
-            plots.plot3DRadPattern(csv_file_name, plot_file_name, sParams, plot_freq)
+            try:
+                plots.plot3DRadPattern(csv_file_name, plot_file_name, sParams, plot_freq)
+            except:
+                return False
         elif plot_type == "cutPhi":
+            # try:
             plots.plotPhiCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_phi)
+            # except:
+            #     return False
         elif plot_type == "cutTheta":
-            plots.plotThetaCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_theta)
+            try:
+                plots.plotThetaCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_theta)
+            except:
+                return False
         else:
             return False
         # util.printf(curr_phase, None, f"Found {csv_file_name}...")
@@ -314,8 +323,10 @@ if __name__ == '__main__':
     if run_type == "p":
 
         print(f"Plotting {args.data_file}")
-        plot_data_file(args.data_file, args.plot_type, args.sParams, args.plot_freq, args.plot_phi, args.plot_theta,
+        res = plot_data_file(args.data_file, args.plot_type, args.sParams, args.plot_freq, args.plot_phi, args.plot_theta,
                        args.plot_p_phi)
+        if not res:
+            util.printf(curr_phase, "Error", f"Could not generate {args.plot_type} plot from '{args.data_file}'.")
         exit(1)
 
     if run_type == "a":
