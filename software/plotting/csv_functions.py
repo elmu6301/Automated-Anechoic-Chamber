@@ -145,12 +145,15 @@ def getPhiCutData(csv_filename, sparam, frequency, phi):
     assert type(sparam) == str
     assert type(frequency) == float
     assert type(phi) == float
+    
+    #frequency = 10e9
 
     freq_raw, theta_raw, phi_raw, params_col_names, param_raw = getRawData(csv_filename, [sparam], dBOnly=True)
-    param_raw = param_raw[0]
-
-    frequency = freq_raw[0]
-    phi = phi_raw[0]
+    param_raw = param_raw[0][0]
+    
+    #frequency = freq_raw[0]
+    #pdb.set_trace()
+    #phi = phi_raw[0]
     # assert frequency in freq_raw
     # assert phi in phi_raw
     # assert max(theta_raw) - min(theta_raw) <= 360
@@ -159,13 +162,21 @@ def getPhiCutData(csv_filename, sparam, frequency, phi):
     theta_values = np.sort(np.unique(theta_raw))
     param_values = np.ndarray(len(theta_values))
 
+    print(theta_values)
+    print('\n\n', param_values)
+
+    #pdb.set_trace()
     for i in range(0, len(theta_values)):
         theta_val = theta_values[i]
         print(theta_val)
+        
         for k in range(0, len(param_raw)):
-            if theta_raw[k] == theta_val and phi_raw[k] == phi and freq_raw[k] == frequency:
+            #pdb.set_trace()
+            if theta_raw[0][k] == theta_val and phi_raw[0][k] == phi and freq_raw[0][k] == frequency:
+                #pdb.set_trace()
                 param_values[i] = param_raw[k]
 
+    #pdb.set_trace()
     return theta_values, param_values
 
 
@@ -260,6 +271,7 @@ def getRawData(csv_filename, sparams, dBOnly=False):
     for i in range(0, len(params_raw_deg)):
         assert len(theta_raw) == len(params_raw_deg[i])
 
+    
     if dBOnly:
         return freq_raw, theta_raw, phi_raw, params_col_names_dB, params_raw_dB
     else:

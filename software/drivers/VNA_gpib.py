@@ -27,6 +27,11 @@ class VNA_HP8719A:
         self.freq_mode = freq_mode
         self.sparam_list = sparam_list
         self.instrument = self.connect_VNA()
+        self.instrument.write('POWE 0')
+        self.instrument.write('AVERON')
+        self.instrument.write('AVERFACT 20')
+        self.instrument.write('S21')
+        self.instrument.write('LOGM')
 
     def connect_VNA(self):
         curr_phase = 'Setup'
@@ -70,6 +75,9 @@ class VNA_HP8719A:
         self.instrument.write("POIN " + str(num_pts)) #Will round up to be one of the following values: 3, 11, 21, 51, 101, 201, 401, 801, 1601
         #NOTE: there is a min freq span for each number of points see operating manual page 52
         self.freq_sweep_type()  # Set the freq sweep mode for all following measurements (lin or log)
+        
+        
+        self.degree = self.instrument.query('OUTPFORM')
 
         #Checking if Start and Stop Freq changed due to selected number of points or log freq sweep
         real_start_freq = self.instrument.query("STAR?") #Ask VNA for set start frequency
@@ -105,6 +113,8 @@ class VNA_HP8719A:
             return True, real_start_freq, real_stop_freq #Note returns as string not float
 
         #Do we care about setting CENTER or SPAN:FULL/SPAN:LINK ?
+        
+        
 
     #Select the ype of frequency sweep (linear or logarithmic)
     def freq_sweep_type(self):
@@ -128,10 +138,14 @@ class VNA_HP8719A:
 
     #Collect logarithmic magnitude data for a frequency sweep
     def logmag_data(self):
-        self.instrument.write("LOGM")  # Set display to log magnitude format
+        #self.instrument.write("LOGM")  # Set display to log magnitude format
         # time.sleep(5)
         try:
             start_time = time.perf_counter_ns()
+            self.instrument.write('AVERREST')
+            time.sleep(2.5)
+            #self.instrument.write('NUMG 20')
+            #self.instrument.query('OPC?')
             data_db = self.instrument.query("OUTPFORM")  # Output format is a list of form (db, 0)
             end_time = time.perf_counter_ns()
             total_time = (end_time - start_time) / (10 ** 9)
@@ -161,14 +175,14 @@ class VNA_HP8719A:
         # Collect data for selected s-parameter
         curr_phase = "Running"
         printMsg(curr_phase,"Collecting " + sparam + " data...")
-        self.instrument.write(sparam)
+        #self.instrument.write(sparam)
         # time.sleep(5)
         db = self.logmag_data()
         # if not db:
         #     print("Error on logmag data collection exiting now ")
         #     return [], []
         # time.sleep(20)
-        degree = self.phase_data()
+        degree = self.degree #self.phase_data()
         # time.sleep(20)
 
         if db is False or degree is False:
@@ -254,7 +268,7 @@ class VNA_HP8719A:
             data_all.insert(0, freq_only)
             col_names.insert(0, "Freq (Hz)")
 
-        self.instrument.write("NOOP")  # No operation + sets operation bit to complete (puts VNA back in listen mode so can use front panel)
+        #self.instrument.write("NOOP")  # No operation + sets operation bit to complete (puts VNA back in listen mode so can use front panel)
 
         #Return a dictionary containing the collected data
         return data_all, col_names
@@ -381,8 +395,8 @@ def plot_main(freq):
     # hp8719a.reset()
     # hp8719a.marker("2 GHz") #Can use to verify values at a freq
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
     # for i in range(0,3):
-    freq = main()
+#    freq = main()
     # freq = 1.000000000000000000e+09
     # plot_main(freq)

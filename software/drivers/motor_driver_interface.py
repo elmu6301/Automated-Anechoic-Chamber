@@ -93,10 +93,12 @@ class MotorDriver:
         return msg[:-1]
     def _rxCmd(self):
         msg = []
-        while (len(msg)==0) or (msg[-1] != CMDDELIM):
-            while self.ser.in_waiting == 0:
-                pass
-            msg.append(self.ser.read().decode('ASCII'))
+        try:
+            while (len(msg)==0) or (msg[-1] != CMDDELIM):
+                while self.ser.in_waiting == 0:
+                    pass
+                msg.append(self.ser.read().decode('ASCII'))
+        finally:
             if self.debug:
                 print(msg)
         msg = ''.join(msg)

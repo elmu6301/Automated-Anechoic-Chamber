@@ -2,6 +2,7 @@
 import pydoc
 import os
 import json
+import pdb
 
 from drivers.motor_driver_interface import findSystemMotorDrivers, MotorDriver
 from drivers.VNA_gpib import *
@@ -205,13 +206,13 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         base_file_name = plot_args['dataFileName']
         assert type(base_file_name) == str
         csv_file_name = base_file_name +".csv"
-        plot_file_name = base_file_name +".jpg"
+        plot_file_name = base_file_name +".pdf"
         printf('\t\tRaw Data File: %s' % (csv_file_name))
         printf('\t\tPlot File: %s' % (plot_file_name))
 
         plot_type = plot_args['plotType']
         printf('\t\tPlot Type: %s' % (plot_type))
-        plot_freq = plot_args['plotTestPhi']
+        plot_freq = plot_args['plotFreq']
         printf('\t\tFrequency to Plot: %s Hz' % (plot_freq ))
 
         plot_t_theta = plot_args['plotTestTheta']
@@ -231,7 +232,6 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         data = np.array([])  # np.array([[-1]] * len(col_names)) # trash data
         csv.createCSV(csv_file_name, col_names, data)
 
-
     except Exception as e:
         print(f"Exception: {e}")
         return error_codes.BAD_ARGS
@@ -250,8 +250,6 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         except:
             pass
     # UNCOMMENT FOR TESTING UI stuff
-
-    return error_codes.SUCCESS
 
     # Connect to motor driver PCBs
     printf('Setting up the system...')
@@ -298,6 +296,7 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         # disconnect()
         return error_codes.VNA
     printf('\t\tDone.')
+    
 
     current_phase = 'Running'
     # Run alignment routine
@@ -358,8 +357,8 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         if Probe_MD.getOrientation('phi', 'aligned') != Probe_MD.getOrientation('phi', 'current'):
             disconnect()
             return error_codes.SUCCESS
-        if (aligned_value < np.mean(ambient_values)) \
-                or ((np.abs(aligned_value - np.mean(ambient_values)) / np.std(ambient_values)) < alignment_tolerance):
+        if ((3.3*aligned_value/4096) < 1):#np.mean(ambient_values)) \
+#                or ((np.abs(aligned_value - np.mean(ambient_values)) / np.std(ambient_values)) < alignment_tolerance):
             disconnect()
             return error_codes.ALIGNMENT
     else:
@@ -535,7 +534,7 @@ def run_sweepPhi(args):
         args['test-theta end'] = test_theta_orientation
         args['test-theta steps'] = 1
         args['probe-phi start'] = probe_phi_orientation
-        args['probe-phi end'] = probe_phi_orientation
+        args['probe-phi end'] = probe_phi_orientationcsv_file_name
         args['probe-phi steps'] = 1
     except:
         return error_codes.BAD_ARGS

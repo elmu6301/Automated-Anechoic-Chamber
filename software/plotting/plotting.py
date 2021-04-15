@@ -10,11 +10,15 @@ Types of plotting supported:
 For all functions in this file we assume theta is the major axis and phi is the minor azimuthal axis
 '''
 
+#import os
+#os.chdir(os.path.join(os.getcwd(), '..'))
+
 import numpy as np
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as axes3d
 from plotting import csv_functions as csv_f
 import pdb
+import os
 
 
 def plot3DRadPattern(csv_filename,plot_filename,param,frequency):
@@ -83,9 +87,12 @@ def plotPhiCut(csv_filename,plot_filename,param,frequency,phi):
     assert type(frequency) == float
     assert type(phi) == float
     
+    csv_filename = os.path.join(os.getcwd(), 'data', csv_filename)
+    print("Plotting data stored in: " + csv_filename)
+    
     print("Plotting data stored in: " + csv_filename)
     theta_vals,param_vals = csv_f.getPhiCutData(csv_filename,param,frequency,phi)
-
+    
     #Convert to radians
     theta_vals *= np.pi/180
 
@@ -112,7 +119,7 @@ def plot2DSparamFrequency(csv_filename,plot_filename,params,theta,phi):
     assert type(theta) == float
     assert type(phi) == float
 
-    print("Plotting data stored in: " + filename)
+    
     freq,params_db,params_db_names,params_deg,names = csv_f.getSparamFrequencyData(csv_filename,params,theta,phi)
 
     fig1 = plt.figure("Figure 1: Magnitude")

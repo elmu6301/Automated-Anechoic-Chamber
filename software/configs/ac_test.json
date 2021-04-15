@@ -11,7 +11,7 @@
   "plot": {
     "dataFileName": "test.txt",
     "plotType": "cutPhi",
-    "plotFreq": "6.85 GHz",
+    "plotFreq": "10GHz",
     "plotTestPhi": 0,
     "plotTestTheta": 100,
     "plotProbePhi": 0
@@ -28,8 +28,8 @@
       "startProbePhi": 0,
       "endProbePhi": 0,
       "stepsProbePhi": 1,
-      "startFrequency": "200MHz",
-      "stopFrequency": "20GHz",
+      "startFrequency": "10GHz",
+      "stopFrequency": "11GHz",
       "numPoints": 3
     }
   ]
