@@ -1,97 +1,368 @@
 import sys
 import getopt
-from drivers import MSP430_usb as usb
-from util import config_parser as parser
 import json
+from optparse import OptionParser
+import pdb
 
+# Custom Modules
+from utils import config_parser as parser
+from utils import experiments as expt
+from utils import util
 
-def print_menu():
-    print("~~~~~~~~~Menu~~~~~~~~~~")
-    print("'o' : set orientation")
-    print("'w' : write data")
-    print("'h' : get help")
-    print("'q' : quit")
+from utils import error_codes
+from utils.calibrate import calibrate
+
+from plotting import plotting as plots
+import time
+
+# Global Variables
+curr_phase = "Setup"
+mode = "Debug"
 
 
 def print_usage():
     print("\tDirecMeasure Usage")
     print("\t\t- Run with laser alignment: main.py -c <configfile>")
     print("\t\t- Run without laser alignment: main.py -c <configfile> -l")
+    print("\t\t- Calibrate the system: main.py --calibrate")
 
 
 def print_welcome_sign():
+    """ Prints the welcome sign"""
     print("\n  ********************************************************")
-    print("  *             Welcome to direcMeasure v0.0             *")
+    print("  *             Welcome to direcMeasure v1.0             *")
     print("  ********************************************************\n")
 
 
-def process_cmd_line(argv):
-    # Get all options and their arguments
-    try:
-        opts, args = getopt.gnu_getopt(argv, "hlc:")
-    except getopt.GetoptError as err:
-        print("Error: Invalid command line input entered...")
-        print_usage()
-        sys.exit()
-    config = ''
-    # Parse all options
-    for opt, arg in opts:
-        # Check to see if the user needs help
-        if opt == "-h":
-            print_usage()
-            sys.exit()
-        # Check to see if
-        elif opt == '-c':
-            config = arg
-            if config == '' or config is None:
-                print("Error: No config file detected...")
-                sys.exit()
-            elif config.endswith(".json") is False:
-                print("Error: Config file must be a json file...")
-                sys.exit()
-            print(f"Opening {config}...")
-        # Run the system without
-        elif opt == '-l':
-            print("Running direcMeasure without laser alignment...")
+def config_run(option, opt, value, parser):
+    """ Used to set the run_type variable from the command line arguments"""
+    if parser.values.run_type == "f":
+        if (opt == '-a') or (opt == '--alignOnly'):
+            parser.values.run_type = 'a'
+        elif (opt == '-c') or (opt == '--config'):
+            parser.values.run_type = 'f'
+    else:
+        parser.values.run_type = "e"
+
+
+def process_cmd_line():
+    """ Processes the command line arguments and sets up the system control variables accordingly"""
+
+    # Set up parser
+    opt_parser = OptionParser()
+    usage = "usage: ./direcMeasure --config<config_file>"
+    opt_parser.set_usage(usage)
+    opt_parser.set_defaults(run_type="f", verbose=False)
+    opt_parser.prog = "direcMeasure"
+
+    # Add options
+    opt_parser.add_option("-c", "--config", type="string", action="store", dest="cfg", default='',
+                      help="Configuration file used to control the system. Must be a JSON file.")
+    opt_parser.add_option("-a", "--alignOnly", action="callback", callback=config_run, dest="run_type",
+                      help="Only run the alignment routine.")
+    opt_parser.add_option("--calibrate", action="store_true", dest="calibrate", default=False,
+                      help="Run the calibration interface.")
+    opt_parser.add_option("--plot", action="store_true", dest="plot", default=False,
+                      help="Run the calibration interface.")
+    opt_parser.add_option("--dataFile", type="string", action="store", dest="data_file", default='',
+                      help="Plot option. Input data file to plot")
+    opt_parser.add_option("--plotType", type="string", action="store", dest="plot_type", default='',
+                      help="Plot option. Input data file to plot")
+    opt_parser.add_option("--freq", type="float", action="store", dest="plot_freq", default=0.0,
+                      help="Plot option. Frequency to plot at. Must be in GHz")
+    opt_parser.add_option("--phi", type="float", action="store", dest="plot_phi", default=0.0,
+                      help="Plot option. Test phi angle to plot at. Must be in degrees "
+                           "and between -180 and 180 degrees.")
+    opt_parser.add_option("--theta", type="float", action="store", dest="plot_theta", default=0.0,
+                      help="Plot option. Test theta angle to plot at. Must be in degrees "
+                           "and between -180 and 180 degrees.")
+    opt_parser.add_option("--probPhi", type="float", action="store", dest="plot_p_phi", default=0.0,
+                      help="Plot option. Probe phi angle to plot at. Must be in degrees "
+                           "and between -180 and 180 degrees.")
+    opt_parser.add_option("--sParams", type="string", action="store", dest="sParams", default="S21",
+                      help="Plot option. S parameters to plot.")
+
+    # Check to make sure a config file was entered with the -c
+    index = -1
+    for i in range(len(sys.argv)):
+        if sys.argv[i] == "-c" or sys.argv[i] == "--config":
+            index = i + 1
+
+    if index >= len(sys.argv) or index > 0 and opt_parser.has_option(sys.argv[index]):
+        sys.argv.insert(index, None)
+
+    # Parse command line
+    (options, args) = opt_parser.parse_args()
+    # print(options)
+    # Error Checking
+    if options.run_type == "e":
+        util.printf(curr_phase, "Error", "Cannot simultaneously run the alignment routine only and run the system with out "
+                                    "the alignment routine. See usage for more information on command line options.")
+        opt_parser.print_help()
+        return False
+
+    # Config file checks
+    if options.cfg is None:
+        util.printf(curr_phase, "Error", f"Configuration file flag detected but no configuration was detected. See usage "
+                                    f"for more information on command line options. ")
+        opt_parser.print_help()
+        return False
+
+    num_modes = int(options.cfg != '') + int(options.run_type == 'a') + int(options.calibrate) + int(options.plot)
+
+    if num_modes == 0:
+        util.printf(curr_phase, "Error", "Cannot configure system as no command lines arguments were inputted."
+                                    " See usage for more information on command line options. ")
+        opt_parser.print_help()
+        return False
+    if num_modes > 1:
+        util.printf(curr_phase, "Error", "Mutually-exclusive options specified. Cannot simultaneously run the "
+                                    "calibration routine and the run the full run the system. See usage for more "
+                                    "information on command line options.")
+        opt_parser.print_help()
+        return False
+    if options.calibrate:
+        options.run_type = "c"
+
+    if options.plot:
+        options.run_type = "p"
+
+    if options.cfg != '' and not options.cfg.endswith(".json"):
+        util.printf(curr_phase, "Error", f"The configuration file entered '{options.cfg}' is not a JSON file. "
+                                    f" See the User Manual for more information on configuration files and "
+                                    f"usage for more information on command line options.")
+        opt_parser.print_help()
+        return False
+
+    if options.plot and (options.data_file == ''):
+        util.printf(curr_phase, "Error", f"Plotting requested but no input data file was entered."
+                                         f" See usage for more information on command line options.")
+        opt_parser.print_help()
+        return False
+
+    if options.plot and (options.data_file == '' or not options.data_file.endswith(".csv")):
+        util.printf(curr_phase, "Error", f"The input data file entered '{options.data_file}' is not a csv file. "
+                                         f" See usage for more information on command line options.")
+        opt_parser.print_help()
+        return False
+
+    if options.plot and options.plot_type == '':
+        util.printf(curr_phase, "Error", f"Plotting requested but no plot type was specified. "
+                                         f" See usage for more information on command line options.")
+        opt_parser.print_help()
+        return False
+
+    if options.plot and options.plot_type not in parser.ALLOWED_PLOT_TYPES:
+        util.printf(curr_phase, "Error", f"Plotting requested but invalid plot type {options.plot_type} was specified. "
+                                         f"Plot type must one of the following {parser.ALLOWED_PLOT_TYPES}"
+                                         f" See usage for more information on command line options.")
+        opt_parser.print_help()
+        return False
+
+    return options
+
+
+def process_config(config_name):
+    """ Parses the configuration file and generates the appropriate commands. """
+    if config_name != '' and config_name is not None:
+        # Find Config
+        util.printf(curr_phase, None, f"Starting configuration file parsing process on {config_name}...")
+        full_cfg_name = parser.find_config(config_name)
+        if not full_cfg_name:
+            util.printf(curr_phase, "Error", f"Could not locate the file '{config_name}'. Ensure that '{config_name}'"
+                                        f" is located in the configuration file repository:\n\t\t "
+                                        f"'{util.get_root_path() + parser.config_base}'.")
+            return False
+        # Get flow and meas config from the configuration file
+        flow, meas, calib, plot = parser.get_config(full_cfg_name)
+        errors = 0
+        if not flow:
+            util.printf(curr_phase, "Error", f"Could not read in data from '{config_name}'. Ensure that the 'flow' section"
+                                        f" in '{config_name}' is correctly formatted. See the User Manual for details.")
+            errors += 1
+        if not meas:
+            util.printf(curr_phase, "Error", f"Could not read in data from '{config_name}'. Ensure that the 'meas' section"
+                                        f" in '{config_name}' is correctly formatted. See the User Manual for details.")
+            errors += 1
+        if not calib:
+            util.printf(curr_phase, "Error", f"Could not read in data from '{config_name}'. Ensure that the 'calibrate' "
+                                        f"section in '{config_name}' is correctly formatted. "
+                                        f"See the User Manual for details.")
+            errors += 1
+        if not plot:
+            util.printf(curr_phase, "Error", f"Could not read in data from '{config_name}'. Ensure that the 'plot' section"
+                                        f" in '{config_name}' is correctly formatted. See the User Manual for details.")
+            errors += 1
+        if errors != 0:
+            return False
+
+        # Generate commands
+        cmds = parser.gen_expt_cmds(flow)
+        if not cmds:
+            util.printf(curr_phase, "Error", f"Could not generate experiment commands from '{config_name}'.")
+            return False
+        util.printf(curr_phase, None, f"Successfully generated experiment commands from '{config_name}'.")
+        return {"cmds": cmds, "meas": meas, "calib": calib, "plot": plot}
+    else:
+        util.printf(curr_phase, "Error", f"No configuration file was passed in, could not generate experiment commands.")
+        return False
+
+
+def handle_error_code(error_code):
+    if error_code == error_codes.SUCCESS:  # routine finished without issues
+        util.printf(curr_phase, None, "Successfully ran routine without issues. ")
+    elif error_code == error_codes.CONNECTION:  # could not find any connected motor driver PCBs
+        util.printf(curr_phase, "Error", "No USB devices connected. Ensure the test-side and probe-side devices"
+                                         " are connected and powered on. ")
+    elif error_code == error_codes.CONNECTION_PROBE:  # could not find a probe motor driver PCB
+        util.printf(curr_phase, "Error", "Detected device on test-side. No probe-side USB devices connected."
+                                         " Ensure the probe-side device is connected and powered on. ")
+    elif error_code == error_codes.CONNECTION_TEST:  # could not find a test motor driver PCB
+        util.printf(curr_phase, "Error", "Detected device on probe-side. No test-side USB devices connected."
+                                         " Ensure the test-side device is connected and powered on. ")
+    elif error_code == error_codes.DISTINCT_IDS:  # detected two motor driver PCBs, but they were both configured as test or probe
+        util.printf(curr_phase, "Error", "USB devices must be of different types. Ensure that the test-side device is"
+                                         " set to TX and that the probe-side device is set to RX.")
+    elif error_code == error_codes.VNA:  # could not connect to VNA
+        util.printf(curr_phase, "Error", "No GPIB devices connected. Ensure the VNA is connected and powered on. ")
+    elif error_code == error_codes.TEST_THETA_FAULT:  # test-theta motor fault
+        util.printf(curr_phase, "Error", "Motor driver fault detected on the test-side theta motor. Ensure"
+                                         " that the theta motor driver is properly connected to the test-side device.")
+    elif error_code == error_codes.TEST_PHI_FAULT:  # test-phi motor fault
+        util.printf(curr_phase, "Error", "Motor driver fault detected on the test-side phi motor. Ensure"
+                                         " that the phi motor driver is properly connected to the test-side device.")
+    elif error_code == error_codes.PROBE_PHI_FAULT:  # probe-phi motor fault
+        util.printf(curr_phase, "Error", "Motor driver fault detected on the probe-side phi motor. Ensure"
+                                         " that the phi motor driver is properly connected to the probe-side device.")
+    elif error_code == error_codes.ALIGNMENT:  # alignment routine failed
+        util.printf(curr_phase, "Error", "Alignment error detected. System could not be aligned. Try running the"
+                                         " calibration routine to ensure proper alignment. ")
+    elif error_code == error_codes.BAD_ARGS:  # routine was called with invalid arguments
+        util.printf(curr_phase, "Error", "Unable to run routine as invalid arguments were entered.")
+    elif error_code == error_codes.MISC:  # issue not listed above
+        util.printf(curr_phase, "Error", "An unknown error has occurred.")
+    else:
+        assert False
+
+
+def run_experiments(cmds, meas, calib, plot):
+    """ Runs the experiments in cmds."""
+    for sub_expt in cmds:
+        # Split cmds into usable pieces
+        expt_type = sub_expt['experiment type']
+
+        # Run the appropriate function for the sub-experiment
+        if expt_type == "sweepFreq":
+            util.printf(curr_phase, "Debug", f"Running Type: {expt_type}")
+            # print(sub_expt)
+            error_code = expt.run_sweepFreq(sub_expt, meas, calib, plot)
+        elif expt_type == "sweepPhi":
+            util.printf(curr_phase, "Debug", f"Running Type: {expt_type}")
+            error_code = expt.run_sweepPhi(sub_expt)
+        elif expt_type == "sweepTheta":
+            util.printf(curr_phase, "Debug", f"Running Type: {expt_type}")
+            error_code = expt.run_sweepTheta(sub_expt)
+        else:
+            util.printf(curr_phase, "Error", f"Could not run experiment of type '{expt_type}'")
+            return False, expt_type
+        handle_error_code(error_code)
+
+    return True, True, True
+
+
+def plot_data_file(data_file, plot_type, sParams, plot_freq, plot_t_phi, plot_t_theta, plot_p_phi):
+    # Find data file
+    if data_file != '':
+        path = util.get_root_path() + "\\data\\"
+        csv_file_name = path + data_file
+        try:
+            f = open(csv_file_name)
+            f.close()
+        except:
+            util.printf(curr_phase, "Error", f"Could not locate the file '{data_file}'. Ensure that '{data_file}'"
+                                             f" is located in the raw data file repository:\n\t\t'{path}'.")
+            return False
+
+        plot_file_name = csv_file_name[0:len(csv_file_name)-4] + ".jpg"
+        util.printf(curr_phase, None, f"Plotting '{data_file}' now to {plot_file_name}")
+        if plot_type == "3d":
+            try:
+                plots.plot3DRadPattern(csv_file_name, plot_file_name, sParams, plot_freq)
+            except:
+                return False
+        elif plot_type == "cutPhi":
+            try:
+                plots.plotPhiCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_phi)
+            except:
+                return False
+        elif plot_type == "cutTheta":
+            try:
+                plots.plotThetaCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_theta)
+            except:
+                return False
+        else:
+            return False
+        # util.printf(curr_phase, None, f"Found {csv_file_name}...")
+        return True
+    return False
+
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+
     print_welcome_sign()
-    print_usage()
-    process_cmd_line(sys.argv[1:])
+    # Setup Phase
+    # util.printf(curr_phase, None, "Setting up system...")
 
-    print("\nStarting device connection process")
-    active = True
-    port = input("MSP430 COM port: ")
-    msp430 = usb.MSP430(port, open=False)
-    port_conn = msp430.connect_to_port()
+    # Process Command Line
+    args = process_cmd_line()
+    if not args:
+        exit(-1)
+    cfg = args.cfg
+    run_type = args.run_type
+    if run_type == "p":
 
-    while not port_conn:
-        print(f"Unable to connect to {port} try a different port or entering port like: COMXX")
-        port = input("MSP430 COM port: ")
-        msp430.port = port
-        port_conn = msp430.connect_to_port()
+        print(f"Plotting {args.data_file}")
+        res = plot_data_file(args.data_file, args.plot_type, args.sParams, args.plot_freq, args.plot_phi, args.plot_theta,
+                       args.plot_p_phi)
+        if not res:
+            util.printf(curr_phase, "Error", f"Could not generate {args.plot_type} plot from '{args.data_file}'.")
+        exit(1)
 
-    print_menu()
-    while active:
-        action = input("--> ")
-        if action == 'o':
-            phi = input("phi: ")
-            theta = input("theta: ")
-            print(f"Sending {phi, theta} to device...")
-        elif action == 'w':
-            data = input("data: ")
-            res = msp430.write_to_device(data)
-            if res == 'NACK\n':
-                print("Data transfer was not successful!")
-            else:
-                print("Data transfer was successful!")
-        elif action == 'h':
-            print_menu()
-        elif action == 'q':
-            print(f"Closing port {port}")
-            msp430.disconnect_from_port()
-            active = False
-        else:
-            print("Command not recognized. Enter 'h' for help")
+    if run_type == "a":
+        util.printf(curr_phase, None, "Running the alignment routine only.")
+    # elif run_type == "s":
+    #    util.printf(curr_phase, "Debug", "Skipping the alignment routine.")
+    elif run_type == "c":
+        util.printf(curr_phase, "Debug", "Starting the calibration interface.")
+    sys_cmds = False
+    # Process Configuration File if running the entire system
+    if run_type in ("f"):  # , "s"):
+        sys_cmds = process_config(cfg)
+        if not sys_cmds:
+            exit(-1)
+        # parser.print_cmds(sys_cmds) # Print out the commands
+        # exit(1)
+    # Start execution/running phase
+    curr_phase = "Running"
+    if run_type in ("f"):  # , "s"):
+        # Start Running the experiments
+        res = run_experiments(sys_cmds['cmds'], sys_cmds['meas'], sys_cmds['calib'], sys_cmds['plot'])
+        # if res[0] is False:
+        #     util.printf(curr_phase, "Error", f"Issue executing {res[1]} received {res[2]} instead.")
+    elif run_type == "c":
+        time.sleep(1)
+        error_code = calibrate()
+        handle_error_code(error_code)
+    elif run_type == 'a':
+        error_code = expt.run_Align()
+        handle_error_code(error_code)
+
+    # Shutdown Phase
+    # curr_phase = "Shutdown"
+    # print()
+    # util.printf(curr_phase, None, "Closing down system...")
+    # util.printf(curr_phase, None, "Successfully closed down system...")
+
+    exit(1)

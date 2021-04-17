@@ -1,0 +1,36 @@
+{
+  "meas": {
+    "deviceAddress": 16,
+    "freqSweepMode": "lin",
+    "sParams": "S21"
+  },
+  "calibrate": {
+    "align": "False",
+    "alignTolerance": 10
+  },
+  "plot": {
+    "dataFileName": "test.txt",
+    "plotType": "cutPhi",
+    "plotFreq": "10GHz",
+    "plotTestPhi": 0,
+    "plotTestTheta": 100,
+    "plotProbePhi": 0
+  },
+  "flow": [
+    {
+      "expType": "sweepFreq",
+      "startTestTheta": 0,
+      "endTestTheta": 0,
+      "stepsTestTheta": 20,
+      "startTestPhi": 0,
+      "endTestPhi": 0,
+      "stepsTestPhi": 1,
+      "startProbePhi": 0,
+      "endProbePhi": 0,
+      "stepsProbePhi": 1,
+      "startFrequency": "10GHz",
+      "stopFrequency": "11GHz",
+      "numPoints": 3
+    }
+  ]
+}
