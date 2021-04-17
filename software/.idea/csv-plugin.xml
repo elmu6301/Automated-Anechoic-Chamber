@@ -59,6 +59,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\utils\error_codes.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\utils\experiments.py">
           <value>
             <Attribute>

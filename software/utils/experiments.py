@@ -202,6 +202,11 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         assert type(freq_stop) == float
         printf('\t\tStop frequency: %f GHz' % (freq_stop))
 
+        num_octaves = util.calc_num_octaves(freq_start, freq_stop)
+        if freq_sweep_type == "log" and num_octaves <= 2:
+            return error_codes.VNA_LOGFREQ_OCTAVE
+
+
         printf('\tPlot settings:')
         base_file_name = plot_args['dataFileName']
         assert type(base_file_name) == str
@@ -251,6 +256,27 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
             pass
     # UNCOMMENT FOR TESTING UI stuff
 
+    printf('\tConnecting to VNA...')
+    VNA = ""
+    try:
+        # Connect to VNA and configure it
+        VNA = VNA_HP8719A(sparam_list=sParams, address=vna_address, freq_mode=freq_sweep_type)
+        if not VNA.instrument:
+            return error_codes.VNA
+        # Configure start and stop frequency
+        startF = "%f GHz" % freq_start
+        stopF = "%f GHz" % freq_stop
+
+        res, real_startF, real_stopF = VNA.init_freq_sweep(startF, stopF, num_points)
+        print(f"Real start Frequency: {real_startF}Hz\nReal stop Frequency: {real_stopF} Hz")
+        print(f"res = {res}")
+    except Exception as e:
+        print(f"Exception: {e}")
+        # disconnect()
+        return error_codes.VNA
+    printf('\t\tDone.')
+    return error_codes.SUCCESS
+
     # Connect to motor driver PCBs
     printf('Setting up the system...')
     printf('\tDetecting motor drivers...')
@@ -283,7 +309,7 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         stopF = "%f GHz" % freq_stop
 
         res, real_startF, real_stopF = VNA.init_freq_sweep(startF, stopF, num_points)
-
+        print()
         # if not res:
         #     printf(f"\tTried running VNA with start frequency of "
         #            f"{real_startF} GHz and stop frequency of {real_stopF} GHz ")

@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+import math
 
 
 root_base = "software"
@@ -52,3 +53,6 @@ def append_date_time_str(file_name):
         return file_name
     else:
         return False
+
+def calc_num_octaves(startFreq, stopFreq):
+    return math.log(stopFreq,2) / math.log(startFreq,2)

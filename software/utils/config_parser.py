@@ -141,8 +141,6 @@ def get_config(full_file_name):
             plot["plotFreq"] = 1e9 * float(plot["plotFreq"][:-3])
         else:
            plot = False
-           
-        
 
         plot.setdefault("plotTestPhi", DEF_TEST_PHI)
         plot.setdefault("plotTestTheta", DEF_TEST_THETA)

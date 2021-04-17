@@ -241,6 +241,9 @@ def handle_error_code(error_code):
         util.printf(curr_phase, "Error", "Unable to run routine as invalid arguments were entered.")
     elif error_code == error_codes.MISC:  # issue not listed above
         util.printf(curr_phase, "Error", "An unknown error has occurred.")
+    elif error_code == error_codes.VNA_LOGFREQ_OCTAVE:  # issue not listed above
+        util.printf(curr_phase, "Error", "Cannot run GPIB device in logarithmic mode as the start and stop frequencies"
+                                         " are not 2 octaves apart. See the User Manual for more information.")
     else:
         assert False
 
