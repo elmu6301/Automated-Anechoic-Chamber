@@ -1,0 +1,46 @@
+Instructions for installing the Automated Anechoic Chamber virtual environment.
+
+Assumptions: A version of Python 3 and pip have been installed on the host computer,
+and the Automated-Anechoic-Chamber repository has been copied onto the host computer
+
+1. If the virtualenv package is not already installed, install it by running
+>pip install virtualenv
+
+2. Make a directory called "Environments" (it can be named anything, but "Environments"
+is a good descriptor) somewhere on your file system. This is where all virtual 
+environments should be saved.
+
+3. Navigate to the "\Environments" directory via command line.
+
+4. Create the AAC virtual environment by running
+>py -m venv AAC
+
+5. Step 4 only create the environment. To activate the environment so that all calls
+to python programs reference the libraries installed within the environment, run
+>.\AAC\Scripts\activate
+
+6. After step 5, the AAC virtual environment should be active. To check that this is
+the case, verify the prescence of "(AAC)" to the left of your command line.
+
+7. Navigate via command line to the "\Automated-Anechoic-Chamber" directory.
+
+8. The "\Automated-Anechoic-Chamber" directory should contain a file named 
+"requirements.txt". This file contains information about the libraries that need to
+be installed for the measurement system to run. To install all libraries in the AAC
+virtual environment, run
+>pip install -r requirements.txt
+
+9. Now the virtual environment should be set up! You should be able to run the user
+interface by navigating to the "\Automated-Anechoic-Chamber\software" directory and
+running
+>python main.py -h
+
+Note on virtual environments: Setting up the AAC virtual environment guarantees that 
+the AAC measurement system will work regardless of updates to the libraries it calls
+upon, so long as the AAC virtual environment is activated. To run a different project
+in a different environment (or in the main python environment), the AAC virtual 
+environment can be deactivated by simply running 
+>deactivate
+To reacivate the AAC virtual environment, navigate to the "\Environments" directory
+and run 
+>.\AAC\Scripts\activate
