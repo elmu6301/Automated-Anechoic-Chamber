@@ -33,6 +33,18 @@ class VNA_HP8719A:
         self.instrument.write('S21')
         self.instrument.write('LOGM')
 
+    def __exit__(self):
+        if getattr(self,'instrument'):
+            self.instrument.before_close()
+            self.instrument.clear()
+            self.instrument.close()
+
+    def __del__(self):
+        if getattr(self, 'instrument'):
+            self.instrument.before_close()
+            self.instrument.clear()
+            self.instrument.close()
+
     def connect_VNA(self):
         curr_phase = 'Setup'
         rm = pyvisa.ResourceManager()  # Download https://www.keysight.com/main/software.jspx?id=2175637&pageMode=CV&cc=US&lc=eng
@@ -69,16 +81,14 @@ class VNA_HP8719A:
     # Also sets number of points and lin vs log freq sweep type
     def init_freq_sweep(self, start_freq, stop_freq, num_pts):
         curr_phase = 'Running'
-        printMsg(curr_phase, "Setting frequency range from " + start_freq + " to " + stop_freq + " with " + str(
-            num_pts) + " points")
-        self.instrument.write("STAR " + start_freq)
-        self.instrument.write("STOP " + stop_freq)
-        self.instrument.write("POIN " + str(
-            num_pts))  # Will round up to be one of the following values: 3, 11, 21, 51, 101, 201, 401, 801, 1601
+
+        self.instrument.write("STAR " + str(start_freq) +" GHz")
+        self.instrument.write("STOP " + str(stop_freq) +" GHz")
+        self.instrument.write("POIN " + str(num_pts))  # Will round up to be one of the following values: 3, 11, 21, 51, 101, 201, 401, 801, 1601
         # NOTE: there is a min freq span for each number of points see operating manual page 52
         self.freq_sweep_type()  # Set the freq sweep mode for all following measurements (lin or log)
 
-        self.degree = self.instrument.query('OUTPFORM')
+        # self.degree = self.instrument.query('OUTPFORM')
 
         # Checking if Start and Stop Freq changed due to selected number of points or log freq sweep
         real_start_freq = self.instrument.query("STAR?")  # Ask VNA for set start frequency
@@ -91,25 +101,9 @@ class VNA_HP8719A:
             printError(curr_phase, "You need > 2 octaves in span to run a logarithmic frequency sweep")
             return False, real_start_freq, real_stop_freq
 
-        user_start_freq = start_freq.split(" ")  # Split the units from the number for start freq
-        if user_start_freq[1] == "GHz":
-            user_start_freq[0] = float(user_start_freq[0]) * 10 ** 9  # Convert from GHz to Hz
-        elif user_start_freq[1] == "MHz":
-            user_start_freq[0] = float(user_start_freq[0]) * 10 ** 6  # Convert MHz to Hz
-        else:
-            printError(curr_phase, "Units other than MHz or GHz were used")
-            return False, real_start_freq, real_stop_freq  # Note returns as string not float
-
-        user_stop_freq = stop_freq.split(" ")  # Split the units from the number for start freq
-        if user_stop_freq[1] == "GHz":
-            user_stop_freq[0] = float(user_stop_freq[0]) * 10 ** 9  # Convert from GHz to Hz
-        elif user_stop_freq[1] == "MHz":
-            user_stop_freq[0] = float(user_stop_freq[0]) * 10 ** 6  # Convert MHz to Hz
-        else:
-            printError(curr_phase, "Units other than MHz or GHz were used")
-            return False, real_start_freq, real_stop_freq  # Note returns as string not float
-
-        if float(real_start_freq) - user_start_freq[0] != 0 or float(real_stop_freq) - user_stop_freq[0] != 0:
+        start_freq *= 1e9
+        stop_freq *= 1e9
+        if float(real_start_freq) - float(start_freq) != 0 or float(real_stop_freq) - float(stop_freq) != 0:
             return False, real_start_freq, real_stop_freq  # Note returns as string not float
         else:
             return True, real_start_freq, real_stop_freq  # Note returns as string not float

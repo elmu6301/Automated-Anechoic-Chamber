@@ -10,4 +10,5 @@ PROBE_PHI_FAULT    = 8  # Fault signal from probe-phi motor
 ALIGNMENT          = 9  # Alignment routine was not successful
 BAD_ARGS           = 10 # Invalid arguments passed to routine
 MISC               = 11 # Error other than those specified above
-VNA_LOGFREQ_OCTAVE = 12 #
+VNA_LOGFREQ_OCTAVE = 12 # In log mode frequencies is not greater than
+VNA_FREQ_MISMATCH  = 13 # Requested frequencies don't match actual ones

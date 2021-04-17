@@ -241,9 +241,14 @@ def handle_error_code(error_code):
         util.printf(curr_phase, "Error", "Unable to run routine as invalid arguments were entered.")
     elif error_code == error_codes.MISC:  # issue not listed above
         util.printf(curr_phase, "Error", "An unknown error has occurred.")
-    elif error_code == error_codes.VNA_LOGFREQ_OCTAVE:  # issue not listed above
+    elif error_code == error_codes.VNA_LOGFREQ_OCTAVE:  #
         util.printf(curr_phase, "Error", "Cannot run GPIB device in logarithmic mode as the start and stop frequencies"
                                          " are not 2 octaves apart. See the User Manual for more information.")
+    elif error_code == error_codes.VNA_FREQ_MISMATCH:  #
+        util.printf(curr_phase, "Error", "Cannot run GPIB device with the current settings. The passed in start and "
+                                         "stop frequencies does not match the frequencies used by the device due to "
+                                         "the internal configuration settings of the device. See the User Manual"
+                                         " for more information.")
     else:
         assert False
 

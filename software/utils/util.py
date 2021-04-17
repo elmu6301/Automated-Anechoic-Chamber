@@ -55,4 +55,4 @@ def append_date_time_str(file_name):
         return False
 
 def calc_num_octaves(startFreq, stopFreq):
-    return math.log(stopFreq,2) / math.log(startFreq,2)
+    return math.log(stopFreq/startFreq,2)  #- math.log(startFreq,2)

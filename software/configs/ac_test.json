@@ -28,9 +28,9 @@
       "startProbePhi": 0,
       "endProbePhi": 0,
       "stepsProbePhi": 1,
-      "startFrequency": "10GHz",
-      "stopFrequency": "11GHz",
-      "numPoints": 3
+      "startFrequency": "1GHz",
+      "stopFrequency": "4.5GHz",
+      "numPoints": 1601
     }
   ]
 }
