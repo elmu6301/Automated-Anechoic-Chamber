@@ -1,8 +1,8 @@
 {
   "meas": {
     "deviceAddress": 16,
-    "freqSweepMode": "log",
-    "sParams": "S21"
+    "freqSweepMode": "lin",
+    "sParams": "S11, S12, S21, S22"
   },
   "calibrate": {
     "align": "False",
@@ -28,9 +28,9 @@
       "startProbePhi": 0,
       "endProbePhi": 0,
       "stepsProbePhi": 1,
-      "startFrequency": "1GHz",
-      "stopFrequency": "4.5GHz",
-      "numPoints": 1601
+      "startFrequency": "10GHz",
+      "stopFrequency": "11GHz",
+      "numPoints": 11
     }
   ]
 }

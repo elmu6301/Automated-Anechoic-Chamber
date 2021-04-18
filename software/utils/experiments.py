@@ -232,8 +232,7 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         # CREATE THE CSV
         # generate the appropriate column names
         col_names = util.gen_col_names(sParams)
-        # print(csv_file_name)
-        data = np.array([])  # np.array([[-1]] * len(col_names)) # trash data
+        data = np.array([])
         csv.createCSV(csv_file_name, col_names, data)
 
     except Exception as e:
@@ -265,8 +264,6 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         # Configure start and stop frequency
         res, real_startF, real_stopF = VNA.init_freq_sweep(freq_start, freq_stop, num_points)
         if not res:
-            # printf(f"\tTried running VNA with start frequency of "
-            #        f"{real_startF} GHz and stop frequency of {real_stopF} GHz ")
             return error_codes.VNA_FREQ_MISMATCH
 
     except Exception as e:
@@ -274,6 +271,15 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         # disconnect()
         return error_codes.VNA
     printf('\t\tDone.')
+
+    data_out, temp = VNA.sparam_data()
+    # Append orientation info to data # TODO verify this
+    data_out.insert(1, [test_theta_start] * num_points)
+    data_out.insert(2, [test_phi_start] * num_points)
+    data_out.insert(3, [probe_phi_start] * num_points)
+    data_to_save = np.array(data_out, dtype=object)
+    # Write to CSV file
+    csv.appendToCSV(csv_file_name, data_to_save)
     return error_codes.SUCCESS
 
     # Connect to motor driver PCBs

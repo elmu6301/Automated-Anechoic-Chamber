@@ -30,8 +30,8 @@ class VNA_HP8719A:
         self.instrument.write('POWE 0')
         self.instrument.write('AVERON')
         self.instrument.write('AVERFACT 20')
-        self.instrument.write('S21')
-        self.instrument.write('LOGM')
+        # self.instrument.write('S21')
+        # self.instrument.write('LOGM')
 
     def __exit__(self):
         if getattr(self,'instrument'):
@@ -110,7 +110,7 @@ class VNA_HP8719A:
 
         # Do we care about setting CENTER or SPAN:FULL/SPAN:LINK ?
 
-    # Select the ype of frequency sweep (linear or logarithmic)
+    # Select the type of frequency sweep (linear or logarithmic)
     def freq_sweep_type(self):
         curr_phase = "Running"
         if self.freq_mode == "log":
@@ -137,11 +137,14 @@ class VNA_HP8719A:
         # time.sleep(5)
         try:
             start_time = time.perf_counter_ns()
-            self.instrument.write('AVERREST')
-            time.sleep(2.5)
-            # self.instrument.write('NUMG 20')
+            # self.instrument.write('AVERREST')
+            # time.sleep(2.5)
+            self.instrument.write('NUMG 20')
+            # self.instrument.write('SING')
+            # self.instrument.write('CONT')
             # self.instrument.query('OPC?')
             data_db = self.instrument.query("OUTPFORM")  # Output format is a list of form (db, 0)
+            # self.instrument.write('CONT')
             end_time = time.perf_counter_ns()
             total_time = (end_time - start_time) / (10 ** 9)
             # print(f"Magnitude data time in s: {total_time}")
@@ -156,7 +159,10 @@ class VNA_HP8719A:
         # time.sleep(5)
         try:
             start_time = time.perf_counter_ns()
+            # self.instrument.write('SING')
+            self.instrument.write('NUMG 20')
             data_degree = self.instrument.query("OUTPFORM")  # Output format is a list of form (degrees, 0)
+            # self.instrument.write('CONT')
             end_time = time.perf_counter_ns()
             total_time = (end_time - start_time) / (10 ** 9)
             # print(f"Phase data time in s: {total_time}")
@@ -170,14 +176,16 @@ class VNA_HP8719A:
         # Collect data for selected s-parameter
         curr_phase = "Running"
         printMsg(curr_phase, "Collecting " + sparam + " data...")
-        # self.instrument.write(sparam)
+        self.instrument.write(sparam)
         # time.sleep(5)
         db = self.logmag_data()
+        degree = self.phase_data()
         # if not db:
         #     print("Error on logmag data collection exiting now ")
         #     return [], []
         # time.sleep(20)
-        degree = self.degree  # self.phase_data()
+        # degree = self.degree  # self.phase_data()
+
         # time.sleep(20)
 
         if db is False or degree is False:
@@ -201,7 +209,6 @@ class VNA_HP8719A:
             s11_db, s11_deg = self.sparam_select("S11")
 
             if not len(s11_db) or not len(s11_deg):
-                # self.instrument.write("NOOP")
                 self.reset()
                 return False, False
             else:
@@ -214,7 +221,6 @@ class VNA_HP8719A:
             s12_db, s12_deg = self.sparam_select("S12")
 
             if not len(s12_db) or not len(s12_deg):
-                # self.instrument.write("NOOP")
                 self.reset()
                 return False, False
             else:
@@ -227,7 +233,6 @@ class VNA_HP8719A:
             s21_db, s21_deg = self.sparam_select("S21")
 
             if not len(s21_db) or not len(s21_deg):
-                # self.instrument.write("NOOP")
                 self.reset()
                 return False, False
             else:
@@ -240,7 +245,6 @@ class VNA_HP8719A:
             s22_db, s22_deg = self.sparam_select("S22")
 
             if not len(s22_db) or not len(s22_deg):
-                # self.instrument.write("NOOP")
                 self.reset()
                 return False, False
             else:
@@ -253,7 +257,6 @@ class VNA_HP8719A:
         freq = self.freq_data()  # Collect frequency data for each data point in the sweep defined by init_freq_sweep()
 
         if freq is False:
-            # self.instrument.write("NOOP")
             self.reset()
             return False, False
         else:
@@ -264,7 +267,7 @@ class VNA_HP8719A:
             data_all.insert(0, freq_only)
             col_names.insert(0, "Freq (Hz)")
 
-        # self.instrument.write("NOOP")  # No operation + sets operation bit to complete (puts VNA back in listen mode so can use front panel)
+        self.instrument.write("NOOP")  # No operation + sets operation bit to complete (puts VNA back in listen mode so can use front panel)
 
         # Return a dictionary containing the collected data
         return data_all, col_names
@@ -279,44 +282,6 @@ class VNA_HP8719A:
                         0::2]  # [0::2] takes every other list element starting at index 0
 
         return np.array(data_col1[:-1], dtype=float)
-
-    def file_save(self, filename, data, col_names):  # Do we want to pass in user comments too?
-        print("\nSaving collected data to: " + filename)
-        data_transpose = data.T
-        # col_names = "Freq (GHz), S11 Mag (dB), S11 Phase (deg), S12 Mag (dB), S12 Phase (deg), S21 Mag (dB), S21 Phase (deg), S22 Mag (dB), S22 Phase (deg)" #Will frequency ever not be GHz?
-        np.savetxt(filename, data_transpose, delimiter=',', header=col_names,
-                   comments="")  # More specification options available
-
-    def plot(self, filename):
-        print("Plotting data stored in: " + filename)
-        freq, s11_db, s11_degree, s12_db, s12_degree, s21_db, s21_degree, s22_db, s22_degree = np.loadtxt(filename,
-                                                                                                          delimiter=',',
-                                                                                                          skiprows=1,
-                                                                                                          comments="#",
-                                                                                                          unpack=True)
-
-        fig1 = plt.figure("Figure 1: Magnitude")
-        plt.title("S-parameter Magnitude Values")
-        plt.xlabel("Frequency (GHz)")
-        plt.ylabel("Magnitude (dB)")
-        plt.plot(freq, s11_db, label="S11")
-        plt.plot(freq, s12_db, label="S12")
-        plt.plot(freq, s21_db, label="S21")
-        plt.plot(freq, s22_db, label="S22")
-        plt.legend()
-        fig1.savefig("antenna_s_params_magnitude.jpg")
-
-        fig2 = plt.figure("Figure 2: Phase")
-        plt.title("S-parameter Phase Values")
-        plt.xlabel("Frequency (GHz)")
-        plt.ylabel("Phase (Degrees)")
-        plt.plot(freq, s11_degree, label="S11")
-        plt.plot(freq, s12_degree, label="S12")
-        plt.plot(freq, s21_degree, label="S21")
-        plt.plot(freq, s22_degree, label="S22")
-        plt.legend()
-        fig2.savefig("antenna_s_params_phase.jpg")
-        # plt.show() #Shows the plots on screen but code halts until they are closed (which is why I saved them as files instead)
 
     # Set a marker on the VNA display and print the value to the command line
     def marker(self, freq_val):
