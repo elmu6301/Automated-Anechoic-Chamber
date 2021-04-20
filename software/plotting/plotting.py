@@ -6,30 +6,25 @@ Types of plotting supported:
 - 3D s-parameter pattern
 - Cuts in a phi plane
 - Cuts in a theta plane
-
 For all functions in this file we assume theta is the major axis and phi is the minor azimuthal axis
 '''
-
-#import os
-#os.chdir(os.path.join(os.getcwd(), '..'))
 
 import numpy as np
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as axes3d
 from plotting import csv_functions as csv_f
 import pdb
-import os
 
 
 def plot3DRadPattern(csv_filename,plot_filename,param,frequency):
     #Based on example code: https://stackoverflow.com/questions/36816537/spherical-coordinates-plot-in-matplotlib
-    
+
     assert type(csv_filename) == str
     assert type(plot_filename) == str
     assert type(param) == str
     assert type(frequency) == float
 
-    # print("Plotting data stored in: " + csv_filename)
+    print("Plotting data stored in: " + csv_filename)
     theta,phi,param_vals = csv_f.getSparamData3D(csv_filename,param,frequency)
 
     #Convert to radians
@@ -58,7 +53,7 @@ def plotThetaCut(csv_filename,plot_filename,param,frequency,theta):
     assert type(frequency) == float
     assert type(theta) == float
 
-    # print("Plotting data stored in: " + csv_filename)
+    print("Plotting data stored in: " + csv_filename)
     phi_vals,param_vals = csv_f.getThetaCutData(csv_filename,param,frequency,theta)
 
     #Convert to radians
@@ -86,12 +81,10 @@ def plotPhiCut(csv_filename,plot_filename,param,frequency,phi):
     assert type(param) == str
     assert type(frequency) == float
     assert type(phi) == float
-    
-    csv_filename = os.path.join(os.getcwd(), 'data', csv_filename)
-    # print("Plotting data stored in: " + csv_filename)
 
+    print("Plotting data stored in: " + csv_filename)
     theta_vals,param_vals = csv_f.getPhiCutData(csv_filename,param,frequency,phi)
-    
+
     #Convert to radians
     theta_vals *= np.pi/180
 
@@ -118,7 +111,7 @@ def plot2DSparamFrequency(csv_filename,plot_filename,params,theta,phi):
     assert type(theta) == float
     assert type(phi) == float
 
-    
+    print("Plotting data stored in: " + filename)
     freq,params_db,params_db_names,params_deg,names = csv_f.getSparamFrequencyData(csv_filename,params,theta,phi)
 
     fig1 = plt.figure("Figure 1: Magnitude")
@@ -148,7 +141,7 @@ def plot2DSparamPhi(csv_filename,plot_filename,parameter,theta,frequency):
     assert type(theta) == float
     assert type(frequency) == float
 
-    # print("Plotting data stored in: " + filename)
+    print("Plotting data stored in: " + filename)
 
 def plot2DSparamTheta(csv_filename,plot_filename,parameter,phi,frequency):
     #Plots magnitude and phase for a constant frequency and phi
@@ -159,7 +152,7 @@ def plot2DSparamTheta(csv_filename,plot_filename,parameter,phi,frequency):
     assert type(frequency) == float
     assert type(phi) == float
 
-    # print("Plotting data stored in: " + filename)
+    print("Plotting data stored in: " + filename)
 
 # if __name__ == "__main__":
 #     plot3DRadPattern('..\\data\\test.csv','..\\data\\test.jpg','S21',1.351000000000000000e+10)
