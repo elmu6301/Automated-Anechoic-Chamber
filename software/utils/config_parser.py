@@ -43,25 +43,28 @@ def find_config(file_name, file_path=None):
         return False
 
     # Get the root path
-    print(os.getcwd())
-    root_path = util.get_root_path()
-    config_repo_path = root_path + config_base
+    # print(os.getcwd())
+    # root_path = util.get_root_path()
+    # config_repo_path = root_path + config_base
+    file_path = util.get_file_path(file_name, "configs")
 
-    # Walking down file searching in the config repository
-    for root, dir, files in os.walk(config_repo_path):
-        if file_name in files:
-            full_name = os.path.join(root, file_name)
-            return full_name
-    # print(f"Unable to find '{file_name}' in configuration file repository located '{config_repo_path}'")
-    # Walking down file searching in the root path
-    for root, dir, files in os.walk(root_path):
-        if file_name in files:
-            full_name = os.path.join(root, file_name)
-            return full_name
+    return file_path
 
-    # File was not found
-    # print(f"Unable to find '{file_name}' in direcMeasure path located '{root_path}'")
-    return False
+    # # Walking down file searching in the config repository
+    # for root, dir, files in os.walk(config_repo_path):
+    #     if file_name in files:
+    #         full_name = os.path.join(root, file_name)
+    #         return full_name
+    # # print(f"Unable to find '{file_name}' in configuration file repository located '{config_repo_path}'")
+    # # Walking down file searching in the root path
+    # for root, dir, files in os.walk(root_path):
+    #     if file_name in files:
+    #         full_name = os.path.join(root, file_name)
+    #         return full_name
+    #
+    # # File was not found
+    # # print(f"Unable to find '{file_name}' in direcMeasure path located '{root_path}'")
+    # return False
 
 
 # Opens the file and returns the contents of flow
@@ -147,8 +150,6 @@ def get_config(full_file_name):
         # Check for valid file names remove any extensions
         if plot["dataFileName"].rfind(".") != -1:
             plot["dataFileName"] = plot["dataFileName"][0:plot["dataFileName"].rfind(".")]
-        plot["dataFileName"] = util.get_root_path() + "\\data\\" + plot["dataFileName"]
-        plot["dataFileName"] = util.append_date_time_str(plot["dataFileName"])
 
         # Verify a good plot type
         if plot["plotType"] not in ALLOWED_PLOT_TYPES:
@@ -173,9 +174,15 @@ def get_config(full_file_name):
             # plot = False
             error[2] = True
 
-        print(json.dumps(meas, indent=4))
-        print(json.dumps(plot, indent=4))
-        print(json.dumps(calib, indent=4))
+        # generate path name
+        time_stamp_base = util.append_date_time_str(plot["dataFileName"])
+        path = util.get_file_path('', os.path.join("data", time_stamp_base))
+        if not error[2] and time_stamp_base and path:
+            plot["dataFileName"] = os.path.join(path, time_stamp_base)
+
+        # print(json.dumps(meas, indent=4))
+        # print(json.dumps(plot, indent=4))
+        # print(json.dumps(calib, indent=4))
         if error[0]:
             meas = False
         if error[1]:

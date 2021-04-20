@@ -42,6 +42,40 @@ def get_root_path():
     return path
 
 
+def get_file_path(file_name, dir_path):
+    # Navigate to the correct base
+    root_path = get_root_path()
+    search_base_path = os.path.join(root_path, dir_path)
+
+    # Find a file
+    if file_name != '':
+        # Check to see if the path exists
+        if not os.path.isdir(search_base_path):
+            return False
+
+        # Walking down file searching in the specified repository
+        for root, dir, files in os.walk(search_base_path):
+            if file_name in files:
+                full_name = os.path.join(root, file_name)
+                return full_name
+
+        # Walking down file searching in the root path
+        for root, dir, files in os.walk(root_path):
+            if file_name in files:
+                full_name = os.path.join(root, file_name)
+                return full_name
+        return False
+    else:
+        # Make a directory if needed
+        if not os.path.isdir(search_base_path):
+            try:
+                os.mkdir(search_base_path)
+            except:
+                return False
+
+        return search_base_path
+
+
 def append_date_time_str(file_name):
     if file_name != '':
         if file_name.endswith(".csv"):

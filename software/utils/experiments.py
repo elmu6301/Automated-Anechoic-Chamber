@@ -207,10 +207,10 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         base_file_name = plot_args['dataFileName']
         assert type(base_file_name) == str
         csv_file_name = base_file_name +".csv"
-        printf('\t\tRaw Data File: %s' % (csv_file_name))
+        printf('\t\tRaw Data File: %s' % (os.path.basename(csv_file_name)))
         if run_plot:
             plot_file_name = base_file_name +".pdf"
-            printf('\t\tPlot File: %s' % (plot_file_name))
+            printf('\t\tPlot File: %s' % (os.path.basename(plot_file_name)))
             plot_type = plot_args['plotType']
             printf('\t\tPlot Type: %s' % (plot_type))
             plot_freq = plot_args['plotFreq']
@@ -226,13 +226,30 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
             assert (type(plot_p_phi) == float) and (-180 <= plot_p_phi <= 180)
             printf('\t\tProbe phi Angle to Plot: %s deg' % (plot_p_phi))
 
-        # # CREATE THE CSV
-        # # generate the appropriate column names
+        # CREATE THE CSV
         # col_names = util.gen_col_names(sParams)
-        # # print(csv_file_name)
-        # data = np.array([])  # np.array([[-1]] * len(col_names)) # trash data
+        # data = np.array([1])
         # csv.createCSV(csv_file_name, col_names, data)
-
+        #
+        # current_phase = 'Plotting'
+        # if run_plot:
+        #     if plot_type == "3d":
+        #         printf(f'Plotting 3D plot from collected data with S parameters: {sParams} at {plot_freq} Hz '
+        #                f'to {plot_file_name}.')
+        #         plots.plot3DRadPattern(csv_file_name, plot_file_name, sParams, plot_freq)
+        #     elif plot_type == "cutPhi":
+        #         printf(f'Plotting Phi cut plot from collected data with S parameters: {sParams} at {plot_freq} Hz and'
+        #                f' phi at {plot_t_phi} degrees to {plot_file_name}.')
+        #         plots.plotPhiCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_phi)
+        #     elif plot_type == "cutTheta":
+        #         printf(f'Plotting Theta cut plot from collected data with S parameters: {sParams} at {plot_freq} Hz and'
+        #                f' theta at {plot_t_phi} degrees to {plot_file_name}.')
+        #         plots.plotThetaCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_theta)
+        #     else:
+        #         return error_codes.BAD_ARGS
+        #     printf('\tDone.')
+        # else:
+        #     printf('Skipping plotting phase.')
 
     except Exception as e:
         print(f"Exception: {e}")

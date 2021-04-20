@@ -9,8 +9,8 @@
     "alignTolerance": 10
   },
   "plot": {
-    "runPlotter": false,
-    "dataFileName": "test.txt",
+    "runPlotter": true,
+    "dataFileName": "test",
     "plotType": "cutPhi",
     "plotFreq": "10GHz",
     "plotTestPhi": 0,
