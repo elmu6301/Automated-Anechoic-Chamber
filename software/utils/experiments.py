@@ -203,34 +203,85 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         printf('\t\tStop frequency: %f GHz' % (freq_stop))
 
         printf('\tPlot settings:')
+        run_plot = plot_args['runPlotter']
         base_file_name = plot_args['dataFileName']
         assert type(base_file_name) == str
         csv_file_name = base_file_name +".csv"
-        plot_file_name = base_file_name +".pdf"
-        printf('\t\tRaw Data File: %s' % (csv_file_name))
-        printf('\t\tPlot File: %s' % (plot_file_name))
+        printf('\t\tRaw Data File: %s' % (os.path.basename(csv_file_name)))
+        if run_plot:
+            plot_file_name = base_file_name +".pdf"
+            printf('\t\tPlot File: %s' % (os.path.basename(plot_file_name)))
+            plot_type = plot_args['plotType']
+            printf('\t\tPlot Type: %s' % (plot_type))
+            plot_freq = plot_args['plotFreq']
+            printf('\t\tFrequency to Plot: %s Hz' % (plot_freq ))
 
-        plot_type = plot_args['plotType']
-        printf('\t\tPlot Type: %s' % (plot_type))
-        plot_freq = plot_args['plotFreq']
-        printf('\t\tFrequency to Plot: %s Hz' % (plot_freq ))
-
-        plot_t_theta = plot_args['plotTestTheta']
-        assert (type(plot_t_theta) == float) and (-180 <= plot_t_theta <= 180)
-        printf('\t\tTest theta Angle to Plot: %s deg' % (plot_t_theta))
-        plot_t_phi = plot_args['plotTestPhi']
-        assert (type(plot_t_phi) == float) and (-180 <= plot_t_phi <= 180)
-        printf('\t\tTest phi Angle to Plot: %s deg' % (plot_t_phi))
-        plot_p_phi = plot_args['plotProbePhi']
-        assert (type(plot_p_phi) == float) and (-180 <= plot_p_phi <= 180)
-        printf('\t\tProbe phi Angle to Plot: %s deg' % (plot_p_phi))
+            plot_t_theta = plot_args['plotTestTheta']
+            assert (type(plot_t_theta) == float) and (-180 <= plot_t_theta <= 180)
+            printf('\t\tTest theta Angle to Plot: %s deg' % (plot_t_theta))
+            plot_t_phi = plot_args['plotTestPhi']
+            assert (type(plot_t_phi) == float) and (-180 <= plot_t_phi <= 180)
+            printf('\t\tTest phi Angle to Plot: %s deg' % (plot_t_phi))
+            plot_p_phi = plot_args['plotProbePhi']
+            assert (type(plot_p_phi) == float) and (-180 <= plot_p_phi <= 180)
+            printf('\t\tProbe phi Angle to Plot: %s deg' % (plot_p_phi))
 
         # CREATE THE CSV
-        # generate the appropriate column names
-        col_names = util.gen_col_names(sParams)
-        # print(csv_file_name)
-        data = np.array([])  # np.array([[-1]] * len(col_names)) # trash data
-        csv.createCSV(csv_file_name, col_names, data)
+        # col_names = util.gen_col_names(sParams)
+        # data = np.array([])
+        # csv.createCSV(csv_file_name, col_names, data)
+        #
+        # current_phase = 'Plotting'
+        # if run_plot:
+        #     if plot_type == "3d":
+        #         printf(f'Plotting 3D plot from collected data with S parameters: {sParams} at {plot_freq} Hz '
+        #                f'to {plot_file_name}.')
+        #         plots.plot3DRadPattern(csv_file_name, plot_file_name, sParams, plot_freq)
+        #     elif plot_type == "cutPhi":
+        #         printf(f'Plotting Phi cut plot from collected data with S parameters: {sParams} at {plot_freq} Hz and'
+        #                f' phi at {plot_t_phi} degrees to {plot_file_name}.')
+        #         plots.plotPhiCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_phi)
+        #     elif plot_type == "cutTheta":
+        #         printf(f'Plotting Theta cut plot from collected data with S parameters: {sParams} at {plot_freq} Hz and'
+        #                f' theta at {plot_t_phi} degrees to {plot_file_name}.')
+        #         plots.plotThetaCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_theta)
+        #     else:
+        #         return error_codes.BAD_ARGS
+        #     printf('\tDone.')
+        # else:
+        #     printf('Skipping plotting phase.')
+
+            # Connect to VNA
+        # printf('\tConnecting to VNA...')
+        # VNA = ""
+        # try:
+        #     # Connect to VNA and configure it
+        #     VNA = VNA_HP8719A(sparam_list=sParams, address=vna_address, freq_mode=freq_sweep_type)
+        #     if not VNA.instrument:
+        #         return error_codes.VNA
+        #     # Configure start and stop frequency
+        #     startF = "%f GHz" % freq_start
+        #     stopF = "%f GHz" % freq_stop
+        #
+        #     res, real_startF, real_stopF = VNA.init_freq_sweep(startF, stopF, num_points)
+        #
+        #
+        # except Exception as e:
+        #     print(f"Exception: {e}")
+        #     # disconnect()
+        #     return error_codes.VNA
+        # printf('\t\tDone.')
+
+        # Take data
+        # data_out, col = VNA.sparam_data()
+        # # Append orientation info to data
+        # data_out.insert(1, [0] * num_points)
+        # data_out.insert(2, [1] * num_points)
+        # data_out.insert(3, [2] * num_points)
+        # data_to_save = np.array(data_out, dtype=object)
+        #
+        # # Write to CSV file generated earlier
+        # csv.appendToCSV(csv_file_name, data_to_save)
 
     except Exception as e:
         print(f"Exception: {e}")
@@ -284,19 +335,13 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
 
         res, real_startF, real_stopF = VNA.init_freq_sweep(startF, stopF, num_points)
 
-        # if not res:
-        #     printf(f"\tTried running VNA with start frequency of "
-        #            f"{real_startF} GHz and stop frequency of {real_stopF} GHz ")
-        #     return error_codes.VNA
-        # printf(f"\tRunning VNA with start frequency of {real_startF} GHz and stop frequency of {real_stopF} GHz ")
-
 
     except Exception as e:
         print(f"Exception: {e}")
         # disconnect()
         return error_codes.VNA
     printf('\t\tDone.')
-    
+
 
     current_phase = 'Running'
     # Run alignment routine
@@ -364,6 +409,12 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
     else:
         printf('Skipping alignment phase.')
 
+    # Create the CSV to store the collected data
+
+    # generate the appropriate column names
+    col_names = util.gen_col_names(sParams)
+    csv.createCSV(csv_file_name, col_names, np.array([]))
+
     # Move motors to start location
     printf('Moving motors to starting orientations...')
     test_theta_offset = int(TT_SPR * np.abs(test_theta_start) / 360)
@@ -426,25 +477,19 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
                 printf('\t\tTest-phi orientation: %f degrees.' % (test_phi_orientation))
                 printf('\t\tProbe-phi orientation: %f degrees.' % (probe_phi_orientation))
 
-                ##################################################################################
-                #   Elena: take/record data here; see variables representing current orientation above
-
+                # Wait for system to settle before taking a measurement
                 time.sleep(1)
-                # Take data
-                data_out = []
-                col_names = []
-                # Note don't need to use column names just append to data_out and cast as np array
 
-                data_out, temp = VNA.sparam_data()
-                # Append orientation info to data # TODO verify this
+                # Take data
+                data_out, col = VNA.sparam_data()
+                # Append orientation info to data
                 data_out.insert(1, [test_theta_orientation] * num_points)
                 data_out.insert(2, [test_phi_orientation] * num_points)
                 data_out.insert(3, [probe_phi_orientation] * num_points)
                 data_to_save = np.array(data_out, dtype=object)
-                # Write to CSV file
-                csv.appendToCSV(csv_file_name, data_to_save)
 
-                ##################################################################################
+                # Write to CSV file generated earlier
+                csv.appendToCSV(csv_file_name, data_to_save)
 
                 if idx__test_phi != test_phi_steps - 1:
                     printf('\tMoving test-phi motor...')
@@ -508,18 +553,25 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
     disconnect()
     printf('\tDone.')
 
-    ##############################################################################
-    # Elena: plot data here
-
-    ##############################################################################
-    if plot_type == "3d":
-        plots.plot3DRadPattern(csv_file_name,plot_file_name,sParams,plot_freq)
-    elif plot_type == "cutPhi":
-        plots.plotPhiCut(csv_file_name,plot_file_name,sParams,plot_freq,plot_t_phi)
-    elif plot_type == "cutTheta":
-        plots.plotThetaCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_theta)
+    current_phase = 'Plotting'
+    if run_plot:
+        if plot_type == "3d":
+            printf(f'Plotting 3D plot from collected data with S parameters: {sParams} at {plot_freq} Hz '
+                   f'to {plot_file_name}.')
+            plots.plot3DRadPattern(csv_file_name,plot_file_name,sParams,plot_freq)
+        elif plot_type == "cutPhi":
+            printf(f'Plotting Phi cut plot from collected data with S parameters: {sParams} at {plot_freq} Hz and'
+                   f' phi at {plot_t_phi} degrees to {plot_file_name}.')
+            plots.plotPhiCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_phi)
+        elif plot_type == "cutTheta":
+            printf(f'Plotting Theta cut plot from collected data with S parameters: {sParams} at {plot_freq} Hz and'
+                   f' theta at {plot_t_phi} degrees to {plot_file_name}.')
+            plots.plotThetaCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_theta)
+        else:
+            return error_codes.BAD_ARGS
+        printf('\tDone.')
     else:
-        return error_codes.BAD_ARGS
+        printf('Skipping plotting phase.')
 
     return error_codes.SUCCESS
 

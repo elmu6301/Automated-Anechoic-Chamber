@@ -5,11 +5,12 @@
     "sParams": "S21"
   },
   "calibrate": {
-    "align": "False",
+    "align": false,
     "alignTolerance": 10
   },
   "plot": {
-    "dataFileName": "test.txt",
+    "runPlotter": true,
+    "dataFileName": "test",
     "plotType": "cutPhi",
     "plotFreq": "10GHz",
     "plotTestPhi": 0,
@@ -30,7 +31,7 @@
       "stepsProbePhi": 1,
       "startFrequency": "10GHz",
       "stopFrequency": "11GHz",
-      "numPoints": 3
+      "numPoints": 1601
     }
   ]
 }

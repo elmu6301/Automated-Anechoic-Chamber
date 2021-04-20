@@ -1,4 +1,5 @@
 import sys
+import os
 import getopt
 import json
 from optparse import OptionParser
@@ -20,11 +21,19 @@ curr_phase = "Setup"
 mode = "Debug"
 
 
-def print_usage():
-    print("\tDirecMeasure Usage")
-    print("\t\t- Run with laser alignment: main.py -c <configfile>")
-    print("\t\t- Run without laser alignment: main.py -c <configfile> -l")
-    print("\t\t- Calibrate the system: main.py --calibrate")
+def set_usage(exe_name):
+    exe_name ="./" + exe_name
+    help = f"\tGet Help:\n\t\t{exe_name} --h\n\t\t{exe_name} --help\n"
+    align = f"\tAlign System:\n\t\t{exe_name} --a\n\t\t{exe_name} --alignOnly\n"
+    calibrate = f"\tCalibrate System:\n\t\t{exe_name} --calibrate\n"
+    full_syst = f"\tRun Entire System:\n\t\t{exe_name} --config <config_file.json>\n"
+    plot3d = f"\t3D Plot:\n\t\t{exe_name} --plot --dataFile <data.csv> --plotType 3d --freq <freq>\n"
+    plotPhi = f"\tPhi Cut Plot: \n\t\t{exe_name} --plot --dataFile <data.csv> --plotType cutPhi " \
+              f"--freq <freq> --phi <phi>\n"
+    plotTheta = f"\tTheta Cut Plot:\n\t\t{exe_name} --plot --dataFile <data.csv> --plotType cutTheta" \
+                f" --freq <freq> --theta <theta>\n"
+
+    return help + align + calibrate + full_syst + plot3d + plotPhi + plotTheta
 
 
 def print_welcome_sign():
@@ -50,12 +59,12 @@ def process_cmd_line():
 
     # Set up parser
     opt_parser = OptionParser()
-    usage = "usage: ./direcMeasure --config<config_file>"
+    opt_parser.prog = "direcMeasure"
+    usage = set_usage(opt_parser.prog)
     opt_parser.set_usage(usage)
     opt_parser.set_defaults(run_type="f", verbose=False)
-    opt_parser.prog = "direcMeasure"
 
-    # Add options
+    # Main options
     opt_parser.add_option("-c", "--config", type="string", action="store", dest="cfg", default='',
                       help="Configuration file used to control the system. Must be a JSON file.")
     opt_parser.add_option("-a", "--alignOnly", action="callback", callback=config_run, dest="run_type",
@@ -64,19 +73,21 @@ def process_cmd_line():
                       help="Run the calibration interface.")
     opt_parser.add_option("--plot", action="store_true", dest="plot", default=False,
                       help="Run the calibration interface.")
+    # Plot options
     opt_parser.add_option("--dataFile", type="string", action="store", dest="data_file", default='',
                       help="Plot option. Input data file to plot")
     opt_parser.add_option("--plotType", type="string", action="store", dest="plot_type", default='',
-                      help="Plot option. Input data file to plot")
-    opt_parser.add_option("--freq", type="float", action="store", dest="plot_freq", default=0.0,
-                      help="Plot option. Frequency to plot at. Must be in GHz")
-    opt_parser.add_option("--phi", type="float", action="store", dest="plot_phi", default=0.0,
+                      help=f"Plot option. Type of plot to generate. Must be one of the following"
+                           f" {parser.ALLOWED_PLOT_TYPES}.")
+    opt_parser.add_option("--freq", type="string", action="store", dest="plot_freq", default='',
+                          help="Plot option. Frequency to plot at. Must be in Hz, MHz, or GHz")
+    opt_parser.add_option("--phi", type="float", action="store", dest="plot_phi", default=200.0,
                       help="Plot option. Test phi angle to plot at. Must be in degrees "
                            "and between -180 and 180 degrees.")
-    opt_parser.add_option("--theta", type="float", action="store", dest="plot_theta", default=0.0,
+    opt_parser.add_option("--theta", type="float", action="store", dest="plot_theta", default=200.0,
                       help="Plot option. Test theta angle to plot at. Must be in degrees "
                            "and between -180 and 180 degrees.")
-    opt_parser.add_option("--probPhi", type="float", action="store", dest="plot_p_phi", default=0.0,
+    opt_parser.add_option("--probPhi", type="float", action="store", dest="plot_p_phi", default=200.0,
                       help="Plot option. Probe phi angle to plot at. Must be in degrees "
                            "and between -180 and 180 degrees.")
     opt_parser.add_option("--sParams", type="string", action="store", dest="sParams", default="S21",
@@ -126,36 +137,63 @@ def process_cmd_line():
 
     if options.plot:
         options.run_type = "p"
+        if options.data_file == '':
+            util.printf(curr_phase, "Error", f"Plotting requested but no input data file was entered."
+                                             f" See usage for more information on command line options.")
+            opt_parser.print_help()
+            return False
+
+        if options.data_file == '' or not options.data_file.endswith(".csv"):
+            util.printf(curr_phase, "Error", f"The input data file entered '{options.data_file}' is not a csv file. "
+                                             f" See usage for more information on command line options.")
+            opt_parser.print_help()
+            return False
+
+        if options.plot_type == '':
+            util.printf(curr_phase, "Error", f"Plotting requested but no plot type was specified. "
+                                             f" See usage for more information on command line options.")
+            opt_parser.print_help()
+            return False
+
+        if options.plot_type not in parser.ALLOWED_PLOT_TYPES:
+            util.printf(curr_phase, "Error",
+                        f"Plotting requested but invalid plot type {options.plot_type} was specified. "
+                        f"Plot type must one of the following {parser.ALLOWED_PLOT_TYPES}"
+                        f" See usage for more information on command line options.")
+            opt_parser.print_help()
+            return False
+
+        if options.plot_type == "cutPhi" and options.plot_phi == 200:
+            util.printf(curr_phase, "Error",
+                        f"Phi cut plot requested but no phi angle was specified. "
+                        f" See usage for more information on command line options.")
+            opt_parser.print_help()
+            return False
+        elif options.plot_type == "cutTheta" and options.plot_theta == 200:
+            util.printf(curr_phase, "Error",
+                        f"Theta cut plot requested but no theta angle was specified. "
+                        f" See usage for more information on command line options.")
+            opt_parser.print_help()
+            return False
+
+        if 'MHz' in options.plot_freq:
+            options.plot_freq = 1e6 * float(options.plot_freq[:-3])
+        elif 'GHz' in options.plot_freq:
+            options.plot_freq = 1e9 * float(options.plot_freq[:-3])
+        elif 'Hz' in options.plot_freq:
+            options.plot_freq = float(options.plot_freq[:-3])
+        else:
+            util.printf(curr_phase, "Error",
+                        f"Plotting requested but invalid plot frequency {options.plot_freq} was specified. "
+                        f"Plot type must be in units of Hz, MHz, or GHz (e.g. 10GHz or \"10 GHz\")."
+                        f" See usage for more information on command line options.")
+            opt_parser.print_help()
+            return False
 
     if options.cfg != '' and not options.cfg.endswith(".json"):
         util.printf(curr_phase, "Error", f"The configuration file entered '{options.cfg}' is not a JSON file. "
                                     f" See the User Manual for more information on configuration files and "
                                     f"usage for more information on command line options.")
-        opt_parser.print_help()
-        return False
-
-    if options.plot and (options.data_file == ''):
-        util.printf(curr_phase, "Error", f"Plotting requested but no input data file was entered."
-                                         f" See usage for more information on command line options.")
-        opt_parser.print_help()
-        return False
-
-    if options.plot and (options.data_file == '' or not options.data_file.endswith(".csv")):
-        util.printf(curr_phase, "Error", f"The input data file entered '{options.data_file}' is not a csv file. "
-                                         f" See usage for more information on command line options.")
-        opt_parser.print_help()
-        return False
-
-    if options.plot and options.plot_type == '':
-        util.printf(curr_phase, "Error", f"Plotting requested but no plot type was specified. "
-                                         f" See usage for more information on command line options.")
-        opt_parser.print_help()
-        return False
-
-    if options.plot and options.plot_type not in parser.ALLOWED_PLOT_TYPES:
-        util.printf(curr_phase, "Error", f"Plotting requested but invalid plot type {options.plot_type} was specified. "
-                                         f"Plot type must one of the following {parser.ALLOWED_PLOT_TYPES}"
-                                         f" See usage for more information on command line options.")
         opt_parser.print_help()
         return False
 
@@ -271,20 +309,26 @@ def run_experiments(cmds, meas, calib, plot):
 
 
 def plot_data_file(data_file, plot_type, sParams, plot_freq, plot_t_phi, plot_t_theta, plot_p_phi):
-    # Find data file
+
     if data_file != '':
-        path = util.get_root_path() + "\\data\\"
-        csv_file_name = path + data_file
-        try:
-            f = open(csv_file_name)
-            f.close()
-        except:
-            util.printf(curr_phase, "Error", f"Could not locate the file '{data_file}'. Ensure that '{data_file}'"
-                                             f" is located in the raw data file repository:\n\t\t'{path}'.")
+        # Find data file
+        if data_file.rfind(".") == -1:
+            data_file += ".csv"
+        elif not data_file.endswith(".csv"):
+            util.printf(curr_phase, "Error", f"The '{data_file}' is not a CSV file. Ensure that '{data_file}'"
+                                             f" is a CSV file.")
             return False
 
-        plot_file_name = csv_file_name[0:len(csv_file_name)-4] + ".jpg"
-        util.printf(curr_phase, None, f"Plotting '{data_file}' now to {plot_file_name}")
+        csv_file_name = util.get_file_path(data_file, "data")
+        # print(csv_file_name)
+        if not os.path.isfile(csv_file_name) or not csv_file_name:
+            path = util.get_file_path('', "data")
+            util.printf(curr_phase, "Error", f"Could not locate the file '{data_file}'. Ensure that '{data_file}'"
+                                             f" is located in the data file repository:\n\t\t'{path}'.")
+            return False
+
+        plot_file_name = csv_file_name[0:len(csv_file_name)-4] + ".pdf"
+        util.printf(curr_phase, None, f"Plotting '{data_file}' to {plot_file_name}")
         if plot_type == "3d":
             try:
                 plots.plot3DRadPattern(csv_file_name, plot_file_name, sParams, plot_freq)
@@ -302,18 +346,14 @@ def plot_data_file(data_file, plot_type, sParams, plot_freq, plot_t_phi, plot_t_
                 return False
         else:
             return False
-        # util.printf(curr_phase, None, f"Found {csv_file_name}...")
         return True
     return False
-
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
     print_welcome_sign()
-    # Setup Phase
-    # util.printf(curr_phase, None, "Setting up system...")
 
     # Process Command Line
     args = process_cmd_line()
@@ -322,35 +362,32 @@ if __name__ == '__main__':
     cfg = args.cfg
     run_type = args.run_type
     if run_type == "p":
-
-        print(f"Plotting {args.data_file}")
-        res = plot_data_file(args.data_file, args.plot_type, args.sParams, args.plot_freq, args.plot_phi, args.plot_theta,
-                       args.plot_p_phi)
+        curr_phase = 'Plotting'
+        res = plot_data_file(args.data_file, args.plot_type, args.sParams, args.plot_freq, args.plot_phi,
+                             args.plot_theta, args.plot_p_phi)
         if not res:
-            util.printf(curr_phase, "Error", f"Could not generate {args.plot_type} plot from '{args.data_file}'.")
+            util.printf(curr_phase, "Error", f"Could not generate '{args.plot_type}' plot from '{args.data_file}'.")
         exit(1)
 
     if run_type == "a":
         util.printf(curr_phase, None, "Running the alignment routine only.")
-    # elif run_type == "s":
-    #    util.printf(curr_phase, "Debug", "Skipping the alignment routine.")
+
     elif run_type == "c":
         util.printf(curr_phase, "Debug", "Starting the calibration interface.")
-    sys_cmds = False
+
     # Process Configuration File if running the entire system
+    sys_cmds = False
     if run_type in ("f"):  # , "s"):
         sys_cmds = process_config(cfg)
         if not sys_cmds:
             exit(-1)
-        # parser.print_cmds(sys_cmds) # Print out the commands
-        # exit(1)
+
     # Start execution/running phase
     curr_phase = "Running"
     if run_type in ("f"):  # , "s"):
         # Start Running the experiments
         res = run_experiments(sys_cmds['cmds'], sys_cmds['meas'], sys_cmds['calib'], sys_cmds['plot'])
-        # if res[0] is False:
-        #     util.printf(curr_phase, "Error", f"Issue executing {res[1]} received {res[2]} instead.")
+
     elif run_type == "c":
         time.sleep(1)
         error_code = calibrate()
@@ -360,9 +397,6 @@ if __name__ == '__main__':
         handle_error_code(error_code)
 
     # Shutdown Phase
-    # curr_phase = "Shutdown"
-    # print()
-    # util.printf(curr_phase, None, "Closing down system...")
-    # util.printf(curr_phase, None, "Successfully closed down system...")
+
 
     exit(1)
