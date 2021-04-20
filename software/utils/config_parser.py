@@ -9,10 +9,16 @@ from utils import util
 
 
 DEF_ALIGN = True
-DEF_ALIGN_TOLERANCE = 10
+DEF_ALIGN_TOLERANCE = 10.0
+
+DEF_RUN_PLOTTER = False
+DEF_DATA_FILE_NAME = "data"
+DEF_PLOT_TYPE = "3d"
+DEF_FREQ = "10GHz"
+DEF_PROBE_PHI = 0
 DEF_TEST_PHI = 0
 DEF_TEST_THETA = 0
-DEF_PROBE_PHI = 0
+
 ALLOWED_PLOT_TYPES = ("3d", "cutPhi", "cutTheta")
 
 '''
@@ -66,18 +72,20 @@ def get_config(full_file_name):
         # Get file name with file path
         full_file_name = find_config(full_file_name)
 
-    #
     flow = False
     meas = False
     plot = False
     calib = False
-    # print(f"full_file_name {full_file_name}")
+    error = [False, False, False]
+    # Open file and get connents
     with open(full_file_name, "r") as file:
+        # Check to see if the file is in the correct JSON format
         try:
             data = json.load(file)
         except json.decoder.JSONDecodeError:
-            print("error here")
             return flow, meas, calib, plot
+
+        # Pull key sections
         flow = data.get("flow")
         meas = data.get("meas")
         plot = data.get("plot")
@@ -85,78 +93,96 @@ def get_config(full_file_name):
 
         # Provide defaults for meas if not provided
         if meas is None or not meas:
-            meas = {"deviceAddress": vna.DEF_DEV_ADDR,
-                    "freqSweepMode": vna.DEF_FREQ_MODE,
-                    "sParams": vna.DEF_S_PARAMS
-                    }
+            meas = {}
         meas.setdefault("deviceAddress", vna.DEF_DEV_ADDR)
         meas.setdefault("freqSweepMode", vna.DEF_FREQ_MODE)
         meas.setdefault("sParams", vna.DEF_S_PARAMS)
+
         # Check for valid modes
         if meas["freqSweepMode"] not in vna.ALLOWED_FREQ_MODES:
-            meas = False
+            error[0] = True
 
         # Provide defaults for calib if not provided
         if calib is None or not calib:
-            calib = {"align": DEF_ALIGN,
-                     "alignTolerance": DEF_ALIGN_TOLERANCE
-                     }
+            calib = {}
+
         calib.setdefault("align", DEF_ALIGN)
         calib.setdefault("alignTolerance", DEF_ALIGN_TOLERANCE)
         # Assign align to a boolean
-        if calib['align'] in ("True", "true"):
-            calib['align'] = True
-        elif calib['align'] in ("False", "false"):
-            calib['align'] = False
-        else:
-            calib = False
+        if type(calib['align']) == str:
+            if calib['align'] in ("True", "true"):
+                calib['align'] = True
+            elif calib['align'] in ("False", "false"):
+                calib['align'] = False
+            else:
+                error[1] = True
+
         # Check for valid tolerances
         if type(calib["alignTolerance"]) != float and type(calib["alignTolerance"]) != int\
                 or calib["alignTolerance"] <= 0:
-            calib = False
+            error[1] = True
         else:
             calib["alignTolerance"] = float(calib["alignTolerance"])
 
-        # TODO add checks for plotting once items are figured out
+        # Provide defaults for plot
         if plot is None or not plot:
-            plot = {"dataFileName": "data_out",
-                    "plotType": "FILL IN",
-                    "plotFreq": "3d",
-                    "plotTestPhi": 100,
-                    "plotTestTheta": 100,
-                    "plotProbePhi": 100
-                    }
-        # Check for valid file names
-        if plot["dataFileName"].rfind(".") != -1:
-            plot["dataFileName"] = plot["dataFileName"][0:plot["dataFileName"].rfind(".")]
-        plot["dataFileName"] = util.get_root_path() + "\\data\\" + plot["dataFileName"]
-        plot["dataFileName"] = util.append_date_time_str(plot["dataFileName"])
-        # Verify a good plot type
-        if plot["plotType"] not in ALLOWED_PLOT_TYPES:
-            plot = False
-        # elif plot["plotType"] == "freq":
-        if 'MHz' in plot["plotFreq"]:
-             plot["plotFreq"] = 1e6 * float(plot["plotFreq"][:-3])
-        elif 'GHz' in plot["plotFreq"]:
-            plot["plotFreq"] = 1e9 * float(plot["plotFreq"][:-3])
-        else:
-           plot = False
-           
-        
-
+            plot = {}
+        plot.setdefault("runPlotter", DEF_RUN_PLOTTER)
+        plot.setdefault("dataFileName", DEF_DATA_FILE_NAME)
+        plot.setdefault("plotType", DEF_PLOT_TYPE)
+        plot.setdefault("plotFreq", DEF_FREQ)
         plot.setdefault("plotTestPhi", DEF_TEST_PHI)
         plot.setdefault("plotTestTheta", DEF_TEST_THETA)
         plot.setdefault("plotProbePhi", DEF_PROBE_PHI)
 
-        # Convert orientations to floats
-        plot["plotTestPhi"] = float(plot["plotTestPhi"])
-        plot["plotTestTheta"] = float(plot["plotTestTheta"])
-        plot["plotProbePhi"] = float(plot["plotProbePhi"])
+        # Assign runPlotter to a boolean
+        if type(plot["runPlotter"]) == str:
+            if plot["runPlotter"] in ("True", "true"):
+                plot["runPlotter"] = True
+            elif plot["runPlotter"] in ("False", "false"):
+                plot["runPlotter"] = False
+            else:
+                error[2] = True
 
-        # Currently plot regardless
-        plot.setdefault("runPlotter", True)
-        # print(plot)
-    #pdb.set_trace()
+        # Check for valid file names remove any extensions
+        if plot["dataFileName"].rfind(".") != -1:
+            plot["dataFileName"] = plot["dataFileName"][0:plot["dataFileName"].rfind(".")]
+        plot["dataFileName"] = util.get_root_path() + "\\data\\" + plot["dataFileName"]
+        plot["dataFileName"] = util.append_date_time_str(plot["dataFileName"])
+
+        # Verify a good plot type
+        if plot["plotType"] not in ALLOWED_PLOT_TYPES:
+            error[2] = True
+
+        # Convert frequency to a float in GHz
+        try:
+            if 'MHz' in plot["plotFreq"]:
+                 plot["plotFreq"] = 1e6 * float(plot["plotFreq"][:-3])
+            elif 'GHz' in plot["plotFreq"]:
+                plot["plotFreq"] = 1e9 * float(plot["plotFreq"][:-3])
+            elif 'Hz' in plot["plotFreq"]:
+                plot["plotFreq"] = float(plot["plotFreq"][:-3])
+            else:
+               error[2] = True
+
+            # Convert orientations to floats
+            plot["plotTestPhi"] = float(plot["plotTestPhi"])
+            plot["plotTestTheta"] = float(plot["plotTestTheta"])
+            plot["plotProbePhi"] = float(plot["plotProbePhi"])
+        except:
+            # plot = False
+            error[2] = True
+
+        print(json.dumps(meas, indent=4))
+        print(json.dumps(plot, indent=4))
+        print(json.dumps(calib, indent=4))
+        if error[0]:
+            meas = False
+        if error[1]:
+            calib = False
+        if error[2]:
+            plot = False
+
     return flow, meas, calib, plot
 
 
