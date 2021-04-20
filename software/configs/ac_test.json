@@ -9,12 +9,14 @@
     "alignTolerance": 10
   },
   "plot": {
+    "runPlotter": "True",
     "dataFileName": "test.txt",
     "plotType": "cutPhi",
     "plotFreq": "10GHz",
     "plotTestPhi": 0,
     "plotTestTheta": 100,
-    "plotProbePhi": 0
+    "plotProbePhi": 0,
+
   },
   "flow": [
     {
