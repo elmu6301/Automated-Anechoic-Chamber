@@ -20,11 +20,19 @@ curr_phase = "Setup"
 mode = "Debug"
 
 
-def print_usage():
-    print("\tDirecMeasure Usage")
-    print("\t\t- Run with laser alignment: main.py -c <configfile>")
-    print("\t\t- Run without laser alignment: main.py -c <configfile> -l")
-    print("\t\t- Calibrate the system: main.py --calibrate")
+def set_usage(exe_name):
+    exe_name ="./" + exe_name
+    help = f"\tGet Help:\n\t\t{exe_name} --h\n\t\t{exe_name} --help\n"
+    align = f"\tAlign System:\n\t\t{exe_name} --a\n\t\t{exe_name} --alignOnly\n"
+    calibrate = f"\tCalibrate System:\n\t\t{exe_name} --calibrate\n"
+    full_syst = f"\tRun Entire System:\n\t\t{exe_name} --config <config_file.json>\n"
+    plot3d = f"\t3D Plot:\n\t\t{exe_name} --plot --dataFile <data.csv> --plotType 3d --freq <freq>\n"
+    plotPhi = f"\tPhi Cut Plot: \n\t\t{exe_name} --plot --dataFile <data.csv> --plotType cutPhi " \
+              f"--freq <freq> --phi <phi>\n"
+    plotTheta = f"\tTheta Cut Plot:\n\t\t{exe_name} --plot --dataFile <data.csv> --plotType cutTheta" \
+                f" --freq <freq> --theta <theta>\n"
+
+    return help + align + calibrate + full_syst + plot3d + plotPhi + plotTheta
 
 
 def print_welcome_sign():
@@ -50,12 +58,12 @@ def process_cmd_line():
 
     # Set up parser
     opt_parser = OptionParser()
-    usage = "usage: ./direcMeasure --config<config_file>"
+    opt_parser.prog = "direcMeasure"
+    usage = set_usage(opt_parser.prog)
     opt_parser.set_usage(usage)
     opt_parser.set_defaults(run_type="f", verbose=False)
-    opt_parser.prog = "direcMeasure"
 
-    # Add options
+    # Main options
     opt_parser.add_option("-c", "--config", type="string", action="store", dest="cfg", default='',
                       help="Configuration file used to control the system. Must be a JSON file.")
     opt_parser.add_option("-a", "--alignOnly", action="callback", callback=config_run, dest="run_type",
@@ -64,6 +72,7 @@ def process_cmd_line():
                       help="Run the calibration interface.")
     opt_parser.add_option("--plot", action="store_true", dest="plot", default=False,
                       help="Run the calibration interface.")
+    # Plot options
     opt_parser.add_option("--dataFile", type="string", action="store", dest="data_file", default='',
                       help="Plot option. Input data file to plot")
     opt_parser.add_option("--plotType", type="string", action="store", dest="plot_type", default='',
@@ -305,7 +314,6 @@ def plot_data_file(data_file, plot_type, sParams, plot_freq, plot_t_phi, plot_t_
         # util.printf(curr_phase, None, f"Found {csv_file_name}...")
         return True
     return False
-
 
 
 # Press the green button in the gutter to run the script.

@@ -225,12 +225,12 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         assert (type(plot_p_phi) == float) and (-180 <= plot_p_phi <= 180)
         printf('\t\tProbe phi Angle to Plot: %s deg' % (plot_p_phi))
 
-        # CREATE THE CSV
-        # generate the appropriate column names
-        col_names = util.gen_col_names(sParams)
-        # print(csv_file_name)
-        data = np.array([])  # np.array([[-1]] * len(col_names)) # trash data
-        csv.createCSV(csv_file_name, col_names, data)
+        # # CREATE THE CSV
+        # # generate the appropriate column names
+        # col_names = util.gen_col_names(sParams)
+        # # print(csv_file_name)
+        # data = np.array([])  # np.array([[-1]] * len(col_names)) # trash data
+        # csv.createCSV(csv_file_name, col_names, data)
 
     except Exception as e:
         print(f"Exception: {e}")
@@ -284,19 +284,12 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
 
         res, real_startF, real_stopF = VNA.init_freq_sweep(startF, stopF, num_points)
 
-        # if not res:
-        #     printf(f"\tTried running VNA with start frequency of "
-        #            f"{real_startF} GHz and stop frequency of {real_stopF} GHz ")
-        #     return error_codes.VNA
-        # printf(f"\tRunning VNA with start frequency of {real_startF} GHz and stop frequency of {real_stopF} GHz ")
-
 
     except Exception as e:
         print(f"Exception: {e}")
         # disconnect()
         return error_codes.VNA
     printf('\t\tDone.')
-    
 
     current_phase = 'Running'
     # Run alignment routine
@@ -364,6 +357,12 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
     else:
         printf('Skipping alignment phase.')
 
+    # Create the CSV to store the collected data
+
+    # generate the appropriate column names
+    col_names = util.gen_col_names(sParams)
+    csv.createCSV(csv_file_name, col_names, np.array([]))
+
     # Move motors to start location
     printf('Moving motors to starting orientations...')
     test_theta_offset = int(TT_SPR * np.abs(test_theta_start) / 360)
@@ -426,25 +425,19 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
                 printf('\t\tTest-phi orientation: %f degrees.' % (test_phi_orientation))
                 printf('\t\tProbe-phi orientation: %f degrees.' % (probe_phi_orientation))
 
-                ##################################################################################
-                #   Elena: take/record data here; see variables representing current orientation above
-
+                # Wait for system to settle before taking a measurement
                 time.sleep(1)
-                # Take data
-                data_out = []
-                col_names = []
-                # Note don't need to use column names just append to data_out and cast as np array
 
-                data_out, temp = VNA.sparam_data()
-                # Append orientation info to data # TODO verify this
+                # Take data
+                data_out, col = VNA.sparam_data()
+                # Append orientation info to data
                 data_out.insert(1, [test_theta_orientation] * num_points)
                 data_out.insert(2, [test_phi_orientation] * num_points)
                 data_out.insert(3, [probe_phi_orientation] * num_points)
                 data_to_save = np.array(data_out, dtype=object)
-                # Write to CSV file
-                csv.appendToCSV(csv_file_name, data_to_save)
 
-                ##################################################################################
+                # Write to CSV file generated earlier
+                csv.appendToCSV(csv_file_name, data_to_save)
 
                 if idx__test_phi != test_phi_steps - 1:
                     printf('\tMoving test-phi motor...')
