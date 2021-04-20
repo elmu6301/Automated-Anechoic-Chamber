@@ -228,7 +228,7 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
 
         # CREATE THE CSV
         # col_names = util.gen_col_names(sParams)
-        # data = np.array([1])
+        # data = np.array([])
         # csv.createCSV(csv_file_name, col_names, data)
         #
         # current_phase = 'Plotting'
@@ -250,6 +250,38 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         #     printf('\tDone.')
         # else:
         #     printf('Skipping plotting phase.')
+
+            # Connect to VNA
+        # printf('\tConnecting to VNA...')
+        # VNA = ""
+        # try:
+        #     # Connect to VNA and configure it
+        #     VNA = VNA_HP8719A(sparam_list=sParams, address=vna_address, freq_mode=freq_sweep_type)
+        #     if not VNA.instrument:
+        #         return error_codes.VNA
+        #     # Configure start and stop frequency
+        #     startF = "%f GHz" % freq_start
+        #     stopF = "%f GHz" % freq_stop
+        #
+        #     res, real_startF, real_stopF = VNA.init_freq_sweep(startF, stopF, num_points)
+        #
+        #
+        # except Exception as e:
+        #     print(f"Exception: {e}")
+        #     # disconnect()
+        #     return error_codes.VNA
+        # printf('\t\tDone.')
+
+        # Take data
+        # data_out, col = VNA.sparam_data()
+        # # Append orientation info to data
+        # data_out.insert(1, [0] * num_points)
+        # data_out.insert(2, [1] * num_points)
+        # data_out.insert(3, [2] * num_points)
+        # data_to_save = np.array(data_out, dtype=object)
+        #
+        # # Write to CSV file generated earlier
+        # csv.appendToCSV(csv_file_name, data_to_save)
 
     except Exception as e:
         print(f"Exception: {e}")
@@ -309,6 +341,7 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         # disconnect()
         return error_codes.VNA
     printf('\t\tDone.')
+
 
     current_phase = 'Running'
     # Run alignment routine

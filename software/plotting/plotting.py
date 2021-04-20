@@ -29,7 +29,7 @@ def plot3DRadPattern(csv_filename,plot_filename,param,frequency):
     assert type(param) == str
     assert type(frequency) == float
 
-    print("Plotting data stored in: " + csv_filename)
+    # print("Plotting data stored in: " + csv_filename)
     theta,phi,param_vals = csv_f.getSparamData3D(csv_filename,param,frequency)
 
     #Convert to radians
@@ -58,7 +58,7 @@ def plotThetaCut(csv_filename,plot_filename,param,frequency,theta):
     assert type(frequency) == float
     assert type(theta) == float
 
-    print("Plotting data stored in: " + csv_filename)
+    # print("Plotting data stored in: " + csv_filename)
     phi_vals,param_vals = csv_f.getThetaCutData(csv_filename,param,frequency,theta)
 
     #Convert to radians
@@ -88,9 +88,8 @@ def plotPhiCut(csv_filename,plot_filename,param,frequency,phi):
     assert type(phi) == float
     
     csv_filename = os.path.join(os.getcwd(), 'data', csv_filename)
-    print("Plotting data stored in: " + csv_filename)
-    
-    print("Plotting data stored in: " + csv_filename)
+    # print("Plotting data stored in: " + csv_filename)
+
     theta_vals,param_vals = csv_f.getPhiCutData(csv_filename,param,frequency,phi)
     
     #Convert to radians
@@ -149,7 +148,7 @@ def plot2DSparamPhi(csv_filename,plot_filename,parameter,theta,frequency):
     assert type(theta) == float
     assert type(frequency) == float
 
-    print("Plotting data stored in: " + filename)
+    # print("Plotting data stored in: " + filename)
 
 def plot2DSparamTheta(csv_filename,plot_filename,parameter,phi,frequency):
     #Plots magnitude and phase for a constant frequency and phi
@@ -160,7 +159,7 @@ def plot2DSparamTheta(csv_filename,plot_filename,parameter,phi,frequency):
     assert type(frequency) == float
     assert type(phi) == float
 
-    print("Plotting data stored in: " + filename)
+    # print("Plotting data stored in: " + filename)
 
 # if __name__ == "__main__":
 #     plot3DRadPattern('..\\data\\test.csv','..\\data\\test.jpg','S21',1.351000000000000000e+10)

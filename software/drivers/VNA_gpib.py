@@ -138,7 +138,7 @@ class VNA_HP8719A:
 
     #Collect logarithmic magnitude data for a frequency sweep
     def logmag_data(self):
-        #self.instrument.write("LOGM")  # Set display to log magnitude format
+        self.instrument.write("LOGM")  # Set display to log magnitude format
         # time.sleep(5)
         try:
             start_time = time.perf_counter_ns()

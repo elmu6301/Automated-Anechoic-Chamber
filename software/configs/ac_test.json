@@ -31,7 +31,7 @@
       "stepsProbePhi": 1,
       "startFrequency": "10GHz",
       "stopFrequency": "11GHz",
-      "numPoints": 3
+      "numPoints": 1601
     }
   ]
 }
