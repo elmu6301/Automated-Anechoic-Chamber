@@ -32,7 +32,7 @@ def plot3DRadPattern(csv_filename,plot_filename,param,frequency):
     phi *= np.pi/180
 
     THETA,PHI = np.meshgrid(theta,phi)
-    pdb.set_trace()
+    # pdb.set_trace()
     X = param_vals * np.sin(PHI) * np.cos(THETA)
     Y = param_vals * np.sin(PHI) * np.sin(THETA)
     Z = param_vals * np.cos(PHI)
@@ -41,7 +41,7 @@ def plot3DRadPattern(csv_filename,plot_filename,param,frequency):
     plot = ax.plot_surface(X, Y, Z,rstride=1,cstride=1,cmap=plt.get_cmap('jet'),linewidth=0,antialiased=False,alpha=0.5)
     fig.colorbar(plot, shrink=0.5, aspect=5)
     plt.savefig(plot_filename)
-    plt.show()
+    # plt.show()
 
 
 def plotThetaCut(csv_filename,plot_filename,param,frequency,theta):

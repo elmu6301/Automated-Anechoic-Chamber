@@ -335,15 +335,15 @@ def plot_data_file(data_file, plot_type, sParams, plot_freq, plot_t_phi, plot_t_
             except:
                 return False
         elif plot_type == "cutPhi":
-            try:
-                plots.plotPhiCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_phi)
-            except:
-                return False
+            # try:
+            plots.plotPhiCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_phi)
+            # except:
+            #     return False
         elif plot_type == "cutTheta":
-            try:
-                plots.plotThetaCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_theta)
-            except:
-                return False
+            # try:
+            plots.plotThetaCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_theta)
+            # except:
+            #     return False
         else:
             return False
         return True
