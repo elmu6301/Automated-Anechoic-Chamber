@@ -92,6 +92,10 @@ def process_cmd_line():
                            "and between -180 and 180 degrees.")
     opt_parser.add_option("--sParams", type="string", action="store", dest="sParams", default="S21",
                       help="Plot option. S parameters to plot.")
+    opt_parser.add_option("--logName", type="string", action="store", dest="log_name", default=None,
+                      help="Filename for terminal output log.")
+    opt_parser.add_option("--logPath", type="string", action="store", dest="log_path", default=None,
+                      help="Filepath for terminal output log.")
 
     # Check to make sure a config file was entered with the -c
     index = -1
@@ -247,6 +251,7 @@ def process_config(config_name):
 
 
 def handle_error_code(error_code):
+    curr_phase = "Shutdown"
     if error_code == error_codes.SUCCESS:  # routine finished without issues
         util.printf(curr_phase, None, "Successfully ran routine without issues. ")
     elif error_code == error_codes.CONNECTION:  # could not find any connected motor driver PCBs
@@ -361,6 +366,8 @@ if __name__ == '__main__':
         exit(-1)
     cfg = args.cfg
     run_type = args.run_type
+    if run_type != "c":
+        util.initLog(args.log_name, args.log_path)
     if run_type == "p":
         curr_phase = 'Plotting'
         res = plot_data_file(args.data_file, args.plot_type, args.sParams, args.plot_freq, args.plot_phi,
@@ -395,6 +402,9 @@ if __name__ == '__main__':
     elif run_type == 'a':
         error_code = expt.run_Align()
         handle_error_code(error_code)
+        
+    if run_type != "c":
+        util.closeLog()
 
     # Shutdown Phase
 
