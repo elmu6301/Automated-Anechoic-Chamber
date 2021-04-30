@@ -1,0 +1,36 @@
+(Setup):    Starting configuration file parsing process on ac_test.json...
+(Setup):    Successfully generated experiment commands from 'ac_test.json'.
+(Running):  Running Type: sweepFreq
+(Setup):    Parsing configuration settings...
+(Setup):    	Test-theta axis:
+(Setup):    		Start: 0.000000 degrees
+(Setup):    		End: 360.000000 degrees
+(Setup):    		Steps: 1
+(Setup):    	Test-phi axis:
+(Setup):    		Start: 0.000000 degrees
+(Setup):    		End: 360.000000 degrees
+(Setup):    		Steps: 1
+(Setup):    	Probe-phi axis:
+(Setup):    		Start: 0.000000 degrees
+(Setup):    		End: 360.000000 degrees
+(Setup):    		Steps: 1
+(Setup):    	Alignment:
+(Setup):    		Will use: False
+(Setup):    	VNA settings:
+(Setup):    		Device Address is: 16
+(Setup):    		Sweep type: lin
+(Setup):    		Types of data to collect: S21
+(Setup):    		Number of points to sweep: 0.000000 GHz
+(Setup):    		Start frequency: 10.000000 GHz
+(Setup):    		Stop frequency: 11.000000 GHz
+(Setup):    	Plot settings:
+(Setup):    		Raw Data File: test.csv
+(Setup):    		Plot File: test.pdf
+(Setup):    		Plot Type: cutPhi
+(Setup):    		Frequency to Plot: 10000000000.0 Hz
+(Setup):    		Test theta Angle to Plot: 100.0 deg
+(Setup):    		Test phi Angle to Plot: 0.0 deg
+(Setup):    		Probe phi Angle to Plot: 0.0 deg
+(Setup):    Setting up the system...
+(Setup):    	Detecting motor drivers...
+(Shutdown) Error: USB devices must be of different types. Ensure that the test-side device is set to TX and that the probe-side device is set to RX.

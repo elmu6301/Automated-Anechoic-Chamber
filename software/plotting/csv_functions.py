@@ -339,10 +339,13 @@ def getPhiCutData(csv_filename, sparam, frequency, phi):
     assert type(phi) == float
 
     freq_raw, theta_raw, phi_raw, params_col_names, param_raw = getRawData(csv_filename, [sparam], dBOnly=True)
-    param_raw = param_raw[0]
+    param_raw = param_raw[0][0]
+    theta_raw = theta_raw[0]
+    phi_raw = phi_raw[0]
+    freq_raw = freq_raw[0]
 
-    frequency = freq_raw[0]
-    phi = phi_raw[0]
+    #frequency = freq_raw[0]
+    #phi = phi_raw[0]
     # assert frequency in freq_raw
     # assert phi in phi_raw
     # assert max(theta_raw) - min(theta_raw) <= 360

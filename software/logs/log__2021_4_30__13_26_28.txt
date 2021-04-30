@@ -1,0 +1,63 @@
+(Setup):    Starting configuration file parsing process on ac_test.json...
+(Setup):    Successfully generated experiment commands from 'ac_test.json'.
+(Running):  Running Type: sweepFreq
+(Setup):    Parsing configuration settings...
+(Setup):    	Test-theta axis:
+(Setup):    		Start: 0.000000 degrees
+(Setup):    		End: 10.000000 degrees
+(Setup):    		Steps: 1
+(Setup):    	Test-phi axis:
+(Setup):    		Start: 0.000000 degrees
+(Setup):    		End: 360.000000 degrees
+(Setup):    		Steps: 1
+(Setup):    	Probe-phi axis:
+(Setup):    		Start: 0.000000 degrees
+(Setup):    		End: 360.000000 degrees
+(Setup):    		Steps: 1
+(Setup):    	Alignment:
+(Setup):    		Will use: False
+(Setup):    	VNA settings:
+(Setup):    		Device Address is: 16
+(Setup):    		Sweep type: lin
+(Setup):    		Types of data to collect: S21
+(Setup):    		Number of points to sweep: 0.000000 GHz
+(Setup):    		Start frequency: 10.000000 GHz
+(Setup):    		Stop frequency: 11.000000 GHz
+(Setup):    	Plot settings:
+(Setup):    		Raw Data File: test.csv
+(Setup):    		Plot File: test.pdf
+(Setup):    		Plot Type: cutPhi
+(Setup):    		Frequency to Plot: 10000000000.0 Hz
+(Setup):    		Test theta Angle to Plot: 100.0 deg
+(Setup):    		Test phi Angle to Plot: 0.0 deg
+(Setup):    		Probe phi Angle to Plot: 0.0 deg
+(Setup):    Setting up the system...
+(Setup):    	Detecting motor drivers...
+(Setup):    		Done.
+(Setup):    	Connecting to test-side device...
+(Setup):    		Done.
+(Setup):    	Connecting to probe-side device...
+(Setup):    		Done.
+(Setup):    	Connecting to VNA...
+(Setup):    Selected GPIB device: HEWLETT PACKARD,8719A,0,1.01
+
+(Running):  Setting frequency range from 10.000000 GHz to 11.000000 GHz with 3 points
+(Setup):    		Done.
+(Running):  Skipping alignment phase.
+(Running):  Moving motors to starting orientations...
+(Running):  	Moving test-theta motor...
+(Running):  		Done.
+(Running):  		Time taken: 0.062491 seconds.
+(Running):  	Moving test-phi motor...
+(Running):  		Done.
+(Running):  		Time taken: 0.079212 seconds.
+(Running):  	Moving probe-phi motor...
+(Running):  		Done.
+(Running):  		Time taken: 0.079204 seconds.
+(Running):  Running measurement phase...
+(Running):  	Taking measurement 1 of 1...
+(Running):  		Test-theta orientation: 0.000000 degrees.
+(Running):  		Test-phi orientation: 0.000000 degrees.
+(Running):  		Probe-phi orientation: 0.000000 degrees.
+(Running):  Collecting S21 data...
+(Running):  	Moving test-theta motor...

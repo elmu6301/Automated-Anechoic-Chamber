@@ -21,8 +21,8 @@
     {
       "expType": "sweepFreq",
       "startTestTheta": 0,
-      "endTestTheta": 10,
-      "stepsTestTheta": 2,
+      "endTestTheta": 0,
+      "stepsTestTheta": 1,
       "startTestPhi": 0,
       "endTestPhi": 0,
       "stepsTestPhi": 1,
