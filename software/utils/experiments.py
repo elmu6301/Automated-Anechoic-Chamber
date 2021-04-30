@@ -70,7 +70,7 @@ def run_Align():
     printf('\tAligning test-theta motor...')
     t0 = time.time()
     error_code = Test_MD.align('theta')
-    if error_code != error_codes.SUCCESS:
+    if error_code == error_codes.MISC:
         disconnect()
         return error_codes.TEST_THETA_FAULT
     printf('\t\tDone.')
@@ -78,7 +78,7 @@ def run_Align():
     printf('\tAligning test-phi motor...')
     t0 = time.time()
     error_code = Test_MD.align('phi')
-    if error_code != error_codes.SUCCESS:
+    if error_code == error_codes.MISC:
         disconnect()
         return error_codes.TEST_PHI_FAULT
     printf('\t\tDone.')
@@ -86,7 +86,7 @@ def run_Align():
     printf('\tAligning probe-phi motor...')
     t0 = time.time()
     error_code = Probe_MD.align('phi')
-    if error_code != error_codes.SUCCESS:
+    if error_code == error_codes.MISC:
         disconnect()
         return error_codes.PROBE_PHI_FAULT
     printf('\t\tDone.')
@@ -361,25 +361,34 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
         printf('\tAligning test-theta motor...')
         t0 = time.time()
         error_code = Test_MD.align('theta', gradual=True)
-        if error_code != error_codes.SUCCESS:
+        if error_code == error_codes.MISC:
             disconnect()
             return error_codes.TEST_THETA_FAULT
+        elif error_code != error_codes.SUCCESS:
+            disconnect()
+            return error_code
         printf('\t\tDone.')
         printf('\t\tTime taken: %f seconds.' % (time.time() - t0))
         printf('\tAligning test-phi motor...')
         t0 = time.time()
         error_code = Test_MD.align('phi')
-        if error_code != error_codes.SUCCESS:
+        if error_code == error_codes.MISC:
             disconnect()
             return error_codes.TEST_PHI_FAULT
+        elif error_code != error_codes.SUCCESS:
+            disconnect()
+            return error_code
         printf('\t\tDone.')
         printf('\t\tTime taken: %f seconds.' % (time.time() - t0))
         printf('\tAligning probe-phi motor...')
         t0 = time.time()
         error_code = Probe_MD.align('phi')
-        if error_code != error_codes.SUCCESS:
+        if error_code == error_codes.MISC:
             disconnect()
             return error_codes.PROBE_PHI_FAULT
+        elif error_code != error_codes.SUCCESS:
+            disconnect()
+            return error_code
         printf('\t\tDone.')
         printf('\t\tTime taken: %f seconds.' % (time.time() - t0))
         printf('\tMeasuring light level when aligned...')
@@ -426,25 +435,34 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
     printf('\tMoving test-theta motor...')
     t0 = time.time()
     error_code = Test_MD.turnMotor('theta', test_theta_offset, test_theta_dir, gradual=True)
-    if error_code != error_codes.SUCCESS:
+    if error_code == error_codes.MISC:
         disconnect()
         return error_codes.TEST_THETA_FAULT
+    elif error_code != error_codes.SUCCESS:
+        disconnect()
+        return error_code
     printf('\t\tDone.')
     printf('\t\tTime taken: %f seconds.' % (time.time() - t0))
     printf('\tMoving test-phi motor...')
     t0 = time.time()
     error_code = Test_MD.turnMotor('phi', test_phi_offset, test_phi_dir)
-    if error_code != error_codes.SUCCESS:
+    if error_code == error_codes.MISC:
         disconnect()
         return error_codes.TEST_PHI_FAULT
+    elif error_code != error_codes.SUCCESS:
+        disconnect()
+        return error_code
     printf('\t\tDone.')
     printf('\t\tTime taken: %f seconds.' % (time.time() - t0))
     printf('\tMoving probe-phi motor...')
     t0 = time.time()
     error_code = Probe_MD.turnMotor('phi', probe_phi_offset, probe_phi_dir)
-    if error_code != error_codes.SUCCESS:
+    if error_code == error_codes.MISC:
         disconnect()
         return error_codes.PROBE_PHI_FAULT
+    elif error_code != error_codes.SUCCESS:
+        disconnect()
+        return error_code
     printf('\t\tDone.')
     printf('\t\tTime taken: %f seconds.' % (time.time() - t0))
 
@@ -495,18 +513,24 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
                     printf('\tMoving test-phi motor...')
                     t0 = time.time()
                     error_code = Test_MD.turnMotor('phi', test_phi_increment, test_phi_direction)
-                    if error_code != error_codes.SUCCESS:
+                    if error_code == error_codes.MISC:
                         disconnect()
                         return error_codes.TEST_PHI_FAULT
+                    elif error_code != error_codes.SUCCESS:
+                        disconnect()
+                        return error_code
                     printf('\t\tDone.')
                     printf('\t\tTime taken: %f seconds.' % (time.time() - t0))
             if idx__probe_phi != probe_phi_steps - 1:
                 printf('\tMoving probe-phi motor...')
                 t0 = time.time()
                 error_code = Probe_MD.turnMotor('phi', probe_phi_increment, probe_phi_direction)
-                if error_code != error_codes.SUCCESS:
+                if error_code == error_codes.MISC:
                     disconnect()
                     return error_codes.PROBE_PHI_FAULT
+                elif error_code != error_codes.SUCCESS:
+                    disconnect()
+                    return error_code
                 printf('\t\tDone.')
                 printf('\t\tTime taken: %f seconds.' % (time.time() - t0))
             if np.abs(test_phi_start - test_phi_end) != 360:
@@ -514,18 +538,24 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
                 t0 = time.time()
                 error_code = Test_MD.turnMotor('phi', (test_phi_steps - 1) * test_phi_increment,
                                                'ccw' if test_phi_direction == 'cw' else 'cw')
-                if error_code != error_codes.SUCCESS:
+                if error_code == error_codes.MISC:
                     disconnect()
                     return error_codes.TEST_PHI_FAULT
+                elif error_code != error_codes.SUCCESS:
+                    disconnect()
+                    return error_code
                 printf('\t\tDone.')
                 printf('\t\tTime taken: %f seconds.' % (time.time() - t0))
         if idx__test_theta != test_theta_steps - 1:
             printf('\tMoving test-theta motor...')
             t0 = time.time()
             error_code = Test_MD.turnMotor('theta', test_theta_increment, test_theta_direction, gradual=True)
-            if error_code != error_codes.SUCCESS:
+            if error_code == error_codes.MISC:
                 disconnect()
                 return error_codes.TEST_THETA_FAULT
+            elif error_code != error_codes.SUCCESS:
+                disconnect()
+                return error_code
             printf('\t\tDone.')
             printf('\t\tTime taken: %f seconds.' % (time.time() - t0))
         if np.abs(probe_phi_start - probe_phi_end) != 360:
@@ -533,18 +563,24 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
             t0 = time.time()
             error_code = Probe_MD.turnMotor('phi', (probe_phi_steps - 1) * probe_phi_increment,
                                             'ccw' if probe_phi_direction == 'cw' else 'cw')
-            if error_code != error_codes.SUCCESS:
+            if error_code == error_codes.MISC:
                 disconnect()
                 return error_codes.PROBE_PHI_FAULT
+            elif error_code != error_codes.SUCCESS:
+                disconnect()
+                return error_code
             printf('\t\tDone.')
             printf('\t\tTime taken: %f seconds.' % (time.time() - t0))
     printf('\tMoving test-theta motor...')
     t0 = time.time()
     error_code = Test_MD.turnMotor('theta', (test_theta_steps - 1) * test_theta_increment,
                                    'ccw' if test_theta_direction == 'cw' else 'cw', gradual=True)
-    if error_code != error_codes.SUCCESS:
+    if error_code == error_codes.MISC:
         disconnect()
         return error_codes.TEST_THETA_FAULT
+    elif error_code != error_codes.SUCCESS:
+        disconnect()
+        return error_code
     printf('\t\tDone.')
     printf('\t\tTime taken: %f seconds.' % (time.time() - t0))
 

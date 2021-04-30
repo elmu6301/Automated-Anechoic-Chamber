@@ -23,6 +23,7 @@ INVBSL   = 'INVBSL'
 MOVE     = 'MOVE'
 FREQ     = 'FREQ'
 ORIENT   = 'ORIENTATION'
+ABORT    = 'ABORT'
 
 def getMotorDriverComPorts(vid=0x2047, pid=0x3Df):
     ports = []
@@ -137,6 +138,20 @@ class MotorDriver:
         rv = self._rxCmd()
         assert self._rxCmd() == cmd
         return int(rv)
+    def abort(self, motor):
+        try:
+            assert motor in ['theta', 'phi']
+        except:
+            return error_codes.BAD_ARGS
+        args = [ABORT]
+        args.append('PHI' if motor=='phi' else 'THETA')
+        cmd = self._txCmd(args)
+        assert self._rxCmd() == ACK
+        rv = self._rxCmd()
+        if rv == cmd:
+            return error_codes.SUCCESS
+        else:
+            return error_codes.MISC
     def turnMotor(self, motor, num_steps, direction, gradual=False):
         try:
             assert motor in ['theta', 'phi']
@@ -152,12 +167,16 @@ class MotorDriver:
         args.append('GRADUAL' if gradual else 'JUMP')
         args.append('%d'%(num_steps))
         cmd = self._txCmd(args)
-        assert self._rxCmd() == ACK
-        rv = self._rxCmd()
-        if rv == cmd:
-            return error_codes.SUCCESS
-        else:
-            return error_codes.MISC
+        try:
+            assert self._rxCmd() == ACK
+            rv = self._rxCmd()
+            if rv == cmd:
+                return error_codes.SUCCESS
+            else:
+                return error_codes.MISC
+        except KeyboardInterrupt:
+            self.abort(motor)
+            return error_codes.STOPPED
     def findEndSwitch(self, motor, direction, gradual=False):
         try:
             assert motor in ['theta', 'phi']
@@ -170,12 +189,16 @@ class MotorDriver:
         args.append('CW' if direction=='cw' else 'CC')
         args.append('GRADUAL' if gradual else 'JUMP')
         cmd = self._txCmd(args)
-        assert self._rxCmd() == ACK
-        rv = self._rxCmd()
-        if rv == cmd:
-            return error_codes.SUCCESS
-        else:
-            return error_codes.MISC
+        try:
+            assert self._rxCmd() == ACK
+            rv = self._rxCmd()
+            if rv == cmd:
+                return error_codes.SUCCESS
+            else:
+                return error_codes.MISC
+        except KeyboardInterrupt:
+            self.abort(motor)
+            return error_codes.STOPPED
     def getFreq(self, motor):
         assert motor in ['theta', 'phi']
         args = [FREQ]
