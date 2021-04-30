@@ -4,13 +4,33 @@ from datetime import datetime
 
 root_base = "software"
 
+log_file = None
+
+def initLog(log_name=None, log_path=None):
+    global log_file
+    if log_name == None:
+        dt = datetime.now()
+        log_name = r'log__%d_%d_%d__%d_%d_%d.txt'%(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)
+    if log_path == None:
+        log_path = os.path.join(os.getcwd(), 'logs')
+    log_file = open(os.path.join(log_path, log_name), 'a')
+
+def closeLog():
+    if log_file != None:
+        log_file.close()
+
 
 def printf(phase, flag, msg):
     """ Prints out messages to the command line by specifying flag and phase. """
+    global log_file
     if flag in ("Error", "Warning"):
         print(f"({phase}) {flag}: {msg}")
+        if log_file != None:
+            print(f"({phase}) {flag}: {msg}", file=log_file)
     else:
         print(f"({phase}):".ljust(11), f"{msg}")
+        if log_file != None:
+            print(f"({phase}):".ljust(11), f"{msg}", file=log_file)
 
 
 def gen_col_names(sparam_list):

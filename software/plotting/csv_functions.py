@@ -148,7 +148,6 @@ def getPhiCutData(csv_filename,sparam,frequency,phi):
     
     #frequency = 10e9
 
-<<<<<<< HEAD
     freq_raw, theta_raw, phi_raw, params_col_names, param_raw = getRawData(csv_filename, [sparam], dBOnly=True)
     param_raw = param_raw[0][0]
     
@@ -159,7 +158,7 @@ def getPhiCutData(csv_filename,sparam,frequency,phi):
     # assert phi in phi_raw
     # assert max(theta_raw) - min(theta_raw) <= 360
     # assert max(phi_raw) - min(phi_raw) <= 360
-=======
+    
     freq_raw,theta_raw,phi_raw,params_col_names,param_raw = getRawData(csv_filename,[sparam],dBOnly=True)
     param_raw = param_raw[0]
 
@@ -167,12 +166,11 @@ def getPhiCutData(csv_filename,sparam,frequency,phi):
     assert phi in phi_raw
     assert max(theta_raw) - min(theta_raw) <= 360
     assert max(phi_raw) - min(phi_raw) <= 360
->>>>>>> 07d6595683daca68d1c558df4985910a1182e61c
+    
 
     theta_values = np.sort(np.unique(theta_raw))
     param_values = np.ndarray(len(theta_values))
 
-<<<<<<< HEAD
     print(theta_values)
     print('\n\n', param_values)
 
@@ -189,7 +187,7 @@ def getPhiCutData(csv_filename,sparam,frequency,phi):
 
     #pdb.set_trace()
     return theta_values, param_values
-=======
+    
     for i in range(0,len(theta_values)):
         theta_val = theta_values[i]
         print(theta_val)
@@ -198,7 +196,6 @@ def getPhiCutData(csv_filename,sparam,frequency,phi):
                 param_values[i] = param_raw[k]
 
     return theta_values,param_values
->>>>>>> 07d6595683daca68d1c558df4985910a1182e61c
 
 
 def getSparamFrequencyData(csv_filename,params,theta,phi):
