@@ -19,6 +19,18 @@ def initLog(log_name=None, log_path=None):
 def closeLog():
     if log_file != None:
         log_file.close()
+        
+def printf(phase, flag, msg):
+    """ Prints out messages to the command line by specifying flag and phase. """
+    global log_file
+    if flag in ("Error", "Warning"):
+        print(f"({phase}) {flag}: {msg}")
+        if log_file != None:
+            print(f"({phase}) {flag}: {msg}", file=log_file)
+    else:
+        print(f"({phase}):".ljust(11), f"{msg}")
+        if log_file != None:
+            print(f"({phase}):".ljust(11), f"{msg}", file=log_file)
 
 
 def gen_col_names(sparam_list):
