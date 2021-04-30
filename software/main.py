@@ -87,7 +87,7 @@ def process_cmd_line():
     opt_parser.add_option("--theta", type="float", action="store", dest="plot_theta", default=200.0,
                       help="Plot option. Test theta angle to plot at. Must be in degrees "
                            "and between -180 and 180 degrees.")
-    opt_parser.add_option("--probPhi", type="float", action="store", dest="plot_p_phi", default=200.0,
+    opt_parser.add_option("--probePhi", type="float", action="store", dest="plot_p_phi", default=200.0,
                       help="Plot option. Probe phi angle to plot at. Must be in degrees "
                            "and between -180 and 180 degrees.")
     opt_parser.add_option("--sParams", type="string", action="store", dest="sParams", default="S21",
