@@ -21,7 +21,17 @@ curr_phase = "Setup"
 mode = "Debug"
 DEF_ANGLE = 200
 
+""" 
+    Main file that controls and runs the entire system. 
+"""
+
+
 def set_usage(exe_name):
+    """!
+    @brief Sets up the usage message.
+    @param exe_name name of the executable
+    @return A string containing the usage message.
+    """
     exe_name ="./" + exe_name
     help = f"\tGet Help:\n\t\t{exe_name} --h\n\t\t{exe_name} --help\n"
     align = f"\tAlign System:\n\t\t{exe_name} --a\n\t\t{exe_name} --alignOnly\n"
@@ -37,14 +47,22 @@ def set_usage(exe_name):
 
 
 def print_welcome_sign():
-    """ Prints the welcome sign"""
+    """!
+    @brief Prints the welcome sign on the console.
+    """
     print("\n  ********************************************************")
     print("  *             Welcome to direcMeasure v1.0             *")
     print("  ********************************************************\n")
 
 
 def config_run(option, opt, value, parser):
-    """ Used to set the run_type variable from the command line arguments"""
+    """!
+    Used to set the run_type variable from the command line arguments.
+    :param option: Long version name of the option flag name.
+    :param opt: Name of the option flag name. Can be either short or long version.
+    :param value: Value associated with the option flag.
+    :param parser: The OptionParser to use.
+    """
     print(f"Option = {option}")
     if parser.values.run_type == "f":
         if (opt == '-a') or (opt == '--alignOnly'):
@@ -53,15 +71,17 @@ def config_run(option, opt, value, parser):
             parser.values.run_type = 'f'
         elif (opt == '--setTestPhi'):
             parser.values.run_type = 's'
-            print(value)
-            parser.values.test_phi = value
     else:
         parser.values.run_type = "e"
 
 
-def process_cmd_line2():
-
-    """ Processes the command line arguments and sets up the system control variables accordingly"""
+def process_cmd_line_alt():
+    """
+    Alternate version of process_cmd_line. Processes the command line arguments and sets up the
+    system control variables accordingly. If an error occurred, an error message indicating the fault will be printed
+    before the returning False.
+    :return Returns options if no errors occurred, otherwise False.
+    """
     # Set up parser
     opt_parser = OptionParser()
     opt_parser.prog = "direcMeasure"
@@ -107,8 +127,11 @@ def process_cmd_line2():
 
 
 def process_cmd_line():
-    """ Processes the command line arguments and sets up the system control variables accordingly"""
-
+    """
+    Processes the command line arguments and sets up the
+    system control variables accordingly. If an error occurred, an error message indicating the fault will be printed before the returning False.
+    :return Returns options if no errors occurred, otherwise False.
+    """
     # Set up parser
     opt_parser = OptionParser()
     opt_parser.prog = "direcMeasure"
@@ -303,7 +326,11 @@ def process_cmd_line():
 
 
 def process_config(config_name):
-    """ Parses the configuration file and generates the appropriate commands. """
+    """
+    Parses the configuration file and generates the appropriate commands for plotting, measurement setup,
+    experiments, and calibration.
+    :param config_name: Name of the configuration file to parse.
+    """
     if config_name != '' and config_name is not None:
         # Find Config
         util.printf(curr_phase, None, f"Starting configuration file parsing process on {config_name}...")
@@ -349,6 +376,11 @@ def process_config(config_name):
 
 
 def handle_error_code(error_code):
+    """
+    Identifies error codes and prints the appropriate error message associated with a code. If the error could not be
+    identified, then the an assertion error will be raised.
+    :param error_code: Error code that corresponds to an error.
+    """
     curr_phase = "Shutdown"
     if error_code == error_codes.SUCCESS:  # routine finished without issues
         util.printf(curr_phase, None, "Successfully ran routine without issues. ")
@@ -389,7 +421,15 @@ def handle_error_code(error_code):
 
 
 def run_experiments(cmds, meas, calib, plot):
-    """ Runs the experiments in cmds."""
+    """
+    Runs all experiments specified in cmds and uses the meas, calib, and plot settings to configure measurement,
+    calibration, and plotting.
+    :param cmds: List containing the sub-experiments to run.
+    :param meas: Dictionary containing the measurement configuration.
+    :param calib: Dictionary containing the calibration configuration.
+    :param plot: Dictionary containing the plotting configuration.
+    :return: Returns a True tuple
+    """
     for sub_expt in cmds:
         # Split cmds into usable pieces
         expt_type = sub_expt['experiment type']
@@ -460,9 +500,11 @@ def plot_data_file(data_file, plot_type, sParams, plot_freq, plot_t_phi, plot_t_
     return False
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-
+    """
+    Entry for the main program. Prints welcome sign and parses command line inputs. Runs the appropriate routine based
+    upon the parsed inputs. 
+    """
     print_welcome_sign()
 
     # Process Command Line
@@ -514,7 +556,6 @@ if __name__ == '__main__':
         error_code = expt.run_Align()
         handle_error_code(error_code)
     elif run_type == 's':
-        # print("Running single mode")
         error_code = run_single_mode(single_cfg)
     if run_type != "c":
         util.closeLog()
