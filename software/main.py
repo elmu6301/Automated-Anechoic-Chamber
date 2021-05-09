@@ -55,6 +55,50 @@ def config_run(option, opt, value, parser):
 
 
 def process_cmd_line():
+
+    """ Processes the command line arguments and sets up the system control variables accordingly"""
+    # Set up parser
+    opt_parser = OptionParser()
+    opt_parser.prog = "direcMeasure"
+    usage = set_usage(opt_parser.prog)
+    opt_parser.set_usage(usage)
+    opt_parser.set_defaults(run_type="f", verbose=False)
+
+    # Test Phi Options
+    opt_parser.add_option("--setTestPhi", type="float", action="store", dest="test_phi", default=0.0,
+                          help="Sets the test-side phi angle to the specified angle. Must be in degrees "
+                           "and between -180 and 180 degrees.")
+    opt_parser.add_option("--zeroTestPhi", action="store_true", dest="zero_test_phi", default=False,
+                          help="Sets the current test-side phi angle to be the zero reference.")
+    opt_parser.add_option("--alignTestPhi", action="store_true", dest="align_test_phi", default=False,
+                          help="Aligns the test-side phi motor with the end-switch.")
+
+    # Test Theta Options
+    opt_parser.add_option("--setTestTheta", type="float", action="store", dest="test_theta", default=0.0,
+                          help="Sets the test-side theta angle to the specified angle. Must be in degrees "
+                               "and between -180 and 180 degrees.")
+    opt_parser.add_option("--zeroTestTheta", action="store_true", dest="zero_test_theta", default=False,
+                          help="Sets the current test-side theta angle to be the zero reference.")
+    opt_parser.add_option("--alignTestTheta", action="store_true", dest="align_test_theta", default=False,
+                          help="Aligns the test-side test motor with the end-switch.")
+
+    # Probe Theta Options
+    opt_parser.add_option("--setProbePhi", type="float", action="store", dest="probe_phi", default=0.0,
+                          help="Sets the probe-side phi angle to the specified angle. Must be in degrees "
+                               "and between -180 and 180 degrees.")
+    opt_parser.add_option("--zeroProbePhi", action="store_true", dest="zero_probe_phi", default=False,
+                          help="Sets the current probe-side phi angle to be the zero reference.")
+    opt_parser.add_option("--alignProbePhi", action="store_true", dest="align_probe_phi", default=False,
+                          help="Aligns the probe-side phi motor with the end-switch.")
+
+    (options, args) = opt_parser.parse_args()
+    # print(type(options))
+    print(options)
+
+    return False
+
+
+def process_cmd_line2():
     """ Processes the command line arguments and sets up the system control variables accordingly"""
 
     # Set up parser
