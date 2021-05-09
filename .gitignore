@@ -142,4 +142,5 @@ cython_debug/
 docs/
 firmware/
 software/data/
+software/logs/
 # *.bat

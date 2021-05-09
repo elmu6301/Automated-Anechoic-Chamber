@@ -19,7 +19,7 @@ import time
 # Global Variables
 curr_phase = "Setup"
 mode = "Debug"
-
+DEF_ANGLE = 200
 
 def set_usage(exe_name):
     exe_name ="./" + exe_name
@@ -45,16 +45,21 @@ def print_welcome_sign():
 
 def config_run(option, opt, value, parser):
     """ Used to set the run_type variable from the command line arguments"""
+    print(f"Option = {option}")
     if parser.values.run_type == "f":
         if (opt == '-a') or (opt == '--alignOnly'):
             parser.values.run_type = 'a'
         elif (opt == '-c') or (opt == '--config'):
             parser.values.run_type = 'f'
+        elif (opt == '--setTestPhi'):
+            parser.values.run_type = 's'
+            print(value)
+            parser.values.test_phi = value
     else:
         parser.values.run_type = "e"
 
 
-def process_cmd_line():
+def process_cmd_line2():
 
     """ Processes the command line arguments and sets up the system control variables accordingly"""
     # Set up parser
@@ -62,10 +67,13 @@ def process_cmd_line():
     opt_parser.prog = "direcMeasure"
     usage = set_usage(opt_parser.prog)
     opt_parser.set_usage(usage)
-    opt_parser.set_defaults(run_type="f", verbose=False)
+    opt_parser.set_defaults(run_type="s", verbose=False)
 
     # Test Phi Options
-    opt_parser.add_option("--setTestPhi", type="float", action="store", dest="test_phi", default=0.0,
+    opt_parser.add_option("--alignOnly", action="callback", callback=config_run, dest="run_type",
+                      help="Only run the alignment routine.")
+
+    opt_parser.add_option("--setTestPhi", type="float", action="store", dest="test_phi", default=DEF_ANGLE,
                           help="Sets the test-side phi angle to the specified angle. Must be in degrees "
                            "and between -180 and 180 degrees.")
     opt_parser.add_option("--zeroTestPhi", action="store_true", dest="zero_test_phi", default=False,
@@ -74,7 +82,7 @@ def process_cmd_line():
                           help="Aligns the test-side phi motor with the end-switch.")
 
     # Test Theta Options
-    opt_parser.add_option("--setTestTheta", type="float", action="store", dest="test_theta", default=0.0,
+    opt_parser.add_option("--setTestTheta", type="float", action="store", dest="test_theta", default=DEF_ANGLE,
                           help="Sets the test-side theta angle to the specified angle. Must be in degrees "
                                "and between -180 and 180 degrees.")
     opt_parser.add_option("--zeroTestTheta", action="store_true", dest="zero_test_theta", default=False,
@@ -83,7 +91,7 @@ def process_cmd_line():
                           help="Aligns the test-side test motor with the end-switch.")
 
     # Probe Theta Options
-    opt_parser.add_option("--setProbePhi", type="float", action="store", dest="probe_phi", default=0.0,
+    opt_parser.add_option("--setProbePhi", type="float", action="store", dest="probe_phi", default=DEF_ANGLE,
                           help="Sets the probe-side phi angle to the specified angle. Must be in degrees "
                                "and between -180 and 180 degrees.")
     opt_parser.add_option("--zeroProbePhi", action="store_true", dest="zero_probe_phi", default=False,
@@ -93,12 +101,12 @@ def process_cmd_line():
 
     (options, args) = opt_parser.parse_args()
     # print(type(options))
-    print(options)
 
+    print(options)
     return False
 
 
-def process_cmd_line2():
+def process_cmd_line():
     """ Processes the command line arguments and sets up the system control variables accordingly"""
 
     # Set up parser
@@ -149,6 +157,33 @@ def process_cmd_line2():
     opt_parser.add_option("--plotPath", type="string", action="store", dest="plot_path", default=None,
                       help="Filepath for plot generated during experiment.")
 
+    opt_parser.add_option("--setTestPhi", type="float", action="store", dest="test_phi", default=DEF_ANGLE,
+                          help="Sets the test-side phi angle to the specified angle. Must be in degrees "
+                               "and between -180 and 180 degrees.")
+    opt_parser.add_option("--zeroTestPhi", action="store_true", dest="zero_test_phi", default=False,
+                          help="Sets the current test-side phi angle to be the zero reference.")
+    opt_parser.add_option("--alignTestPhi", action="store_true", dest="align_test_phi", default=False,
+                          help="Aligns the test-side phi motor with the end-switch.")
+
+    # Test Theta Options
+    opt_parser.add_option("--setTestTheta", type="float", action="store", dest="test_theta", default=DEF_ANGLE,
+                          help="Sets the test-side theta angle to the specified angle. Must be in degrees "
+                               "and between -180 and 180 degrees.")
+    opt_parser.add_option("--zeroTestTheta", action="store_true", dest="zero_test_theta", default=False,
+                          help="Sets the current test-side theta angle to be the zero reference.")
+    opt_parser.add_option("--alignTestTheta", action="store_true", dest="align_test_theta", default=False,
+                          help="Aligns the test-side test motor with the end-switch.")
+
+    # Probe Theta Options
+    opt_parser.add_option("--setProbePhi", type="float", action="store", dest="probe_phi", default=DEF_ANGLE,
+                          help="Sets the probe-side phi angle to the specified angle. Must be in degrees "
+                               "and between -180 and 180 degrees.")
+    opt_parser.add_option("--zeroProbePhi", action="store_true", dest="zero_probe_phi", default=False,
+                          help="Sets the current probe-side phi angle to be the zero reference.")
+    opt_parser.add_option("--alignProbePhi", action="store_true", dest="align_probe_phi", default=False,
+                          help="Aligns the probe-side phi motor with the end-switch.")
+
+
     # Check to make sure a config file was entered with the -c
     index = -1
     for i in range(len(sys.argv)):
@@ -161,6 +196,16 @@ def process_cmd_line2():
     # Parse command line
     (options, args) = opt_parser.parse_args()
     # print(options)
+
+    # Check for single mode
+    if options.test_phi != DEF_ANGLE or options.zero_test_phi or options.align_test_phi or \
+            options.test_theta != DEF_ANGLE or options.zero_test_theta or options.align_test_theta \
+            or options.probe_phi != DEF_ANGLE or options.zero_probe_phi or options.align_probe_phi:
+        if options.run_type == 'f':
+            options.run_type = 's'
+        else:
+            options.run_type = 'e'
+
     # Error Checking
     if options.run_type == "e":
         util.printf(curr_phase, "Error", "Cannot simultaneously run the alignment routine only and run the system with out "
@@ -175,7 +220,8 @@ def process_cmd_line2():
         opt_parser.print_help()
         return False
 
-    num_modes = int(options.cfg != '') + int(options.run_type == 'a') + int(options.calibrate) + int(options.plot)
+    num_modes = int(options.cfg != '') + int(options.run_type == 'a') + int(options.run_type == 's') + \
+                int(options.calibrate) + int(options.plot)
 
     if num_modes == 0:
         util.printf(curr_phase, "Error", "Cannot configure system as no command lines arguments were inputted."
@@ -367,6 +413,11 @@ def run_experiments(cmds, meas, calib, plot):
     return True, True, True
 
 
+def run_single_mode(cfg):
+    print(f"Running single-mode with: {cfg}")
+    return True
+
+
 def plot_data_file(data_file, plot_type, sParams, plot_freq, plot_t_phi, plot_t_theta, plot_p_phi):
 
     if data_file != '':
@@ -419,6 +470,12 @@ if __name__ == '__main__':
     if not args:
         exit(-1)
     cfg = args.cfg
+
+    single_cfg = {'test_phi': args.test_phi, 'zero_test_phi': args.zero_test_phi, 'align_test_phi': args.align_test_phi,
+              'test_theta':args.test_theta, 'zero_test_theta': args.zero_test_theta, 'align_test_theta':args.align_test_theta,
+              'probe_phi': args.probe_phi, 'zero_probe_phi': args.zero_probe_phi, 'align_probe_phi': args.align_probe_phi}
+
+
     run_type = args.run_type
     if run_type != "c":
         util.initLog(args.log_name, args.log_path)
@@ -456,11 +513,11 @@ if __name__ == '__main__':
     elif run_type == 'a':
         error_code = expt.run_Align()
         handle_error_code(error_code)
-        
+    elif run_type == 's':
+        # print("Running single mode")
+        error_code = run_single_mode(single_cfg)
     if run_type != "c":
         util.closeLog()
 
     # Shutdown Phase
-
-
     exit(1)
