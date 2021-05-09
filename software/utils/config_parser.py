@@ -30,8 +30,13 @@ config_base = "\\configs"
 allowed_expt = ("sweepPhi", "sweepTheta", "sweepFreq")
 
 
-# Attempts to locate the file and returns the full file path if possible
 def find_config(file_name, file_path=None):
+    """
+    Attempts to locate the file and returns the full file path if possible
+    :param file_name: File name of the configuration file.
+    :param file_path: File path where the configuration file is located.
+    :return: Returns the full file path if found otherwise False.
+    """
     full_name = ''
 
     # Check to see if name is valid
@@ -43,8 +48,13 @@ def find_config(file_name, file_path=None):
     return util.get_file_path(file_name, "configs")
 
 
-# Opens the file and returns the contents of flow
 def get_config(full_file_name):
+    """
+    Opens the file and returns the contents of flow
+    :param full_file_name: The full file path of the configuration file.
+    :return: A tuple containing the flow, meas, calib, and plot sections from the configuration file if no
+    errors occurred, otherwise False.
+    """
     if full_file_name == '':
         return False
     if full_file_name.rfind(util.root_base) == -1:
@@ -170,6 +180,11 @@ def get_config(full_file_name):
 
 
 def gen_expt_cmds(flow):
+    """
+    Generates the appropriate commands for each sub-experiment specified in flow based upon experiement type.
+    :param flow: The flow section of the configuration file which contains sub-experiments.
+    :return:
+    """
     cmds = []
     #try:
     for expt in flow:
@@ -249,6 +264,9 @@ def gen_expt_cmds(flow):
 
 
 def print_cmds(cmds):
+    """
+    Prints commands
+    """
     print(f"cmds:")
     for c in cmds['cmds']:
         d = json.dumps(c, indent=4)

@@ -3,11 +3,20 @@ from datetime import datetime
 
 
 root_base = "software"
-
-
 log_file = None
 
+"""
+util.py
+This file contains functions to support printing, logging, searching for files, etc. 
+"""
+
+
 def initLog(log_name=None, log_path=None):
+    """
+    Creates a log file associated with a given run.
+    :param log_name: Name of the log file.
+    :param log_path: File path of the log file.
+    """
     global log_file
     if log_name == None:
         dt = datetime.now()
@@ -16,12 +25,24 @@ def initLog(log_name=None, log_path=None):
         log_path = os.path.join(os.getcwd(), 'logs')
     log_file = open(os.path.join(log_path, log_name), 'a')
 
+
 def closeLog():
+    """
+    Closes the log file.
+    :return:
+    """
     if log_file != None:
         log_file.close()
-        
+
+
 def printf(phase, flag, msg):
-    """ Prints out messages to the command line by specifying flag and phase. """
+    """
+    Prints out messages to the command line by specifying flag and phase.
+    :param phase: Current phase of the system.
+    :param flag: Flag indicating message type.
+    :param msg: String containing message.
+    :return:
+    """
     global log_file
     if flag in ("Error", "Warning"):
         print(f"({phase}) {flag}: {msg}")
@@ -34,7 +55,11 @@ def printf(phase, flag, msg):
 
 
 def gen_col_names(sparam_list):
-    """ Generates the appropriate column names for the CSV file. """
+    """
+    Generates the appropriate column names for the CSV file.
+    :param sparam_list: List of S-Parameters to include.
+    :return: List containing the column names.
+    """
     col_names = ['Frequency', 'Theta', 'Phi', 'Probe Phi']
     if "S11" in sparam_list:
         col_names.append('dB(S11)')
@@ -63,6 +88,13 @@ def get_root_path():
 
 
 def get_file_path(file_name, dir_path):
+    """
+    Gets the file path of the file by first looking at the directory path specified. If no file name is specified
+    but a directory path is, a directory using the specified directory path will be created.
+    :param file_name:
+    :param dir_path:
+    :return: Returns the full file path if found or created otherwise, return False
+    """
     # Navigate to the correct base
     root_path = get_root_path()
     search_base_path = os.path.join(root_path, dir_path)
@@ -97,6 +129,11 @@ def get_file_path(file_name, dir_path):
 
 
 def append_date_time_str(file_name):
+    """
+    Appends timestamp to the file name
+    :param file_name: The file name to append the timestamp to.
+    :return: String containing the updated file name.
+    """
     if file_name != '':
         if file_name.endswith(".csv"):
             file_name = file_name[0:file_name.rfind(".csv")]
