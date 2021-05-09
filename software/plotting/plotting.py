@@ -17,7 +17,14 @@ import pdb
 
 
 def plot3DRadPattern(csv_filename,plot_filename,param,frequency):
-    #Based on example code: https://stackoverflow.com/questions/36816537/spherical-coordinates-plot-in-matplotlib
+    """
+    Plots a 3D radiation pattern. Based on example code:
+     https://stackoverflow.com/questions/36816537/spherical-coordinates-plot-in-matplotlib
+    :param csv_filename: File to plot from.
+    :param plot_filename: File name of plot.
+    :param param: S-param to use.
+    :param frequency: Frequency to plot at.
+    """
 
     assert type(csv_filename) == str
     assert type(plot_filename) == str
@@ -45,7 +52,15 @@ def plot3DRadPattern(csv_filename,plot_filename,param,frequency):
 
 
 def plotThetaCut(csv_filename,plot_filename,param,frequency,theta):
-    #Polar plot of selected sparam magnitude at a selected value of theta (and theta + 180 if in data file)
+    """
+    Polar plot of selected sparam magnitude at a selected value of theta (and theta + 180 if in data file)
+    :param csv_filename: File to plot from.
+    :param plot_filename: File name of plot.
+    :param param: S-param to use.
+    :param frequency: Frequency to plot at.
+    :param theta: Theta angle to plot at.
+    :return:
+    """
 
     assert type(csv_filename) == str
     assert type(plot_filename) == str
@@ -74,7 +89,15 @@ def plotThetaCut(csv_filename,plot_filename,param,frequency,theta):
 
 
 def plotPhiCut(csv_filename,plot_filename,param,frequency,phi):
-    #Polar plot of selected sparam magnitude at a selected value of phi
+    """
+    Polar plot of selected sparam magnitude at a selected value of phi
+    :param csv_filename: File to plot from.
+    :param plot_filename: File name of plot.
+    :param param: S-param to use.
+    :param frequency: Frequency to plot at.
+    :param phi: Phi angle to plot at.
+    :return:
+    """
 
     assert type(csv_filename) == str
     assert type(plot_filename) == str
@@ -101,10 +124,16 @@ def plotPhiCut(csv_filename,plot_filename,param,frequency,phi):
     plt.show()
 
 
-
 def plot2DSparamFrequency(csv_filename,plot_filename,params,theta,phi):
-    #Plots magnitude and phase for constant theta and phi
-
+    """
+    Plots magnitude and phase for constant theta and phi
+    :param csv_filename: File to plot from.
+    :param plot_filename: File name of plot.
+    :param param: S-param to use.
+    :param theta: Theta angle to plot at.
+    :param phi: Phi angle to plot at.
+    :return:
+    """
     assert type(csv_filename) == str
     assert type(plot_filename) == str
     assert type(params) == list
@@ -132,9 +161,18 @@ def plot2DSparamFrequency(csv_filename,plot_filename,params,theta,phi):
     plt.legend()
     fig1.savefig('phase_' + plot_filename)
 
-def plot2DSparamPhi(csv_filename,plot_filename,parameter,theta,frequency):
-    #Plots magnitude and phase for constant frequency and theta
 
+def plot2DSparamPhi(csv_filename,plot_filename,params,theta,frequency):
+    """
+    Plots magnitude and phase for constant frequency and theta
+
+    :param csv_filename: File to plot from.
+    :param plot_filename: File name of plot.
+    :param param: S-param to use.
+    :param frequency: Frequency to plot at.
+    :param theta: Theta angle to plot at.
+    """
+    #
     assert type(csv_filename) == str
     assert type(plot_filename) == str
     assert type(params) == list
@@ -143,8 +181,17 @@ def plot2DSparamPhi(csv_filename,plot_filename,parameter,theta,frequency):
 
     print("Plotting data stored in: " + filename)
 
+
 def plot2DSparamTheta(csv_filename,plot_filename,parameter,phi,frequency):
-    #Plots magnitude and phase for a constant frequency and phi
+    """
+    Plots magnitude and phase for a constant frequency and phi
+    :param csv_filename: File to plot from.
+    :param plot_filename: File name of plot.
+    :param param: S-param to use.
+    :param frequency: Frequency to plot at.
+    :param phi: Phi angle to plot at.
+    :return:
+    """
 
     assert type(csv_filename) == str
     assert type(plot_filename) == str
@@ -153,8 +200,3 @@ def plot2DSparamTheta(csv_filename,plot_filename,parameter,phi,frequency):
     assert type(phi) == float
 
     print("Plotting data stored in: " + filename)
-
-# if __name__ == "__main__":
-#     plot3DRadPattern('..\\data\\test.csv','..\\data\\test.jpg','S21',1.351000000000000000e+10)
-# #plotThetaCut('horn_gregor.csv','ThetaCut.jpg','S21',4.5,0.0)
-# #plotPhiCut('horn_gregor.csv','PhiCut.jpg','S21',4.4,90.0)
