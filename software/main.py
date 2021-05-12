@@ -207,6 +207,7 @@ def process_cmd_line():
     opt_parser.add_option("--alignProbePhi", action="store_true", dest="align_probe_phi", default=False,
                           help="Aligns the probe-side phi motor with the end-switch.")
 
+    # Options determining how the motor will rotate
     opt_parser.add_option("--direction", action="store", dest="direction", default="cw",
                           help="The direction in which motor should rotate.")
     opt_parser.add_option("--gradualAcceleration", action="store_true", dest="grad_accel", default=False,
