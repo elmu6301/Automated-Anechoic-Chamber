@@ -5,7 +5,12 @@ import time
 import numpy as np
 from utils import error_codes
 
+
 def flush_input():
+    """
+    Attempts to flush input.
+    :return:
+    """
     try:
         import sys, termios
         termios.tcflush(sys.stdin, termios.TCIOFLUSH)
@@ -14,7 +19,26 @@ def flush_input():
         while msvcrt.kbhit():
             msvcrt.getch()
 
+
 def _printInstructions(status, increment, sensor_output, test_theta, test_theta_a, test_phi, test_phi_a, probe_phi, probe_phi_a, mcu_updated, laser_state, ambient_output, ambient_std):
+    """
+    Prints the instructions for aligning the system along with system information such as the current test-side
+    theta angle.
+    :param status: Current status of the system.
+    :param increment: Current step amount to increment by.
+    :param sensor_output: Current sensor output of the photo-transistor.
+    :param test_theta: Current angle of the test-side theta motor.
+    :param test_theta_a: Current alignment status of the test-side theta motor.
+    :param test_phi: Current angle of the test-side phi motor.
+    :param test_phi_a: Current alignment status of the test-side phi motor.
+    :param probe_phi: Current angle of the probe-side phi motor.
+    :param probe_phi_a: Current alignment status of the probe-side phi motor.
+    :param mcu_updated: Current status of the MCU.
+    :param laser_state: Current state of the laser (on or off).
+    :param ambient_output: Ambient light level.
+    :param ambient_std: Ambient light standard deviation from the current sensor reading.
+    :return:
+    """
     os.system('cls' if os.name == 'nt' else 'clear')
     print('Calibration routine')
     print('\tControls:')
@@ -62,7 +86,14 @@ def _printInstructions(status, increment, sensor_output, test_theta, test_theta_
             print('\t\t%f +/- %f mean +/- std. dev. Volts'%(ambient_output, ambient_std))
     print('\n\t%s'%(status))
 
+
 def findAlignedPosition(MD_test, MD_probe):
+    """
+    Runs the alignnment calibration routine.
+    :param MD_test: Test-side motor driver.
+    :param MD_probe: Probe-side motor driver.
+    :return:
+    """
     increment = 100000
     sensor_output = None
     ambient_output = None

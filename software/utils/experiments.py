@@ -26,6 +26,10 @@ This file contains functions generate commands and run various experiments.
 
 
 def run_Align():
+    """
+    Runs the alignment routine.
+    :return: Returns an error code indicating success or an error.
+    """
     current_phase = 'Setup'
 
     def printf(msg):
@@ -120,6 +124,14 @@ def run_Align():
 
 
 def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
+    """
+    Runs a sweepFreq experiment.
+    :param cmd_args: List of commands to run the experiment with.
+    :param vna_args: Dictionary containing VNA configuration.
+    :param calib_args: Dictionary containing the alignment configuration.
+    :param plot_args: Dictionary containing the plotting configuration.
+    :return: Returns an error code indicating success or an error.
+    """
     current_phase = 'Setup'
 
     def printf(msg):
@@ -225,63 +237,6 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
             plot_p_phi = plot_args['plotProbePhi']
             assert (type(plot_p_phi) == float) and (-180 <= plot_p_phi <= 180)
             printf('\t\tProbe phi Angle to Plot: %s deg' % (plot_p_phi))
-
-        # CREATE THE CSV
-        # col_names = util.gen_col_names(sParams)
-        # data = np.array([])
-        # csv.createCSV(csv_file_name, col_names, data)
-        #
-        # current_phase = 'Plotting'
-        # if run_plot:
-        #     if plot_type == "3d":
-        #         printf(f'Plotting 3D plot from collected data with S parameters: {sParams} at {plot_freq} Hz '
-        #                f'to {plot_file_name}.')
-        #         plots.plot3DRadPattern(csv_file_name, plot_file_name, sParams, plot_freq)
-        #     elif plot_type == "cutPhi":
-        #         printf(f'Plotting Phi cut plot from collected data with S parameters: {sParams} at {plot_freq} Hz and'
-        #                f' phi at {plot_t_phi} degrees to {plot_file_name}.')
-        #         plots.plotPhiCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_phi)
-        #     elif plot_type == "cutTheta":
-        #         printf(f'Plotting Theta cut plot from collected data with S parameters: {sParams} at {plot_freq} Hz and'
-        #                f' theta at {plot_t_phi} degrees to {plot_file_name}.')
-        #         plots.plotThetaCut(csv_file_name, plot_file_name, sParams, plot_freq, plot_t_theta)
-        #     else:
-        #         return error_codes.BAD_ARGS
-        #     printf('\tDone.')
-        # else:
-        #     printf('Skipping plotting phase.')
-
-            # Connect to VNA
-        # printf('\tConnecting to VNA...')
-        # VNA = ""
-        # try:
-        #     # Connect to VNA and configure it
-        #     VNA = VNA_HP8719A(sparam_list=sParams, address=vna_address, freq_mode=freq_sweep_type)
-        #     if not VNA.instrument:
-        #         return error_codes.VNA
-        #     # Configure start and stop frequency
-        #     startF = "%f GHz" % freq_start
-        #     stopF = "%f GHz" % freq_stop
-        #
-        #     res, real_startF, real_stopF = VNA.init_freq_sweep(startF, stopF, num_points)
-        #
-        #
-        # except Exception as e:
-        #     print(f"Exception: {e}")
-        #     # disconnect()
-        #     return error_codes.VNA
-        # printf('\t\tDone.')
-
-        # Take data
-        # data_out, col = VNA.sparam_data()
-        # # Append orientation info to data
-        # data_out.insert(1, [0] * num_points)
-        # data_out.insert(2, [1] * num_points)
-        # data_out.insert(3, [2] * num_points)
-        # data_to_save = np.array(data_out, dtype=object)
-        #
-        # # Write to CSV file generated earlier
-        # csv.appendToCSV(csv_file_name, data_to_save)
 
     except Exception as e:
         print(f"Exception: {e}")
@@ -613,6 +568,11 @@ def run_sweepFreq(cmd_args, vna_args, calib_args, plot_args):
 
 
 def run_sweepPhi(args):
+    """
+    Runs a sweepPhi experiment.
+    :param args: A list of commands to run the experiment with.
+    :return: Returns an error code indicating success or an error.
+    """
     try:
         test_theta_orientation = args['test-theta orientation']
         assert (type(test_theta_orientation) == float) and (-180 <= test_theta_orientation <= 180)
@@ -631,6 +591,11 @@ def run_sweepPhi(args):
 
 
 def run_sweepTheta(args):
+    """
+        Runs a sweepTheta experiment.
+        :param args: A list of commands to run the experiment with.
+        :return: Returns an error code indicating success or an error.
+        """
     try:
         test_phi_orientation = args['test-phi orientation']
         assert (type(test_phi_orientation) == float) and (-180 <= test_phi_orientation <= 180)
@@ -646,12 +611,3 @@ def run_sweepTheta(args):
         return error_codes.BAD_ARGS
     error_code = run_sweepFreq(args)
     return error_code
-
-
-# main
-def main():
-    print("Experiments!!!")
-
-
-if __name__ == "__main__":
-    main()

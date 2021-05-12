@@ -1,3 +1,6 @@
+"""
+    List of error codes and their corresponding causes.
+"""
 SUCCESS          = 0  # Routine executed with no issues detected
 CONNECTION       = 1  # Could not connect to any motor driver PCBs
 CONNECTION_PROBE = 2  # Could not connect to a probe motor driver PCB

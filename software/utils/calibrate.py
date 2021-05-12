@@ -4,6 +4,10 @@ from utils import error_codes
 
 
 def calibrate():
+    """
+    Runs the calibration routine.
+    :return: An error code indicating success or failure.
+    """
     rv = findSystemMotorDrivers()
     if rv['error code'] != error_codes.SUCCESS:
         return rv['error code']
