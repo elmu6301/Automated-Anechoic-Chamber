@@ -268,6 +268,7 @@ class MotorDriver:
             if rv == cmd:
                 return error_codes.SUCCESS
             else:
+                print('Invalid command returned by device:', rv)
                 return error_codes.MISC
         except KeyboardInterrupt:
             self.abort(motor)
@@ -305,31 +306,33 @@ class MotorDriver:
         assert self._rxCmd() == ACK
         assert self._rxCmd() == cmd
 
-    def setAlignedOrientation(self, theta, phi):
+    def setAlignedOrientation(self, theta=None, phi=None):
         """
         Sets the aligned orientation.
         :param theta: Theta angle of the aligned orientation.
         :param phi: Phi angle of the aligned orientation.
         :return:
         """
-        assert type(theta) == int
-        assert 0 <= abs(theta) < 0xFFFFFFFF
-        assert type(phi) == int
-        assert 0 <= abs(phi) < 0xFFFFFFFF
-        args = [ORIENT]
-        args.append('THETA')
-        args.append('ALIGNED')
-        args.append('%d'%(theta))
-        cmd = self._txCmd(args)
-        assert self._rxCmd() == ACK
-        assert self._rxCmd() == cmd
-        args = [ORIENT]
-        args.append('PHI')
-        args.append('ALIGNED')
-        args.append('%d'%(phi))
-        cmd = self._txCmd(args)
-        assert self._rxCmd() == ACK
-        assert self._rxCmd() == cmd
+        if theta != None:
+            assert type(theta) == int
+            assert 0 <= abs(theta) < 0xFFFFFFFF
+            args = [ORIENT]
+            args.append('THETA')
+            args.append('ALIGNED')
+            args.append('%d'%(theta))
+            cmd = self._txCmd(args)
+            assert self._rxCmd() == ACK
+            assert self._rxCmd() == cmd
+        if phi != None:
+            assert type(phi) == int
+            assert 0 <= abs(phi) < 0xFFFFFFFF
+            args = [ORIENT]
+            args.append('PHI')
+            args.append('ALIGNED')
+            args.append('%d'%(phi))
+            cmd = self._txCmd(args)
+            assert self._rxCmd() == ACK
+            assert self._rxCmd() == cmd
 
     def getOrientation(self, motor, info):
         """
