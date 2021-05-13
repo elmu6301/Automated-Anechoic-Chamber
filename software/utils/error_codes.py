@@ -14,3 +14,4 @@ ALIGNMENT        = 9  # Alignment routine was not successful
 BAD_ARGS         = 10 # Invalid arguments passed to routine
 MISC             = 11 # Error other than those specified above
 STOPPED          = 12 # The user issued a keyboard interrupt to stop the program.
+CALIBRATION      = 13 # The user needs to calibrate the motor before running this command.

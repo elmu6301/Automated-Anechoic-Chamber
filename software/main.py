@@ -9,6 +9,7 @@ import pdb
 from utils import config_parser as parser
 from utils import experiments as expt
 from utils import util
+from utils import single_mode
 
 from utils import error_codes
 from utils.calibrate import calibrate
@@ -93,7 +94,7 @@ def process_cmd_line_alt():
     opt_parser.add_option("--alignOnly", action="callback", callback=config_run, dest="run_type",
                       help="Only run the alignment routine.")
 
-    opt_parser.add_option("--setTestPhi", type="float", action="store", dest="test_phi", default=DEF_ANGLE,
+    opt_parser.add_option("--setTestPhi", type="float", action="store", dest="test_phi", default=None,
                           help="Sets the test-side phi angle to the specified angle. Must be in degrees "
                            "and between -180 and 180 degrees.")
     opt_parser.add_option("--zeroTestPhi", action="store_true", dest="zero_test_phi", default=False,
@@ -102,7 +103,7 @@ def process_cmd_line_alt():
                           help="Aligns the test-side phi motor with the end-switch.")
 
     # Test Theta Options
-    opt_parser.add_option("--setTestTheta", type="float", action="store", dest="test_theta", default=DEF_ANGLE,
+    opt_parser.add_option("--setTestTheta", type="float", action="store", dest="test_theta", default=None,
                           help="Sets the test-side theta angle to the specified angle. Must be in degrees "
                                "and between -180 and 180 degrees.")
     opt_parser.add_option("--zeroTestTheta", action="store_true", dest="zero_test_theta", default=False,
@@ -111,14 +112,14 @@ def process_cmd_line_alt():
                           help="Aligns the test-side test motor with the end-switch.")
 
     # Probe Theta Options
-    opt_parser.add_option("--setProbePhi", type="float", action="store", dest="probe_phi", default=DEF_ANGLE,
+    opt_parser.add_option("--setProbePhi", type="float", action="store", dest="probe_phi", default=None,
                           help="Sets the probe-side phi angle to the specified angle. Must be in degrees "
                                "and between -180 and 180 degrees.")
     opt_parser.add_option("--zeroProbePhi", action="store_true", dest="zero_probe_phi", default=False,
                           help="Sets the current probe-side phi angle to be the zero reference.")
     opt_parser.add_option("--alignProbePhi", action="store_true", dest="align_probe_phi", default=False,
                           help="Aligns the probe-side phi motor with the end-switch.")
-
+                          
     (options, args) = opt_parser.parse_args()
     # print(type(options))
 
@@ -180,7 +181,7 @@ def process_cmd_line():
     opt_parser.add_option("--plotPath", type="string", action="store", dest="plot_path", default=None,
                       help="Filepath for plot generated during experiment.")
 
-    opt_parser.add_option("--setTestPhi", type="float", action="store", dest="test_phi", default=DEF_ANGLE,
+    opt_parser.add_option("--setTestPhi", type="float", action="store", dest="test_phi", default=None,
                           help="Sets the test-side phi angle to the specified angle. Must be in degrees "
                                "and between -180 and 180 degrees.")
     opt_parser.add_option("--zeroTestPhi", action="store_true", dest="zero_test_phi", default=False,
@@ -189,7 +190,7 @@ def process_cmd_line():
                           help="Aligns the test-side phi motor with the end-switch.")
 
     # Test Theta Options
-    opt_parser.add_option("--setTestTheta", type="float", action="store", dest="test_theta", default=DEF_ANGLE,
+    opt_parser.add_option("--setTestTheta", type="float", action="store", dest="test_theta", default=None,
                           help="Sets the test-side theta angle to the specified angle. Must be in degrees "
                                "and between -180 and 180 degrees.")
     opt_parser.add_option("--zeroTestTheta", action="store_true", dest="zero_test_theta", default=False,
@@ -198,7 +199,7 @@ def process_cmd_line():
                           help="Aligns the test-side test motor with the end-switch.")
 
     # Probe Theta Options
-    opt_parser.add_option("--setProbePhi", type="float", action="store", dest="probe_phi", default=DEF_ANGLE,
+    opt_parser.add_option("--setProbePhi", type="float", action="store", dest="probe_phi", default=None,
                           help="Sets the probe-side phi angle to the specified angle. Must be in degrees "
                                "and between -180 and 180 degrees.")
     opt_parser.add_option("--zeroProbePhi", action="store_true", dest="zero_probe_phi", default=False,
@@ -206,6 +207,15 @@ def process_cmd_line():
     opt_parser.add_option("--alignProbePhi", action="store_true", dest="align_probe_phi", default=False,
                           help="Aligns the probe-side phi motor with the end-switch.")
 
+    # Options determining how the motor will rotate
+    opt_parser.add_option("--direction", action="store", dest="direction", default=None,
+                          help="The direction in which motor should rotate.")
+    opt_parser.add_option("--gradualAcceleration", action="store_true", dest="grad_accel", default=None,
+                          help="Gradually accelerate the motor to its maximum frequency. Recommended for test-theta motor.")
+    opt_parser.add_option("--jumpAcceleration", action="store_false", dest="grad_accel",
+                          help="Instantly accelerate the motor to its maximum frequency. Recommended for test-phi and probe-phi motors.")
+    opt_parser.add_option("--incremental", action="store_true", dest="incremental", default=False,
+                          help="Whether input angle should be interpreted as absolute or relative to current angle.")
 
     # Check to make sure a config file was entered with the -c
     index = -1
@@ -221,9 +231,9 @@ def process_cmd_line():
     # print(options)
 
     # Check for single mode
-    if options.test_phi != DEF_ANGLE or options.zero_test_phi or options.align_test_phi or \
-            options.test_theta != DEF_ANGLE or options.zero_test_theta or options.align_test_theta \
-            or options.probe_phi != DEF_ANGLE or options.zero_probe_phi or options.align_probe_phi:
+    if options.test_phi != None or options.zero_test_phi or options.align_test_phi or \
+            options.test_theta != None or options.zero_test_theta or options.align_test_theta \
+            or options.probe_phi != None or options.zero_probe_phi or options.align_probe_phi:
         if options.run_type == 'f':
             options.run_type = 's'
         else:
@@ -388,10 +398,10 @@ def handle_error_code(error_code):
         util.printf(curr_phase, "Error", "No USB devices connected. Ensure the test-side and probe-side devices"
                                          " are connected and powered on. ")
     elif error_code == error_codes.CONNECTION_PROBE:  # could not find a probe motor driver PCB
-        util.printf(curr_phase, "Error", "Detected device on test-side. No probe-side USB devices connected."
+        util.printf(curr_phase, "Error", "No probe-side USB devices connected."
                                          " Ensure the probe-side device is connected and powered on. ")
     elif error_code == error_codes.CONNECTION_TEST:  # could not find a test motor driver PCB
-        util.printf(curr_phase, "Error", "Detected device on probe-side. No test-side USB devices connected."
+        util.printf(curr_phase, "Error", "No test-side USB devices connected."
                                          " Ensure the test-side device is connected and powered on. ")
     elif error_code == error_codes.DISTINCT_IDS:  # detected two motor driver PCBs, but they were both configured as test or probe
         util.printf(curr_phase, "Error", "USB devices must be of different types. Ensure that the test-side device is"
@@ -416,6 +426,11 @@ def handle_error_code(error_code):
         util.printf(curr_phase, "Error", "An unknown error has occurred.")
     elif error_code == error_codes.STOPPED:
         util.printf(curr_phase, "Error", "The user issued a keyboard interrupt to prematurely stop the program.")
+    elif error_code == error_codes.CALIBRATION:
+        util.printf(curr_phase, "Error", "The selected device is not calibrated and must be calibrated to perform the requested action."
+                                         " This means that the device has never been calibrated, or since the last calibration it has encountered an error during a rotation command."
+                                         " The user is advised to rotate to the end switch for this device, then manually rotate to the zero"
+                                         " angle and specify it as such.")
     else:
         assert False
 
@@ -453,9 +468,60 @@ def run_experiments(cmds, meas, calib, plot):
     return True, True, True
 
 
+    single_cfg = {'test_phi': args.test_phi, 'zero_test_phi': args.zero_test_phi, 'align_test_phi': args.align_test_phi,
+              'test_theta':args.test_theta, 'zero_test_theta': args.zero_test_theta, 'align_test_theta':args.align_test_theta,
+              'probe_phi': args.probe_phi, 'zero_probe_phi': args.zero_probe_phi, 'align_probe_phi': args.align_probe_phi}
+
+
 def run_single_mode(cfg):
     print(f"Running single-mode with: {cfg}")
-    return True
+    error_code = error_codes.SUCCESS
+    if cfg['align_test_phi'] == True:
+        error_code = single_mode.alignMotor('test phi', cfg['direction'])
+    if error_code != error_codes.SUCCESS:
+        return error_code
+    if cfg['test_phi'] != None:
+        if cfg['incremental']:
+            error_code = single_mode.rotateMotorInc(cfg['test_phi'], 'test phi', cfg['direction'], cfg['grad_accel'])
+        else:
+            error_code = single_mode.rotateMotorAbs(cfg['test_phi'], 'test phi', cfg['direction'], cfg['grad_accel'])
+    if error_code != error_codes.SUCCESS:
+        return error_code
+    if cfg['zero_test_phi'] == True:
+        error_code = single_mode.zeroCurrentAngle('test phi')
+    if error_code != error_codes.SUCCESS:
+        return error_code
+    if cfg['align_test_theta'] == True:
+        error_code = single_mode.alignMotor('test theta', cfg['direction'])
+    if error_code != error_codes.SUCCESS:
+        return error_code
+    if cfg['test_theta'] != None:
+        if cfg['incremental']:
+            error_code = single_mode.rotateMotorInc(cfg['test_theta'], 'test theta', cfg['direction'], cfg['grad_accel'])
+        else:
+            error_code = single_mode.rotateMotorAbs(cfg['test_theta'], 'test theta', cfg['direction'], cfg['grad_accel'])
+    if error_code != error_codes.SUCCESS:
+        return error_code
+    if cfg['zero_test_theta'] == True:
+        error_code = single_mode.zeroCurrentAngle('test theta')
+    if error_code != error_codes.SUCCESS:
+        return error_code
+    if cfg['align_probe_phi'] == True:
+        error_code = single_mode.alignMotor('probe phi', cfg['direction'])
+    if error_code != error_codes.SUCCESS:
+        return error_code
+    if cfg['probe_phi'] != None:
+        if cfg['incremental']:
+            error_code = single_mode.rotateMotorInc(cfg['probe_phi'], 'probe phi', cfg['direction'], cfg['grad_accel'])
+        else:
+            error_code = single_mode.rotateMotorAbs(cfg['probe_phi'], 'probe phi', cfg['direction'], cfg['grad_accel'])
+    if error_code != error_codes.SUCCESS:
+        return error_code
+    if cfg['zero_probe_phi'] == True:
+        error_code = single_mode.zeroCurrentAngle('probe phi')
+    if error_code != error_codes.SUCCESS:
+        return error_code
+    return error_codes.SUCCESS
 
 
 def plot_data_file(data_file, plot_type, sParams, plot_freq, plot_t_phi, plot_t_theta, plot_p_phi):
@@ -515,7 +581,8 @@ if __name__ == '__main__':
 
     single_cfg = {'test_phi': args.test_phi, 'zero_test_phi': args.zero_test_phi, 'align_test_phi': args.align_test_phi,
               'test_theta':args.test_theta, 'zero_test_theta': args.zero_test_theta, 'align_test_theta':args.align_test_theta,
-              'probe_phi': args.probe_phi, 'zero_probe_phi': args.zero_probe_phi, 'align_probe_phi': args.align_probe_phi}
+              'probe_phi': args.probe_phi, 'zero_probe_phi': args.zero_probe_phi, 'align_probe_phi': args.align_probe_phi,
+              'direction': args.direction, 'incremental': args.incremental, 'grad_accel': args.grad_accel}
 
 
     run_type = args.run_type
@@ -557,6 +624,7 @@ if __name__ == '__main__':
         handle_error_code(error_code)
     elif run_type == 's':
         error_code = run_single_mode(single_cfg)
+        handle_error_code(error_code)
     if run_type != "c":
         util.closeLog()
 
