@@ -208,10 +208,12 @@ def process_cmd_line():
                           help="Aligns the probe-side phi motor with the end-switch.")
 
     # Options determining how the motor will rotate
-    opt_parser.add_option("--direction", action="store", dest="direction", default="cw",
+    opt_parser.add_option("--direction", action="store", dest="direction", default=None,
                           help="The direction in which motor should rotate.")
-    opt_parser.add_option("--gradualAcceleration", action="store_true", dest="grad_accel", default=False,
-                          help="Whether or not to accelerate motor gradually to maximum frequency. Recommended for test-theta motor.")
+    opt_parser.add_option("--gradualAcceleration", action="store_true", dest="grad_accel", default=None,
+                          help="Gradually accelerate the motor to its maximum frequency. Recommended for test-theta motor.")
+    opt_parser.add_option("--jumpAcceleration", action="store_false", dest="grad_accel",
+                          help="Instantly accelerate the motor to its maximum frequency. Recommended for test-phi and probe-phi motors.")
     opt_parser.add_option("--incremental", action="store_true", dest="incremental", default=False,
                           help="Whether input angle should be interpreted as absolute or relative to current angle.")
 

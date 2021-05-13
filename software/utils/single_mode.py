@@ -51,6 +51,8 @@ def initMotorDriver(motor):
             MD = MotorDriver(port.name)
             identity = MD.getId()
             if identity == 'TEST':
+                MD.setFreq('theta', 32768)
+                MD.setFreq('phi', 65536)
                 return MD
             else:
                 del MD
@@ -62,6 +64,7 @@ def initMotorDriver(motor):
             MD = MotorDriver(port.name)
             identity = MD.getId()
             if identity == 'PROBE':
+                MD.setFreq('phi', 65536)
                 return MD
             else:
                 del MD
@@ -100,12 +103,17 @@ def rotateMotorAbs(angle, motor, direction, grad_accel):
     # Parse arguments and verify that they are valid.
     try:
         assert motor in ['test phi', 'test theta', 'probe phi']
-        assert direction in ['cw', 'ccw']
-        assert grad_accel in [True, False]
+        assert direction in [None, 'cw', 'ccw']
+        assert grad_accel in [None, True, False]
+        if grad_accel == None:
+            grad_accel = motor=='test theta'
         assert type(angle) == float
         printf('Setup', None, '\tDone.')
         printf('Setup', None, '\tMotor: '+motor)
-        printf('Setup', None, '\tDirection: '+direction)
+        if direction != None:
+            printf('Setup', None, '\tDirection: '+direction)
+        else:
+            printf('Setup', None, '\tDirection: computing optimal direction.')
         printf('Setup', None, '\tGradual acceleration: '+str(grad_accel))
         printf('Setup', None, 'Detecting motor drivers...')
         MD = initMotorDriver(motor)
@@ -123,6 +131,11 @@ def rotateMotorAbs(angle, motor, direction, grad_accel):
     except:
         return error_codes.CALIBRATION
     num_steps = angleToSteps(angle-current_angle, motor)
+    if direction==None:
+        if np.abs(num_steps+(SPR[motor] if num_steps<0 else 0)) < np.abs(num_steps-(SPR[motor] if num_steps>0 else 0)):
+            direction = 'cw'
+        else:
+            direction = 'ccw'
     if direction=='cw' and num_steps<0:
         num_steps += SPR[motor]
     elif direction=='ccw' and num_steps>0:
@@ -154,8 +167,12 @@ def rotateMotorInc(angle, motor, direction, grad_accel):
     # Parse arguments and verify that they are valid.
     try:
         assert motor in ['test phi', 'test theta', 'probe phi']
-        assert direction in ['cw', 'ccw']
-        assert grad_accel in [True, False]
+        assert direction in [None, 'cw', 'ccw']
+        if direction == None:
+            direction = 'cw'
+        assert grad_accel in [None, True, False]
+        if grad_accel == None:
+            grad_accel = motor=='test theta'
         assert type(angle) == float
         printf('Setup', None, '\tDone.')
         printf('Setup', None, '\tMotor: '+motor)
@@ -240,7 +257,9 @@ def alignMotor(motor, direction):
     # Parse arguments and verify that they are valid.
     try:
         assert motor in ['test phi', 'test theta', 'probe phi']
-        assert direction in ['cw', 'ccw']
+        assert direction in [None, 'cw', 'ccw']
+        if direction == None:
+            direction = 'cw'
         printf('Setup', None, '\tDone.')
         printf('Setup', None, '\tMotor: '+motor)
         printf('Setup', None, '\tDirection: '+direction)
