@@ -1,0 +1,9 @@
+(Setup):    Parsing arguments...
+(Setup):    	Done.
+(Setup):    	Motor: test phi
+(Setup):    	Direction: computing optimal direction.
+(Setup):    	Gradual acceleration: False
+(Setup):    Detecting motor drivers...
+(Setup):    	Done.
+(Setup):    Calculating steps to rotate...
+(Shutdown) Error: The selected device is not calibrated and must be calibrated to perform the requested action. This means that the device has never been calibrated, or since the last calibration it has encountered an error during a rotation command. The user is advised to rotate to the end switch for this device, then manually rotate to the zero angle and specify it as such.

@@ -1,0 +1,14 @@
+(Setup):    Parsing arguments...
+(Setup):    	Done.
+(Setup):    	Motor: test phi
+(Setup):    	Direction: ccw
+(Setup):    	Gradual acceleration: False
+(Setup):    Detecting motor drivers...
+(Setup):    	Done.
+(Setup):    Calculating steps to rotate...
+(Setup):    	Done.
+(Setup):    	Rotating by 90.000000-degree increment through 2285500-step ccw offset from current orientation.
+(Running):  Starting motor rotation...
+(Running):  	Done.
+(Running):  	Time taken: 35.065737 seconds.
+(Shutdown): Successfully ran routine without issues. 

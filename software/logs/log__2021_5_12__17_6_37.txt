@@ -1,0 +1,10 @@
+(Setup):    Parsing arguments...
+(Setup):    	Done.
+(Setup):    	Motor: test phi
+(Setup):    	Direction: cw
+(Setup):    Detecting motor drivers...
+(Setup):    	Done.
+(Running):  Rotating to end switch...
+(Running):  	Done.
+(Running):  	Time taken: 44.151870 seconds.
+(Shutdown): Successfully ran routine without issues. 
